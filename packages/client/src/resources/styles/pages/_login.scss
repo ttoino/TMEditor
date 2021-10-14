@@ -1,0 +1,104 @@
+.login-container {
+  background-color: #c4c4c4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+}
+
+.login-content {
+  height: fit-content;
+  width: 400px;
+  background-color: $color-background;
+  padding: 40px;
+  border-radius: 2px;
+}
+
+.login-logo {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.login-form {
+  position: relative;
+  margin: auto;
+}
+
+.login-field {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding-top: 30px;
+  font-size: 14px;
+
+  .label {
+    position: absolute;
+    padding-top: 25px;
+    color: $textColor;
+    pointer-events: none;
+    width: 100%;
+
+    .content-name {
+      position: absolute;
+    }
+  }
+
+  input {
+    height: 50px;
+    padding-top: 25px;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid $color-base;
+    background: none;
+    color: $textColor;
+
+    & + .label {
+      transform: translateY(-100%);
+      transition: all 0.2s ease;
+      font-size: 14px;
+    }
+
+    &[value=""] {
+      + .label {
+        transform: translateY(0);
+        transition: all 0.2s ease;
+        font-size: 14px;
+      }
+    }
+
+    &:focus {
+      border-bottom: 1px solid $color-primary;
+
+      + .label {
+        transform: translateY(-100%);
+        transition: all 0.2s ease;
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+.login-error {
+  font-size: 12px;
+  padding-top: 10px;
+  color: $color-error;
+}
+
+.login-button {
+  padding: 10px;
+  width: 100%;
+  height: 40px;
+  background-color: $color-primary;
+  color: white;
+  border: none;
+  font-size: 16px;
+  margin-top: 50px;
+  border-radius: 3px;
+  cursor: pointer;
+
+  &:hover {
+    transition: all 300ms;
+    background-color: $color-primary-hover;
+  }
+}

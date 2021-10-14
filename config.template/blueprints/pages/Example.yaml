@@ -1,0 +1,16 @@
+title: Example Page
+
+components:
+  - type: piechart
+    title: Chart title
+    specifications:
+      database: database_id
+      table: activities
+      x: type
+
+  - type: table
+    title: Table title
+    specifications:
+      database: database_id
+      tables: activities
+      attributes: [userId, activityId, value, type]

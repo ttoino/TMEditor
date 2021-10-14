@@ -1,0 +1,20 @@
+{
+  "name": "trial-monitor",
+  "version": "0.1.0",
+  "license": "BSD 3-Clause License",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "postinstall": "yarn workspace client install && yarn workspace server install",
+    "dev": "concurrently \"npm:client\" \"npm:nodemon\"",
+    "nodemon": "nodemon --watch config -e js,yaml --exec yarn run server",
+    "client": "yarn workspace client start",
+    "server": "yarn workspace server run dev"
+  },
+  "devDependencies": {
+    "concurrently": "^6.3.0",
+    "nodemon": "^2.0.13"
+  }
+}

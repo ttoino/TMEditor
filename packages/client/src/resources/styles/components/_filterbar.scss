@@ -1,0 +1,78 @@
+
+/* And other times this */
+@media (max-width: 993px) {
+  .rdrDefinedRangesWrapper {
+    display: none !important;
+  }
+}
+
+@media (max-width: 920px) {
+  .time-filter {
+    margin-top: 20px;
+  }
+
+  .datePickerBtnWrapper {
+    justify-content: flex-start !important;
+  }
+
+  .filter-bar .ui.icon.button {
+    padding-left: 0 !important;
+    padding-right: 25px !important;
+  }
+
+  .datePickerWrapper {
+    display: inline !important;
+  }
+}
+
+.filter-bar {
+  display: flex;
+  flex-flow: row wrap; 
+  background-color: #fff;
+  border-bottom: 1px solid #eee;
+  padding: 8px $dimens-margin-main;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+}
+
+.pushable > .dashboard-content {
+  background-color: $color-background;
+}
+
+.filter-bar .ui.icon.button > .icon {
+  color: $color-primary;
+}
+
+.user-filter > i {
+  color: #ccc;
+}
+
+.time-filter {
+  flex-grow: 1;
+  margin-right: 10px;
+
+  .button {
+    border: 1px solid white;
+    margin: 0;
+  }
+
+  i {
+    font-size: 1.15em;
+  }
+}
+
+.rdrDateRangePickerWrapper {
+  margin-top: 10px;
+  position: absolute;
+  border: 1px solid $color-border;
+}
+
+.datePickerBtnWrapper,
+.datePickerWrapper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+}

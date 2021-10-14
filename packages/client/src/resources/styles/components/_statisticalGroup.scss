@@ -1,0 +1,32 @@
+.statistical-component {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .statistic {
+    padding: 10px;
+    background-color: white;
+    overflow: hidden;
+    border-radius: 0.28571429rem;
+    width: 100%;
+    box-shadow: 0 4px 8px 0 rgba(#000, 0.05);
+    word-break: break-all;
+
+    .label:first-of-type {
+      margin-bottom: 5px !important;
+      font-size: 1.2em !important;
+      color: $color-primary !important;
+    }
+
+    .value {
+      color: $color-base !important;
+    }
+
+    .label:last-of-type {
+      margin-top: 5px !important;
+      color: $color-primary !important;
+    }
+  }
+}

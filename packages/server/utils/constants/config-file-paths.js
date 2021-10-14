@@ -1,0 +1,6 @@
+exports.BLUEPRINTS_PAGE = '../../config/blueprints/pages/'
+exports.USER_MAPPING_CONFIG_FILE = '../../config/user-mapping/config-file.yaml'
+exports.BLUEPRINTS_ENTRY_POINT = '../../config/blueprints/site.yaml'
+exports.DASHBOARD_ENTRY_POINT = '../../config/blueprints/dashboard.yaml'
+exports.CONFIG_PATH = '../../config/'
+exports.REDUCERS_PATH = '../../config/reducers/'

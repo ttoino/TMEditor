@@ -1,0 +1,83 @@
+body {
+  min-width: 750px;
+  width: auto !important;
+  width: 750px;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+}
+
+#root {
+  height: 100%;
+}
+
+.pushable {
+  height: auto !important;
+}
+
+a {
+  color: $color-primary;
+}
+
+a:hover, a:active, a:focus {
+  outline: 0 !important;
+}
+
+.ui.grid>.row {
+  margin-right: 0 !important;
+  margin-left: 0 !important;
+}
+
+.default-btn {
+  background-color: $color-background !important;
+  border: 2px solid $color-border !important;
+  margin-right: 10px !important;
+}
+
+.default-btn:active {
+  border: 2px solid $color-primary !important;
+}
+
+@keyframes fadeIn{
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
+}
+
+@-moz-keyframes fadeIn {
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
+}
+
+@-webkit-keyframes fadeIn {
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
+}
+
+@-o-keyframes fadeIn {
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
+}
+
+@-ms-keyframes fadeIn {
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
+}

@@ -1,0 +1,39 @@
+$fadeIn: fadeIn ease 0.5s;
+
+@mixin fadeIn($fadeMap) {
+  animation: $fadeMap;
+}
+
+.section-wrapper {
+  width: 100%;
+  margin-bottom: 48px;
+
+  .section-content {
+    &.hidden {
+      margin-bottom: 1rem !important;
+    }
+
+    div:first-child {
+      @include fadeIn($fadeIn);
+    }
+
+    .section-wrapper {
+      padding : {
+        top: 1rem;
+        left: 2rem;
+        right: 2rem;
+      }
+    }
+  }
+}
+
+.section-title {
+  .icon {
+    font-size: 0.8em !important;
+    vertical-align: inherit !important;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+}

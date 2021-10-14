@@ -1,0 +1,37 @@
+version: "3"
+services:
+  api:
+    build:
+      context: ./packages/server/
+      dockerfile: Dockerfile
+      # args:
+      #   - PUBLIC_URL=/trial-monitor
+    restart: always
+    volumes:
+      - ./config:/usr/config
+    ports:
+      - 80
+  frontend:
+    build:
+      context: ./packages/client/
+      dockerfile: Dockerfile
+      # args:
+      #   - PUBLIC_URL=/trial-monitor
+      #   - AUTH=KEYCLOAK
+    volumes:
+      - ./config:/usr/config
+    restart: always
+    ports:
+      - 80
+  nginx_proxy:
+    image: nginx:alpine
+    environment:
+      - PUBLIC_URL=/
+    ports:
+      - "80:80"
+    command: /bin/sh -c "envsubst < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf.template
+    links:
+      - api:api
+      - frontend:frontend

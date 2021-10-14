@@ -1,0 +1,28 @@
+title: Trial Monitor
+usersLocation: database_id
+cohorts: true
+databases:
+  - id: database_id
+    type: sqlite
+    config:
+      dialect: sqlite
+      storage: sample.sqlite
+    users:
+      table: users
+      idAttribute: userId
+      nmAttributes: [ userId, name, age, gender ]
+    structure:
+      - users:
+          PK: userId
+          attributes: [name, age]
+          relations:
+            - type: hasMany
+              target: activities
+      - activities:
+          PK: activityId
+          attributes: [activityId, type, value]
+          relations:
+            - type: belongsTo
+              target: users
+              FK: users_userId
+  

@@ -1,0 +1,38 @@
+{
+    "parser": "babel-eslint",
+    "extends": ["standard", "prettier/flowtype", "plugin:react/recommended"],
+    "plugins": ["flowtype", "import", "promise", "compat", "react"],
+    "env": {
+        "es6": true
+    },
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 2018,
+        "sourceType": "module"
+    },    
+    "rules": {
+        "jsx-quotes": ["error", "prefer-double"],
+        "import/no-unresolved": "error",
+        "import/no-extraneous-dependencies": "off",
+        "no-use-before-define": "off",
+        "flowtype/boolean-style": ["error", "boolean"],
+        "flowtype/define-flow-type": "warn",
+        "flowtype/delimiter-dangle": ["error", "never"],
+        "flowtype/generic-spacing": ["error", "never"],
+        "flowtype/no-primitive-constructor-types": "error",
+        "flowtype/no-weak-types": "off",
+        "flowtype/object-type-delimiter": ["error", "comma"],
+        "flowtype/require-parameter-type": "off",
+        "flowtype/require-return-type": "off",
+        "flowtype/require-valid-file-annotation": "off",
+        "flowtype/semi": ["error", "always"],
+        "flowtype/space-after-type-colon": ["error", "always"],
+        "flowtype/space-before-generic-bracket": ["error", "never"],
+        "flowtype/space-before-type-colon": ["error", "never"],
+        "flowtype/union-intersection-spacing": ["error", "always"],
+        "flowtype/use-flow-type": "error",
+        "flowtype/valid-syntax": "error"
+    }
+}
