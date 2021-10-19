@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: Ribeiro
+    given-names: Jorge
+  - family-names: Lima
+    given-names: Pedro
+  - family-names: Nunes
+    given-names: Francisco
+title: "Trial Monitor: Scaffolding Personalised Web Dashboards for Human-Computer Interaction Field Trials"
+preferred-citation:
+  title: "Trial Monitor: Scaffolding Personalised Web Dashboards for Human-Computer Interaction Field Trials"
+  authors:
+    - family-names: Ribeiro
+      given-names: Jorge
+    - family-names: Lima
+      given-names: Pedro
+    - family-names: Nunes
+      given-names: Francisco
+  journal: SoftwareX (under review)
+  type: article
+  year: 2021
+
+version: 0.1

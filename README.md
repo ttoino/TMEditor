@@ -45,3 +45,9 @@ In development mode, trial monitor will run by default on port `3000`. When runn
 
 ## Requirements
 Ensure that you have [Node](https://nodejs.org/) installed on your machine or Docker according to your desired set up.
+
+## Citing
+
+When using Trial Monitor please cite the following publication:
+
+Ribeiro J., Lima P., Nunes F. "Trial Monitor: Scaffolding Personalised Web Dashboards for Human-Computer Interaction Field Trials". SoftwareX (under review) (2021).
