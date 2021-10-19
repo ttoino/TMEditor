@@ -37,7 +37,7 @@ The `blueprints` folders contains the configuration files with the database auth
 
 - `site.yaml` is the main configuration file and contains the configurations to the database, and overall settings for the platform (e.g. project title)
 - `pages/` contains the individual page configurations (one file per page)
-- `dashboard.yaml` (optional) contains the configuration of the web app main page. For more information please check the [Dashboard](dashboard) page.
+- `dashboard.yaml` (optional) contains the configuration of the web app main page. For more information please check the [Dashboard](../UI%20Definition/dashboard) page.
 
  
 ### `site.yaml`
@@ -54,7 +54,7 @@ databases:
 
 - `title` Project name
 - `usersLocation` String or Array with the id of databases that you want to show on the dashboard
-- `databases`: Can be either an object with the configuration of a single database, or an array of databases. Check [Database](database) for details.
+- `databases`: Can be either an object with the configuration of a single database, or an array of databases. Check [Database](../Databases/overview) for details.
 
 
 

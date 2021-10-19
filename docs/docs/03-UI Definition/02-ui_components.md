@@ -5,7 +5,7 @@ title: UI Components
 
 The main purpose of the UI components is to represent data through visual representations. In terms of granularity, they can be divided into two main categories: `cards` and `charts`. The type is defined through the property `type`.
 
-The data needed for these components is specified through the property `specifications`. And in similarity to users, the data retrieved can be filtered through the property [`filters`](database).
+The data needed for these components is specified through the property `specifications`. And in similarity to users, the data retrieved can be filtered through the property [`filters`](../Databases/overview).
 
 ```yaml
 specifications:
