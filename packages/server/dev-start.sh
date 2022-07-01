@@ -1,3 +1,3 @@
 #!/bin/bash
 
-[ ! -d node_modules/ ] && echo "Installing dependencies" && npm i; npm run dev
+[ ! -d node_modules/ ] && echo "Installing dependencies" && yarn; yarn run dev

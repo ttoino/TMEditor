@@ -1,0 +1,93 @@
+title: SQL
+
+components:
+
+  - type: heading
+    label: SQL
+
+  - type: card
+    title: title info
+    query:
+      database: sqlite_db
+      tables: activityLogs
+      x: Steps
+      operator: avg
+
+  - type: chart
+    title: Chart title
+    query:
+      database: sqlite_db
+      tables: activityLogs
+      x: Activity
+    encoding:
+      theta: Activity
+    plot: pie
+
+  - type: table
+    title: Table title
+    query:
+      database: sqlite_db
+      tables: activityLogs
+      fields: [UserId, ActivityType, Steps, Activity]
+
+  - type: chart
+    title: Chart title
+    plot: bar
+    query:
+      database: sqlite_db
+      tables: activityLogs
+    encoding:
+      x: ActivityType
+      y: Steps
+
+  - type: table
+    title: timeseries
+    query:
+      database: sqlite_db
+      tables: activityLogs
+      fields: [Date, Duration, Activity, Steps]
+
+    # spec:
+    #   mark: bar
+    #   transform:
+    #     - aggregate:
+    #       - op: count,
+    #       field: theta
+    #   encoding:
+    #     x: 
+    #       field: type,
+    #       type: nominal
+    #       axis:
+    #         labelAngle: 0
+    #     y:
+    #       field": value
+    #       type": quantitative
+
+  # - type: tabs
+  #   content:
+  #     - label: Tab 1
+  #       components:
+  #         - type: chart
+  #           query: ...
+  #         - type: info
+  #     - label: Tab 2
+  #       content:
+  #         - type: table
+  #           title: Table title
+  #           query:
+  #             database: sqlite_db
+  #             tables: activityLogs
+  #             fields: [userId, activityId, value, type]
+  
+  # - type: columns
+  #   content:
+  #     - type: info
+  #       title: info title
+  #       text: lorema a sdaçs dças dlç
+  #     - type: table
+  #       title: Table title
+  #       query:
+  #         database: sqlite_db
+  #         tables: activityLogs
+  #         fields: [userId, activityId, value, type]
+

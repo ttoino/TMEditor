@@ -1,0 +1,47 @@
+title: Trial Monitor
+databases:
+  - id: firebase_test_db
+    type: firebase
+    config:
+      projectId: tm-demo-68396
+    users:
+      table: users
+      idField: UserId
+      labelField: name
+      fields: [userId, name, age, gender]
+      # filters:
+      #   - target: age
+      #     operator: '>'
+      #     value: 30
+    timestampField:
+      name: Date
+      type: FirebaseTimestamp
+    structure:
+      activityLogs:
+        FK:
+          field: UserId
+          target: users
+      users:
+        FK:
+        field: UserId
+        target: activityLogs
+  - id: sqlite_test_db
+    type: sqlite
+    config:
+      dialect: sqlite
+      storage: sample.sqlite
+    users:
+      table: users
+      idField: userId
+      fields: [userId, name, age, gender]
+    timestampField: Date
+
+  - id: hapi_fhir_test_api
+    type: fhir
+    subtype: hapi
+    config:
+      url: http://localhost:8080/fhir
+    users:
+      idField: id
+      labelField: name
+      fields: [id, name, address.city, birthDate, gender, deceased, maritalStatus, communication]

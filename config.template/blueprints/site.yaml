@@ -1,6 +1,9 @@
 title: Trial Monitor
-usersLocation: database_id
-cohorts: true
+# usersDB: database_id
+
+# cache:
+#   expireTime: 3600
+
 databases:
   - id: database_id
     type: sqlite
@@ -9,20 +12,6 @@ databases:
       storage: sample.sqlite
     users:
       table: users
-      idAttribute: userId
-      nmAttributes: [ userId, name, age, gender ]
-    structure:
-      - users:
-          PK: userId
-          attributes: [name, age]
-          relations:
-            - type: hasMany
-              target: activities
-      - activities:
-          PK: activityId
-          attributes: [activityId, type, value]
-          relations:
-            - type: belongsTo
-              target: users
-              FK: users_userId
-  
+      idField: userId
+      fields: [ userId, name, age, gender ]
+    timestampField: Date

@@ -1,0 +1,43 @@
+title: NOSQL
+
+components:
+  
+  - type: heading
+    label: FIREBASE
+
+  - type: table
+    title: Table title
+    reducer: customReducer
+    query:
+      database: firebase_db
+      tables: activityLogs
+      fields: [UserId, Activity, ActivityType, Steps]
+      # filters:
+      #   target: type
+      #   operator: ==
+      #   value: B
+
+  - type: table
+    title: Table linked
+    query:
+      database: firebase_db
+      tables: [activityLogs, users]
+      fields: [Activity, UserId, user.name, user.gender]
+
+  - type: chart
+    title: Chart title
+    query:
+      database: firebase_db
+      tables: activityLogs
+      fields: [Activity]
+    encoding:
+      theta: type
+    plot: pie
+
+  # - type: card
+  #   title: title info
+  #   specifications:
+  #     database: firebase_db
+  #     tables: activities
+  #     x: value
+  #     operator: avg

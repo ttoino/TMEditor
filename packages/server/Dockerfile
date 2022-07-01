@@ -1,5 +1,5 @@
 
-FROM node:16
+FROM node:16 as builder
 
 ARG PUBLIC_URL=
 ARG BACKEND_PORT=
@@ -12,16 +12,11 @@ WORKDIR /usr/src/app
 # where available (npm@5+)
 COPY ./package*.json ./
 
-RUN npm install --production --silent
+RUN yarn install --prod --silent
 
 # Bundle app source
 COPY . .
 
-RUN echo " \
-PUBLIC_URL="${PUBLIC_URL}" \n \
-BACKEND_PORT="${BACKEND_PORT}" \n\
-" > config/.env
+RUN yarn run build
 
-EXPOSE 80
-
-CMD [ "npm", "start" ]
+CMD [ "node", "-r", "source-map-support/register", "dist/index.js" ]

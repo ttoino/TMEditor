@@ -1,250 +1,178 @@
 ---
 id: ui_components
-title: UI Components
+title: Data Components
 ---
 
-The main purpose of the UI components is to represent data through visual representations. In terms of granularity, they can be divided into two main categories: `cards` and `charts`. The type is defined through the property `type`.
+The main purpose of Data Components is to support the data analysis by representing data visually. Each component has `type` property that specifies which component should be used, properties common to all components, as well as other properties specific to the type of component.
 
-The data needed for these components is specified through the property `specifications`. And in similarity to users, the data retrieved can be filtered through the property [`filters`](../Databases/overview).
+All Data Component share the following properties:
+
+- **type:** `chart` | `table` | `value` | `summary`
+- **title:** a string that represents the component title
+- **query:** describes which data to retrieve from the database
+  - **database:** database identifier
+  - **tables:** string or an array of strings identifying the docs/tables/resources holding data
+  - **fields:** (optional) defines which fields should be retrieved. If not provided, all fields will be retrieved.
+  - **filters:** (optional) defines how data should be filtered. Please check the [`filters`](../Databases/overview#filters) section for details.
+  - **groupby:** (optional) groups data based on one of the table fields. Requires fields to have aggregation operations.
+- **reducer:** (optional) name of a custom function to transform the data before being used by the component.
+
 
 ```yaml
-specifications:
-  database: smSQL
+type: chart
+title: Component title
+query:
+  database: database_id
   tables: activities
-  x: activities.value
+  fields: [type, value]
   filters:
-  - target: value
-    operator: '>='
-    value: 2400
+    - target: value
+      operator: '>='
+      value: 2400
 ```
 
-## Cards
+### Fields
 
-Cards provide a summative overview relatively to an attribute.
+The `fields` properties can be a simple string array with the name of the fields you want to retrieve from the database or an array of objects.
+````yaml
+# Array of strings
+fields: [fieldNameA, fieldNameB]
+````
 
-**Properties:**
+````yaml
+# Array of objects with custom field names
+fields:
+  - target: fieldNameA
+    name: Field Name A
+  - target: fieldNameB
+    name: Field Name B
+````
 
-- **`title`** - a non empty string representing the header title displayed on the top of the card content.
-- **`round`** - `<units>` \| `<u>` \| `<decimals>` \| `<d>` \| `<centesimals>` \| `<c>` **or** an integer representing the number of decimal places.
-- **`specifications`** - property that tells the system how to retrieve data.
-  - **`database`** - a non-empty string representing the database identifier (only considered when there are multiple database connections).
-  - **`datastore`** - (Only for Healthcare API) The name of the datastore where the data is being requested from.
-  - **`tables`** - an array of strings (the name of the targeted tables). These tables must be linked, in other words, at some point, one of them references the other. In Fhir databases, this property is the type of Resource being requested.
-  - **`x`** - a non-empty string representing the name of the targeted attribute.
-  - **`operator`** - `<avg>` \| `<count>` \| `<max>` \| `<min`>.
+````yaml
+# Array of objects with aggregation operations and custom field names
+fields:
+  - target: fieldName
+    name: Field Name
+    operator: [min, max, avg]
+````
 
-![Example of a card](assets/card.png)
+- **target:** string identifying a field from the database
+- **name:** (optional) string with a user-friendly name to be shown on the dashboard
+- **operator:** string or string array with the operation to perform. The following operations are available: `avg` | `max` | `min` | `sum` | `count`
+
+### Alerts
+
+The components `table`, and `value` can be configured to display warnings when one or more values are over a specific threshold. We can use this to quickly monitor specific parameters of the system (e.g. check if the average value is within the reference values).
+
+To define a warning, add a property named `warnings` and inside set as key the corresponding fields for which you want to add a warning. For each field define the properties `threshold` and `operator`:
 
 ```yaml
-- type: card
-  title: Activity Level
-  round: 2
-  specifications:
-      database: lifanaMySQL
-      tables: Activity
-      x: value
-      operator: avg
+  - type: table
+    title: All data
+    query:
+      database: database_id
+      tables: [activityLogs]
+      fields: [Duration, Date, ActivityType, Steps, Calories]
+    warnings:
+      Duration:
+        threshold: 1222000
+        operator: '>'
 ```
 
-## Charts
+- **threshold**: (number) threshold value for triggering the warning in the interface
+- **operator**: `>` | `<` | `=>` | `=>` | `==`
 
-Charts are supported essentially to display data in multiple axes, a functionality that could not be addressed by the [first component](#cards), therefore appearing as complementation.
+## Components
+### Charts
 
-In total there are **four** different charts that can be used being: `timeseries, barchart, pie/doughnut chart, histogram`.
+![Example of a chart](assets/chart.png)
 
-### Time series
+The `chart` component enables the creation of a wide range of visualization for data analysis. Charts are built on top of [Vega-Lite](https://vega.github.io/vega-lite), which is a high-level grammar to create interactive graphics. It uses a declarative syntax that supports data and visual transformations (e.g. aggregation, binning, staking). Please check Vega-Lite website for more details and [examples](https://vega.github.io/vega-lite/examples/) of how to describe a chart.
 
-Time series allows tracking a specific attribute over time because the x-axis reflects the time and the y-axis the corresponding value registered.
+The property `spec` accepts normal Vega-Lite specifications to describe charts. The data property that is available in normal Vega-Lite specifications is injected by Trial Monitor and does not need to be defined.
 
-**Properties:**
+**Chart properties:**
 
-- **`title`** - a string that represents the chart title (**optional**).
-- **`ylabel`** - a string that represents the y-axis label name (**optional**).
-- **`xlabel`** - a string that represents the x-axis label name (**optional**).
-- **`yrange`** - a property to define the lower and upper y-axis limit.
-  - **`beginning`** - an integer establishing the lower limit.
-  - **`end`** - an integer establishing the upper limit.
-- **`specifications`** - property that tells the system how to retrieve data.
-  - **`database`** - a non-empty string representing the database identifier (only considered when there are multiple database connections).
-  - **`datastore`** - (Only for Healthcare API) The name of the datastore where the data is being requested from.
-  - **`tables`** - an array of strings (the name of the targeted tables). These tables must be linked, in other words, at some point, one of them references the other. In Fhir databases, this property is the type of Resource being requested.
-  - **`x`** - a non-empty string representing the attribute to be represented on the x-axis.
-  - **`y`** - a non-empty string representing the attribute to be represented on the y-axis.
-  - **`groupby`** - a property used to group the time according to a specific value based on an operator.
-    - **`time`** - `<hour>` \| `<day>` \| `<week>` \| `<month>`.
-    - **`operator`** - `<avg>` \| `<count>` \| `<max>` \| `<min`>
+- **spec:** Vega-Lite [specification](https://vega.github.io/vega-lite/docs/)
 
-![Example of a timeseries](assets/time-series.png)
+````yaml
+  - type: chart
+    title: Chart title
+    query:
+      [...]
+    spec:
+      mark: bar
+      encoding:
+        x:
+          field: a
+          type: nominal
+        y:
+          field: b
+          type: quantitative
 
-```yaml
-- type: timeseries
-  title: Meal plans created
-  ylabel: Value
-  xlabel: Grouped by day
-  yrange:
-    beginning: 0
-    end: 6
-  specifications:
-    database: lifanaMySQL
-    tables: WeekPlan
-    x: beginDate
-    y: WeekPlan.Household_idHousehold
-    groupby:
-      time: day
-      operator: count
-```
+````
 
-### Histogram
-
-A histogram is a valuable representation when it comes to represent and analyse the frequency of a determined attribute.
-
-**Properties:**
-
-- **`title`** - a string that represents the chart title (**optional**).
-- **`ylabel`** - a string that represents the y-axis label name (**optional**).
-- **`xlabel`** - a string that represents the x-axis label name (**optional**).
-- **`interval`** - a property to define the x-axis interval.
-  - **`start`** - an integer representing the left most limit.
-  - **`end`** - an integer representing the right most limit.
-  - **`size`** - an integer representing the length in the x-axis.
-- **`specifications`** - property that tells the system how to retrieve data.
-  - **`database`** - a non-empty string representing the database identifier (only considered when there are multiple database connections).
-  - **`datastore`** - (Only for Healthcare API) The name of the datastore where the data is being requested from.
-  - **`tables`** - an array of strings (the name of the targeted tables). These tables must be linked, in other words, at some point, one of them references the other. In Fhir databases, this property is the type of Resource being requested.
-  - **`x`** - a non-empty string representing the attribute to be represented on the x-axis.
-
-![Example of a histogram](assets/histogram.png)
-
-```yaml
-- type: histogram
-  title: Weight distribution
-  ylabel: Frequency
-  xlabel: Weight
-  interval:
-    start: 0
-    end: 150
-    size: 5
-  specifications:
-    database: lifanaMySQL
-    tables: WeightLog
-    x: weightKg
-```
-
-### Pie Chart
-
-Pie charts permit us to compare categories in terms of the proportion of their frequency. In such cases, since the arc length is proportional to the frequency, it evidences, the proportions to one another.
-
-**Properties:**
-
-- **`title`** - a string that represents the chart title (**optional**).
-- **`subtype`** - `<donut>` \| `<pie>`
-- **`specifications`** - property that tells the system how to retrieve data.
-  - **`database`** - a non-empty string representing the database identifier (only considered when there are multiple database connections).
-  - **`datastore`** - (Only for Healthcare API) The name of the datastore where the data is being requested from.
-  - **`tables`** - an array of strings (the name of the targeted tables). These tables must be linked, in other words, at some point, one of them references the other. In Fhir databases, this property is the type of Resource being requested.
-  - **`x`** - a non-empty string representing the attribute to be represented.
-
-![Example of a pie chart](assets/pie-chart.png)
-
-```yaml
-- type: piechart
-  subtype: donut
-  title: NPS - Answer Distrib.
-  specifications:
-    database: lifanaFirebase
-    tables: SurveyNps
-    x: answer
-```
-
-### Barchart
-
-Commonly there is data that can be classified as categorical thus, those same categories are used to aggregate information among them based on a specific operator in which ultimately, are represented along one of the axis (in this case x-axis).
-
-**Properties:**
-
-- **`title`** - a string that represents the chart title (**optional**).
-- **`domain`** - `<categorical>` \| `<temporal>` | `<day>`
-- **`labels`** - `<direct>` (**optional**)
-- **`ylabel`** - a string that represents the y-axis label name (**optional**).
-- **`xlabel`** - a string that represents the x-axis label name (**optional**).
-- **`specifications`** - property that tells the system how to retrieve data.
-
-  - **`database`** - a non-empty string representing the database identifier (only considered when there are multiple database connections).
-  - **`datastore`** - (Only for Healthcare API) The name of the datastore where the data is being requested from.
-  - **`tables`** - an array of strings (the name of the targeted tables). These tables must be linked, in other words, at some point, one of them references the other. In Fhir databases, this property is the type of Resource being requested.
-  - **`x`** - assumes either:
-    - (1) a non-empty string representing an attribute.
-    - (2) a non-empty string representing an attribute that is an enumeration variable (e.g. color, assuming color values as `red`, `blue`, `green`).
-    - (3) an array of strings corresponding to the categories (In some cases a tuple from a table contain multiple attributes that are categories, that's why we use this).
-  - **`y`** - assumes either:
-
-    - a non-empty string
-    - `IS_COUNT` to act as a Histogram. Consequently, the `x` defined is variable corresponding to an enumeration.
-    - **It is not declared in case `x` takes a scenario (3)**.
-
-  - **`groupby`** - a property used to group the time according to a specific value based on an operator (**only needed if `domain` set to `temporal`**).
-    - **`time`** - `<hour>` \| `<day>` \| `<week>` \| `<month>`.
-    - **`operator`** - `<avg>` \| `<count>` \| `<max>` \| `<min`>.
-
-![Example of a barchart](assets/bar-chart.png)
-
-```yaml
-- type: barchart
-  domain: categorical
-  title: Bp by attribute
-  ylabel: Value
-  xlabel: Different categories
-  categories:
-    - Bpm
-    - Diastolic
-    - Irreghr
-    - Systolic
-  specifications:
-    database: conventional
-    table: Bp
-    x:
-      - bpm
-      - diastolic
-      - irreghr
-      - systolic
-```
-
-## Table
-
-**Properties:**
-
-- **`title`** - a string that represents the table title (**optional**).
-- **`export`** - `<true>` \| `<false>` (**optional**) Default: false. Allow users to export an CSV with the table data.
-- **`pagination`** - `<true>` \| `<false>` \ `<integer>` (**optional**) Allows users to disable the pagination or to change the number of rows per page. By default pagination is enable with 20 rows per page.
-- **`search`** - `<true>` \| `<false>` (**optional**).  Default: true.
-- **`sort`** - `<true>` \| `<false>` (**optional**). Default: true.
-- **`specifications`** - property that tells the system how to retrieve data.
-  - **`database`** - a non-empty string representing the database identifier (only considered when there are multiple database connections).
-  - **`datastore`** - (Only for Healthcare API) The name of the datastore where the data is being requested from.
-  - **`tables`** - an array of strings (the name of the targeted tables). These tables must be linked, in other words, at some point, one of them references the other. In Fhir databases, this property is the type of Resource being requested.
-  - **`attributes`** - a list of non-empty strings representing the attributes to be represented.
+### Table
 
 ![Example of a table](assets/table.png)
 
+**Table properties:**
+
+- **export:** `boolean` (optional) Default: false. Allow users to export an CSV with the table data.
+- **pagination:** `boolean` | `integer` (optional) Allows users to disable the pagination or to change the number of rows per page. By default, pagination is enabled with 20 rows per page.
+- **search:** `boolean` (optional) Default: true.
+
 ```yaml
 - type: table
-  title: Custom ingredients
-  specifications:
-    database: lifanaMySQL
-    tables: [ShoppingListCustomItem, ShoppingList]
-    attributes: [name]
+  title: Table title
+  query:
+    database: database_id
+    tables: [table1, table2]
+    fields: [name, type, description, score]
+  export: true
+  pagination: 40
+```
+
+### Value
+
+The `value` component provides a summative view of one or more measures. Values shown in the component are based on the [fields](#fields) property and required the definition of an `operator`.
+
+![Example of a Value component](assets/value.png)
+
+**Value properties:**
+- **precision:** `number` (optional) Default: 2. Controls the decimal places in the result
+
+```yaml
+- type: table
+  title: Table title
+  query:
+    database: database_id
+    tables: [table1]
+    fields:
+      - target: Steps
+        operator: min
+      - target: Steps
+        operator: max
+  precision: 0
 ```
 
 
+### Summary
 
-<!-- ## Map
-TODO: We need to test this
+The `summary` component provides summary statistics from a specific field. The component will calculate the measures that are available for [fields](#fields).
 
-The map component provides a map with markers.
+![Example of a Summary component](assets/summary.png)
 
-**Properties:**
 
-- **`specifications`** - property that tells the system how to retrieve data.
-  - **`database`** - a non-empty string representing the database identifier.
-  - **`document`** - a name that it's recognized by the back-end to retrieve data in the following format `[{latitude, longitude, time?, accuracy?}, {...}, ...]` (list of markers).
- -->
+**Value properties:**
+- **precision:** `number` (optional) Default: 2. Controls the decimal places in the result
+
+```yaml
+- type: table
+  title: Table title
+  query:
+    database: database_id
+    tables: [table1]
+    fields: Steps
+  precision: 0
+```

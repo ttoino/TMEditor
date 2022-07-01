@@ -1,0 +1,8 @@
+# Example
+# groupByField: gender
+map:
+  PT:
+    - "1"
+    - "2"
+  USA:
+    - "1"

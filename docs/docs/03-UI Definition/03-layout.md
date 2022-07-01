@@ -3,46 +3,50 @@ id: layout
 title: Layout
 ---
 
-By configuring the layout, the user has control over on how the components are organized and displayed to the user. To keep it simple, the concepts adopted are `section` and `rows`. 
+Trial Monitor provides interface components to support the personalization of the layout of each page.
 
-Both concepts must include as a property, either `numChilds` or `children`. `numChilds` is used whenever the child components are UI components (e.g. charts, card) assuming an integer as its value. `children` in case its children are other layout components, assuming an array of layout components as its value.
+## Heading
 
-With that being said, it is possible to have nested layout components just as
-~~~~
- - section:
-     header: Overview
-     children:
-        - section:
-            header: Received Feedback
-            children: 
-                ...
-~~~~
+The `heading` element can be used to a create visual hierarchy on the page.
 
-### Section
+````yaml
+- type: heading
+  title: Heading name
+````
 
-A `section` is a layout component that wraps content and that can either be expanded or contracted. **Note:** It must at all times have a property `headers` defined which must be unique for each page.
+## Columns
 
-![Example of a section](assets/section.png)
+The `columns` element enables us to create a grid layout with multiple columns. Columns of equal size will be created based on the number of components provided.
 
-~~~
-- section:
-    header: Overview 
-    numChilds: 2
-- section:
-    header: Detailed 
-~~~
+````yaml
+- type: columns
+  components:
+    - type: chart
+      ...
+    - type: table
+      ...
+````
 
-### Row
+## Tabs
 
-A row is part of a grid system and supports additional properties such as `small`, `medium` in order to define the number of colums for distinct screen sizes. 
+The `tabs` element can be used to organize components in multiple tabs.
 
-~~~~
-    children:
-      - row:
-          numChilds: 3
-          small: 1
-          medium: 2
-~~~~
+````yaml
+- type: tabs
+  panels:
+    - label: Tab 1
+      components:
+        - ...
+    - label: Tab 2
+      components:
+        - ...
+````
 
-The first being used for mobile screens and the second for medium sized computer screens. For the case `numChilds` is also defined, it is used for larger screens.
+## Info
 
+The `info` element enables us to display general information on the page, such as warnings or guidance to help users read the charts.
+
+````yaml
+- type: info
+  title: Heading name
+````

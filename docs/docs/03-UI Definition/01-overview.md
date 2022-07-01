@@ -3,7 +3,7 @@ id: overview
 title: Overview
 ---
 
-The system allows the definition of a configuration that reflects the user interfaces presented to the user. Each page content and layout is displayed according to the information stored in the files inside the directory `config/blueprints/pages`. 
+Trial Monitor can be organized into pages, and each page can be customized according to the requirement of each project. The user interface of each can be configured by arranging the different data visualization and layout components that are made available.
 
 ~~~~
 ├── config
@@ -15,16 +15,14 @@ The system allows the definition of a configuration that reflects the user inter
 ~~~~
 
 
-For each file, a link to a page will be generated in the left sidebar, thus, it **must** have configured a property named `title` - the name to be shown in the user interface (otherwise the name of the file will be taken into consideration). The page URL will be generated from the filename. The property `components` will contain the list of UI components, and the layout can be configured through the property `layout` (optional).
+A new page will be generated for each file on the directory `config/blueprints/pages`. The title of the page will be based on the `title` property. If the `title` is not provided, the file name will be used.
 
-~~~~yaml
+The `components` property contains the list of components for displaying data and for configuring the layout. For more information on how to configure interface components please check the next pages.
+
+
+````yaml
 # activities.yaml
 title: Activity Level
 
-layout: [ ... ]
-
 components: [ ... ]
-~~~~
-
-
-Above it is exemplified a scenario where we describe a page and its [layout](layout), as a section composed of a single row containing the only UI component defined, a card.
+````

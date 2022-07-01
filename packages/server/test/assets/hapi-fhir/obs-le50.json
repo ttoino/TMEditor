@@ -1,0 +1,48 @@
+{
+    "resourceType": "Bundle",
+    "id": "47cc0874-9d46-451b-93fc-7f4992a9e498",
+    "meta": {
+        "lastUpdated": "2022-06-14T17:28:52.914+00:00"
+    },
+    "type": "searchset",
+    "total": 1,
+    "link": [
+        {
+            "relation": "self",
+            "url": "http://localhost:8080/fhir/Observation?_count=500&value-quantity=le50"
+        }
+    ],
+    "entry": [
+        {
+            "fullUrl": "http://localhost:8080/fhir/Observation/254",
+            "resource": {
+                "resourceType": "Observation",
+                "id": "254",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2022-06-07T17:19:40.014+00:00",
+                    "source": "#cUd750ZX9MM0foMg"
+                },
+                "status": "final",
+                "code": {
+                    "coding": [
+                        {
+                            "code": "weight"
+                        }
+                    ]
+                },
+                "subject": {
+                    "reference": "Patient/3"
+                },
+                "effectiveDateTime": "2022-02-01T15:07:26+00:00",
+                "valueQuantity": {
+                    "value": 50,
+                    "unit": "kg"
+                }
+            },
+            "search": {
+                "mode": "match"
+            }
+        }
+    ]
+}

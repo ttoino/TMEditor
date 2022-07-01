@@ -1,37 +1,55 @@
 version: "3"
 services:
   api:
+    # image: ghcr.io/fraunhoferportugal/trialmonitor-api:latest
     build:
       context: ./packages/server/
       dockerfile: Dockerfile
-      # args:
-      #   - PUBLIC_URL=/trial-monitor
-    restart: always
+    environment:
+      - REDIS_HOST=redis_cache
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=r3d1sc4ch3
+    restart: unless-stopped
     volumes:
       - ./config:/usr/config
-    ports:
+    expose:
       - 80
+    depends_on:
+      - redis_cache
   frontend:
+    # image: ghcr.io/fraunhoferportugal/trialmonitor-ui:latest
     build:
       context: ./packages/client/
       dockerfile: Dockerfile
-      # args:
-      #   - PUBLIC_URL=/trial-monitor
-      #   - AUTH=KEYCLOAK
+    restart: unless-stopped
     volumes:
-      - ./config:/usr/config
-    restart: always
-    ports:
+      - ./config/ui-config.json:/usr/share/nginx/html/ui-config.json
+    expose:
       - 80
   nginx_proxy:
-    image: nginx:alpine
+    image: nginx:1.21-alpine
     environment:
-      - PUBLIC_URL=/
-    ports:
-      - "80:80"
-    command: /bin/sh -c "envsubst < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"
+      - API_PORT=80
+      - FRONTEND_PORT=80
+    command: /bin/sh -c "envsubst '$${API_PORT} $${FRONTEND_PORT}' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"
+    restart: unless-stopped
     volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf.template
+      - ./deployment/nginx.conf:/etc/nginx/conf.d/default.conf.template
     links:
       - api:api
       - frontend:frontend
+    depends_on:
+      - api
+      - frontend
+    ports:
+      - "80:80"
+  redis_cache:
+    image: redis:alpine3.15
+    command: redis-server --requirepass r3d1sc4ch3
+    environment:
+      - REDIS_REPLICATION_MODE=master
+    restart: unless-stopped
+    volumes:
+      - ./data/redis:/var/lib/redis
+    expose:
+      - 6379

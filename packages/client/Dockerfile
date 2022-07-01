@@ -4,20 +4,16 @@ ARG AUTH=
 FROM node:16 as builder
 WORKDIR /app
 COPY ./package*.json /app/
-RUN npm install
+RUN yarn install
 
 # so global vars are available on this stage
 ARG PUBLIC_URL
 ARG AUTH
 
 COPY . .
-RUN echo " \
-PUBLIC_URL="${PUBLIC_URL}" \n\
-AUTH="${AUTH}" \n\
-" > /app/config/.env
-RUN npm run build
+RUN API_URL=/api yarn run build
 
-FROM nginx:1.17.9
+FROM nginx:1.21-alpine
 ARG PUBLIC_URL
 
 WORKDIR /app

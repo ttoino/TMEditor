@@ -1,0 +1,15 @@
+{
+    "resourceType": "Bundle",
+    "id": "3678b476-11fe-4eee-bff9-d5029edef1fa",
+    "meta": {
+        "lastUpdated": "2022-06-14T17:34:51.868+00:00"
+    },
+    "type": "searchset",
+    "total": 0,
+    "link": [
+        {
+            "relation": "self",
+            "url": "http://localhost:8080/fhir/Observation?_count=500&value-quantity=gt173"
+        }
+    ]
+}

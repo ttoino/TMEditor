@@ -10,49 +10,33 @@ This can be accomplished by writing a reducer function that receives data as inp
 ## Creating the reducer function
 
 To create a new reducer function:
-1. Add a new file to the `config/reducers` directory
+1. Add a new `index.js` to the `config/reducers` directory
 2. Export a function that will transform your data
 
-That function will receive two arguments. The first argument is the data retrieved from the database without any processing; the second argument contains an object with custom arguments passed to the reducer.
+That function will receive two arguments. The first argument is the data retrieved from the database without any processing; the second argument contains the component specification.
 
-Within that function transform the data according to your requirements and return the resulting data. Each UI component will expected different data structure, so check the documentation of the component for details of how data should be exported.
+Within that function, transform the data according to your requirements and return the resulting data. Each UI component will expected different data structures, so check the documentation of the component for details of how data should be returned.
 
 Example of a reducer function:
 
 ````js
-exports.groupAndFilterData = (data, args) =>  {
-  const filteredData = data.filter(el => el.id === args.id)
-
-  const measuresGrouped = filteredData.reduce((acc, curr) => {
-    acc[curr.id] = acc[curr.id] || []
-    acc[curr.id].push(curr)
-    return acc
-  }, {})
-
-  return {
-    x: Object.keys(measuresGrouped),
-    y: Object.values(measuresGrouped)
-  }
+const customReducer = (data, component) => {
+  return data.map(row => {
+    return {
+      ...row,
+      newColumn: parseInt(row.value) * 2.13
+    }
+  })
 }
-````
 
-> Exported function names must be unique. Do not write function with the same name even if they are in different files.
+module.exports { customReducer }
+````
 
 ## Using the reducer
 
-To use the function you have created in the previous step, on the specifications of the UI Component add a new property named `reducer` with the value corresponding to the name of the function you are exporting, or an object with the reducer information.
+Reducer functions can be applied to one of more Data Components. On the specifications of the component, add a new property named `reducer` with the value corresponding to the name of the function you are exporting
 
-- **reducer**: (string | object) Name of the reducer function, or an object with the `name` and `args` properties:
-  - **name**: Name of the reducer function
-  - **args**: (optional) Custom object with additional properties you want to pass to the reducer.
 
-````
-reducer: groupAndFilterData
-
-# --- OR ---
-
-reducer:
-  name: groupAndFilterData
-  args:
-    id: 8
+````yaml
+reducer: customReducer
 ````

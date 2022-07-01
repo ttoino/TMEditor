@@ -1,0 +1,4 @@
+# provider: "firebase",
+# serviceAccount:
+#   type: "service_account"
+#   ...

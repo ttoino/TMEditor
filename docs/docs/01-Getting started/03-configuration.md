@@ -3,8 +3,7 @@ id: configuration
 title: Configuration
 ---
 
-Trial Monitor uses simple configuration files to setup the platform to a specific project. Each instance of Trial Monitor has a folder with YAML files that personalize among other things the database authentication credentials, Web pages for displaying data, or the characteristics of each data visualization employed.
-
+Trial Monitor uses simple configuration files to set up the platform for a specific project. Each instance of Trial Monitor has a folder with YAML or JSON files that personalize among other things the database authentication credentials, Web pages for displaying data, or the characteristics of each data visualization employed.
 
 ## Configuration structure
 
@@ -19,99 +18,120 @@ config
 ├──── dashboard.yaml
 ├──── site.yaml
 ├── reducers
-├── cohorts.yaml
+├── auth
+├── cohorts
+├── ui-config.json
 ````
 
-<!-- * `/blueprints`
-  * `/pages` — contains individual page configurations (one file per page)
-  * `site.yaml` – contains database configuration and general settings;
-  * `dashboard.yaml` — (optional) contains the configuration of the web app main page;
-* `/reducers` — (optional) contains one or more files, exporting custom functions for parsing data;
-* `/cohorts.yaml` — (optional) enables developers to manually group users into cohorts;
-* `/user-mapping.yaml` — (optional) defines how to map long or hashed user identifiers to human-readable names. -->
-
+- `/blueprints`: contains the site and page configurations
+- `/auth`: contains the configuration of the system authentication
+- `/reducers`: (optional) contains one or more files, exporting custom functions for parsing data
+- `/cohorts`: (optional) allows manually grouping users into cohorts
+- `ui-config.json`: api url, auth and theme configurations for the UI
 
 ## Blueprints
 
-The `blueprints` folders contains the configuration files with the database authentication credentials, or pages and data visualizations specifications:
+The `blueprints` folder contains the configuration files with the database authentication credentials, or pages and data visualizations specifications:
 
 - `site.yaml` is the main configuration file and contains the configurations to the database, and overall settings for the platform (e.g. project title)
 - `pages/` contains the individual page configurations (one file per page)
 - `dashboard.yaml` (optional) contains the configuration of the web app main page. For more information please check the [Dashboard](../UI%20Definition/dashboard) page.
 
- 
+
 ### `site.yaml`
 
-The `site.yaml` file contains the databases configurations and other global properties.
+The `site.yaml` file contains configurations of the databases and other global properties.
 
 ````yaml
 title: Project name
-usersLocation: databaseid
+usersDB: database_id
+cache:
+  expireTime: 3600
+
 databases:
-  - id: db1
-  ...
+  - id: database_id
+    type: firebase
+    ...
 ````
 
-- `title` Project name
-- `usersLocation` String or Array with the id of databases that you want to show on the dashboard
-- `databases`: Can be either an object with the configuration of a single database, or an array of databases. Check [Database](../Databases/overview) for details.
+- **title**: Project name
+- **usersDB**: (optional) Users database
+- **cache**: (optional) Specify cache expire time (default value is 300 seconds). To use cache make sure `redis` service is running and accessible.
+- **databases**: Is an array that describes the configuration of one or more databases. Please check [Database](../Databases/overview) for details.
 
 
 
 ### Pages
 
-The pages folder contains one or more `yaml` files that describe the interface of each page. Each configuration file allows the configuration of the following properties:
+The pages folder contains one or more `yaml/json` files that describe the interface of each page. Each configuration file allows the configuration of the following properties:
 
-- `title` Describes the name of page and navigation
-- `components` A list of data visualization components 
-- `layout` (optional) Configuration of how components are arranged in the interface
+- **title**: Describes the name of the page and navigation
+- **components**: A list of data visualization components. Please check [UI Definition](../UI%20Definition/overview) for details.
 
 ````yaml
 title: Page title
 
 components:
   - type: table
-    title: Measures
-    specifications:
-      database: dbname
-      table: sessions
+    title: Table title
+    query:
+      database: database_id
+      table: table_name
 ````
-
 
 ## Cohorts
 
 By default Trial monitor displays all participants on a single list. However, it is possible to manually create cohorts to organize user data:
 
 1. Add a file named `cohorts.yaml` to the `config` folder.
-2. For each cohort, create a list with the user identifiers you want to associate with the cohort.
+2. There are two possible ways to define the cohorts:
+  - Group users by a field
 
-````yaml
-PT:
-  - 5Z64g9t5mvT9CLn9cgxo
-  - FTwFXLkbL9dG7ybsBDnd
-USA:
-  - ZFmXh7OzbmQwzQOWvzao
+  ````yaml
+  groupByField: gender
+  ````
+
+  - Create a map associating the cohorts with a list of users' identifiers
+
+  ````yaml
+  map:
+    PT:
+      - 1
+      - 2
+    USA:
+      - 3
+  ````
+
+## Theming
+
+Trial Monitor can be customized according to the styles of your project/brand. To create a custom theme, edit the `ui-config.json` file in the `/public` (w/o Docker) or `config/` (w/ Docker) folder according to your preference. Check the `ui-config.json` file in the `config.template` folder to see all options that can be configured.
+
+
+````json
+{
+  "theme": {
+    "colors": {
+      "primary": "#007EB2",
+      "primaryTint": "#F2F5F8",
+      "primaryTintHover": "#e5ecf3",
+      "surface": "#ffffff",
+      "text": "#464646"
+    },
+    "fonts": {
+      "body": "Roboto, sans-serif"
+    }
+  }
+}
 ````
-
-To enable *cohorts* in the user interface, in the `site.yaml` file set the property `cohorts`to `true`:
-
-
-````yaml
-cohorts: true
-````
-
-<!-- ## Theming
-
-You can customize your installation of Trial Monitor by changing the main colors according to the styles of your project. To customize these styles add a new file named `theme.yaml` to the `blueprints` folder, and define the color properties according to your brand. Check the `theme.yaml` file provided with the starterkit to see all options that can be configured.
-
-Note that hexadecimal color values must be defined within quotes, otherwise they will be interpreted as comments.
-
-````
-color-primary: "#009474"
-color-text: black
-````
-
-> Changes to `theme.yaml` require the client to be restarted
 
 ### Logo
-To customize the logo that appear on the sidebar and login page, add an image file named `logo.png` to the `config` folder. -->
+To customize the logo that appears on the sidebar and login page, add an image file to the `/public` (w/o Docker) or `config/` (w/ Docker) folder on the server and set the `logo` field with the correct value.
+
+
+````json
+{
+  "theme": {
+    "logo": "logo.svg"
+  }
+}
+````

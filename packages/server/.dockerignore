@@ -3,3 +3,4 @@ dev-start.sh
 Dockerfile.dev
 .eslintrc.json
 logs/
+test/

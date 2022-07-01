@@ -1,0 +1,197 @@
+{
+    "resourceType": "Bundle",
+    "id": "6a8e1514-d6eb-4550-a600-b25e5a750e2e",
+    "meta": {
+        "lastUpdated": "2022-06-14T17:27:26.975+00:00"
+    },
+    "type": "searchset",
+    "total": 6,
+    "link": [
+        {
+            "relation": "self",
+            "url": "http://localhost:8080/fhir/Observation?_count=500&value-quantity=lt173"
+        }
+    ],
+    "entry": [
+        {
+            "fullUrl": "http://localhost:8080/fhir/Observation/254",
+            "resource": {
+                "resourceType": "Observation",
+                "id": "254",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2022-06-07T17:19:40.014+00:00",
+                    "source": "#cUd750ZX9MM0foMg"
+                },
+                "status": "final",
+                "code": {
+                    "coding": [
+                        {
+                            "code": "weight"
+                        }
+                    ]
+                },
+                "subject": {
+                    "reference": "Patient/3"
+                },
+                "effectiveDateTime": "2022-02-01T15:07:26+00:00",
+                "valueQuantity": {
+                    "value": 50,
+                    "unit": "kg"
+                }
+            },
+            "search": {
+                "mode": "match"
+            }
+        },
+        {
+            "fullUrl": "http://localhost:8080/fhir/Observation/302",
+            "resource": {
+                "resourceType": "Observation",
+                "id": "302",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2022-06-09T16:53:24.760+00:00",
+                    "source": "#ElFOjIlr3FqFxebu"
+                },
+                "status": "final",
+                "code": {
+                    "coding": [
+                        {
+                            "code": "weight"
+                        }
+                    ]
+                },
+                "effectiveDateTime": "2022-02-01T15:07:26+00:00",
+                "valueQuantity": {
+                    "value": 61,
+                    "unit": "kg"
+                }
+            },
+            "search": {
+                "mode": "match"
+            }
+        },
+        {
+            "fullUrl": "http://localhost:8080/fhir/Observation/203",
+            "resource": {
+                "resourceType": "Observation",
+                "id": "203",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2022-06-03T10:29:34.269+00:00",
+                    "source": "#jdUu5re3gFq0T8U2"
+                },
+                "status": "final",
+                "code": {
+                    "coding": [
+                        {
+                            "code": "weight"
+                        }
+                    ]
+                },
+                "subject": {
+                    "reference": "Patient/2"
+                },
+                "effectiveDateTime": "2022-02-01T15:07:26+00:00",
+                "valueQuantity": {
+                    "value": 62,
+                    "unit": "kg"
+                }
+            },
+            "search": {
+                "mode": "match"
+            }
+        },
+        {
+            "fullUrl": "http://localhost:8080/fhir/Observation/102",
+            "resource": {
+                "resourceType": "Observation",
+                "id": "102",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2022-05-13T09:19:43.682+00:00",
+                    "source": "#8Vdb6BbRxzmUfOdW"
+                },
+                "status": "final",
+                "code": {
+                    "coding": [
+                        {
+                            "code": "weight"
+                        }
+                    ]
+                },
+                "subject": {
+                    "reference": "Patient/1"
+                },
+                "effectiveDateTime": "2022-02-01T15:07:26+00:00",
+                "valueQuantity": {
+                    "value": 88,
+                    "unit": "kg"
+                }
+            },
+            "search": {
+                "mode": "match"
+            }
+        },
+        {
+            "fullUrl": "http://localhost:8080/fhir/Observation/202",
+            "resource": {
+                "resourceType": "Observation",
+                "id": "202",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2022-06-03T10:28:54.109+00:00",
+                    "source": "#83fpex72CdKd4MX7"
+                },
+                "status": "final",
+                "code": {
+                    "coding": [
+                        {
+                            "code": "weight"
+                        }
+                    ]
+                },
+                "subject": {
+                    "reference": "Patient/2"
+                },
+                "effectiveDateTime": "2022-02-01T15:07:26+00:00",
+                "valueQuantity": {
+                    "value": 88,
+                    "unit": "kg"
+                }
+            },
+            "search": {
+                "mode": "match"
+            }
+        },
+        {
+            "fullUrl": "http://localhost:8080/fhir/Observation/252",
+            "resource": {
+                "resourceType": "Observation",
+                "id": "252",
+                "meta": {
+                    "versionId": "1",
+                    "lastUpdated": "2022-06-07T14:34:45.835+00:00",
+                    "source": "#ZJ1fUerMcxBHrbCo"
+                },
+                "status": "final",
+                "code": {
+                    "coding": [
+                        {
+                            "code": "weight"
+                        }
+                    ]
+                },
+                "effectiveDateTime": "2022-02-01T15:07:26+00:00",
+                "valueQuantity": {
+                    "value": 90,
+                    "unit": "kg"
+                }
+            },
+            "search": {
+                "mode": "match"
+            }
+        }
+    ]
+}

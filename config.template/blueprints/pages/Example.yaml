@@ -1,16 +1,70 @@
 title: Example Page
+requiredPermissions:
+  - read-activity
+  - read-sensitive-info
 
 components:
-  - type: piechart
-    title: Chart title
-    specifications:
+  # The sample SQLite database only contains data between December 2021 and January 2022
+  # Please use the date picker to select the appropriate time period
+  - type: columns
+    # requiredPermissions:
+    #   - read-activity    
+    components:
+    - type: chart
+      title: Steps
+      query:
+        database: database_id
+        tables: activityLogs
+        fields: [Date, Duration, Activity, Steps]
+      spec:
+        mark: line
+        encoding:
+          x:
+            field: Date
+            type: temporal
+          y:
+            field: Steps
+            type: quantitative
+    
+    - type: chart
+      title: Steps / Duration
+      query:
+        database: database_id
+        tables: activityLogs
+        fields: [Date, Duration, Activity, Steps]
+      spec:
+        mark: point
+        encoding:
+          x:
+            field: Steps
+            type: quantitative
+          y:
+            field: Duration
+            type: quantitative
+  
+  - type: value
+    title: Summary
+    # reducer: customReducer
+    query:
       database: database_id
-      table: activities
-      x: type
+      tables: [activityLogs]
+      fields:
+        - target: Calories
+          operator: avg
+        - target: Steps
+          operator: avg              
+    warnings:
+      Steps:
+        threshold: 2000
+        operator: '>'            
 
   - type: table
-    title: Table title
-    specifications:
+    title: All data
+    query:
       database: database_id
-      tables: activities
-      attributes: [userId, activityId, value, type]
+      tables: [activityLogs]
+      fields: [Duration, Date, ActivityType, Steps, Calories]
+    warnings:
+      Duration:
+        threshold: 1222000
+        operator: '>'

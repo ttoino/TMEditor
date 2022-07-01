@@ -1,0 +1,17 @@
+{
+  "indexes": [{
+    "collectionGroup": "activityLogs",
+    "queryScope": "COLLECTION",
+    "fields": [
+      {
+        "fieldPath": "UserId",
+        "order": "ASCENDING"
+      },
+      {
+        "fieldPath": "Date",
+        "order": "ASCENDING"
+      }
+    ]
+  }],
+  "fieldOverrides": []
+}

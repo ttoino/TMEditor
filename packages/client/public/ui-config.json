@@ -1,0 +1,9 @@
+{
+    "api_url": "/api",
+    "auth": {
+        "provider": null
+    },
+    "theme": {
+
+    }
+}
