@@ -3,7 +3,7 @@ id: reducers
 title: Extending data formatting
 ---
 
-With Trial Monitor we try to do some educated guesses regarding how data is structured based on each database type. Once data is retrieved it goes through our internal functions to be formatted so it can be interpreted by the UI components. While this works in most situations, data might be stored in a structured not supported. Understanding these use cases, it is possible to construct your own parsing functions to have control over the formatting process.
+With Trial Monitor we try to do some educated guesses regarding how data is structured based on each database type. Once data is retrieved it goes through its internal functions to be formatted so it can be interpreted by the UI components. While this works in many situations, sometimes additional processing may be required. For instance, data might be stored in a structured not supported by the frontend (e.g. stringified JSON), or you need to transform the data (e.g. calculate the score of a questionnaire based on raw data). Understanding these use cases, it is possible to write your own parsing functions to have control over the formatting process.
 
 This can be accomplished by writing a reducer function that receives data as input, perform a set of operations over it and return the resulting data as an output.
 

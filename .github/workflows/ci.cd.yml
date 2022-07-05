@@ -43,7 +43,7 @@ jobs:
     runs-on: ubuntu-latest
     # Only build and deploy docker images if on master branch and not a PR
     needs: [test]
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master' && needs.test.result != 'failure'
+    if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/')) && needs.test.result != 'failure'
     permissions:
       packages: write
       contents: read
