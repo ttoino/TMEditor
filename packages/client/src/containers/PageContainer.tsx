@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useQuery } from 'react-query'
-import { useParams, useSearchParams } from 'react-router-dom'
+import { useParams, useSearchParams, useLocation, useNavigate } from 'react-router-dom'
 
 import { styled } from '@app/theme'
 import { getPage } from '@app/api'
@@ -14,7 +14,18 @@ const PageContainer = () => {
   const [searchParams] = useSearchParams()
   const params = Object.fromEntries(searchParams)
   const uiConfig = useUIConfig()
+  const location = useLocation()
+  const navigateTo = useNavigate()
+
   const { data, isLoading } = useQuery(['page', page, params], () => getPage(page, searchParams, uiConfig?.api_url))
+
+  useEffect(() => {
+    if (!validateParams(params)) {
+      const { startDate, endDate, ...search } = params
+
+      navigateTo({ pathname: location.pathname, search: new URLSearchParams(search).toString() })
+    }
+  })
 
   if (isLoading || !data) {
     return (
@@ -67,3 +78,13 @@ const LoadingContainer = styled('div', {
   alignItems: 'center',
   height: '100%'
 })
+
+const validateParams = (params: { [k: string]: string }) => {
+  const hasStartDate = Object.prototype.hasOwnProperty.call(params, 'startDate')
+  const hasEndDate = Object.prototype.hasOwnProperty.call(params, 'endDate')
+  if (hasStartDate && hasEndDate) {
+    if (new Date(params.endDate) > new Date(params.startDate)) return true
+    return false
+  } else if (hasStartDate || hasEndDate) return false
+  return true
+}

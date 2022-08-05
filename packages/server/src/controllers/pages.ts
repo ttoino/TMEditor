@@ -13,6 +13,11 @@ export default async function (req: Request, res: Response): Promise<void> {
 
   if (await validatePermissions(req, res, readPagePermissions(page))) {
     try {
+      if (!validateDateQuery(req.query)) {
+        res.status(400).send('Wrong query parameters')
+        return
+      }
+
       const { components, title } = await readUIMetadata(page)
 
       res.status(200).send({
@@ -20,7 +25,7 @@ export default async function (req: Request, res: Response): Promise<void> {
         components: await parseComponentsData(req, res, components)
       })
     } catch (e) {
-      console.log(e)
+      logger.error(e)
       res.sendStatus(500)
     }
   } else {
@@ -66,6 +71,7 @@ const parseComponentsData = async (req: Request, res: Response, components: UICo
     }
 
     const cacheKey = generateCacheKey(component.query, req.query)
+    req.logging.add(JSON.stringify({ ...component.query, ...req.query }))
 
     let data = JSON.parse(await getCache(cacheKey) || '""')
 
@@ -93,4 +99,13 @@ const parseComponentsData = async (req: Request, res: Response, components: UICo
       meta: await getMeta(component.query)
     }
   }))
+}
+const validateDateQuery = (query: any) => {
+  const hasStartDate = Object.prototype.hasOwnProperty.call(query, 'startDate')
+  const hasEndDate = Object.prototype.hasOwnProperty.call(query, 'endDate')
+  if (hasStartDate && hasEndDate) {
+    if (new Date(query.endDate) > new Date(query.startDate)) return true
+    return false
+  } else if (hasStartDate || hasEndDate) return false
+  return true
 }

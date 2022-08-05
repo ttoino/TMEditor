@@ -17,8 +17,9 @@ preferred-citation:
       given-names: Pedro
     - family-names: Nunes
       given-names: Francisco
-  journal: SoftwareX (under review)
+  journal: SoftwareX
   type: article
   year: 2021
+  volume: 16 
 
 version: 0.1

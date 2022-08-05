@@ -9,9 +9,7 @@ type Participant = {
   __cohort?: string,
 }
 
-export default function useParticipants(): Participant[] {
+export default function useParticipants () {
   const uiConfig = useUIConfig()
-  const { data = [] } = useQuery('participants', () => getParticipants(uiConfig?.api_url))
-
-  return data
+  return useQuery<Participant[], any>('participants', () => getParticipants(uiConfig?.api_url))
 }

@@ -1,19 +1,18 @@
 import React from 'react'
-import { useQuery } from 'react-query'
 import { Link, NavLink } from 'react-router-dom'
 
 import { styled } from '@app/theme'
 import { useAuth } from '@app/auth'
-import { getConfig } from '@app/api'
-import type { ResponseSiteConfig } from '@types'
+import type { PageName } from '@types'
 import { useUIConfig } from '@app/config-provider'
 
-export default function Sidebar () {
+interface Props {
+  pages: PageName[]
+}
+
+export default function Sidebar ({ pages }: Props) {
   const { signOut, hasAuth } = useAuth()
   const uiConfig = useUIConfig()
-  const { data } = useQuery('config', () => getConfig(uiConfig?.api_url))
-
-  const { pages } = data as ResponseSiteConfig
 
   return (
     <Wrapper>
@@ -22,7 +21,7 @@ export default function Sidebar () {
       </Logo>
 
       <StyledList>
-        {pages.map(({ fileName, name }) => {
+        {pages?.map(({ fileName, name }) => {
           return (
             <li key={fileName}><StyledLink as={NavLink} to={`/pages/${fileName}`}>{name}</StyledLink></li>
           )

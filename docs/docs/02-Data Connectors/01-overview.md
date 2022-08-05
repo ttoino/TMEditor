@@ -3,7 +3,7 @@ id: overview
 title: Overview
 ---
 
-Trial Monitor is capable of connecting to multiple databases and presenting information from these databases under a single interface. Currently Trial Monitor has database connectors for [SQL](sql), and [Firebase](firebase).
+Trial Monitor is capable of connecting to multiple databases and presenting information from these databases under a single interface. Currently Trial Monitor has database connectors for [SQL](sql), [Firebase](firebase), and [FHIR](fhir).
 
 Each database connector has the following responsibilities:
 
@@ -33,7 +33,7 @@ databases:
 Each database definition has:
 
 - **id**: a unique string that should be defined in case there are multiple databases
-- **type**: `firebase` | `fhir` | `mysql` | `postgresql` | `mariadb` | `sqlite` | `mssql`
+- **type**: `sql` | `firebase` | `fhir`
 - **subtype**: database subtype. Check the corresponding database for the available subtypes.
 - **config**: properties for data access. Check the corresponding database page for more information.
 - **users**: as a table or collection related to the users of the system always exists, it is through this property you are able to define:
@@ -92,7 +92,7 @@ You can set a global `timestampField` on the main database config, if all tables
 ````yaml
   - id: database_id
     timestampField: myTimestampField
-    ...
+    # ...
 ````
 
 Or a different value for each table/doc:
@@ -100,6 +100,7 @@ Or a different value for each table/doc:
 ````yaml
   - id: database_id
     timestampField: myTimestampField
+    # ...
     structure:
       table_name:
         timestampField: otherName

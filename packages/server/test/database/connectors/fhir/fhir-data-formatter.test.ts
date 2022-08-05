@@ -15,17 +15,17 @@ test('generateFiltersQuery - Query with multiple filters', () => {
     }, {
       target: 'date',
       operator: '<=',
-      value: "2020-04-12"
+      value: '2020-04-12'
     }, {
       target: 'date',
       operator: '>',
-      value: "2019-04-12"
+      value: '2019-04-12'
     }, {
       target: 'gender',
       operator: '!=',
-      value: "male"
+      value: 'male'
     }
-  ])).toEqual("value-quantity=gt50&date=le2020-04-12&date=gt2019-04-12&gender:not=male")
+  ])).toEqual('value-quantity=gt50&date=le2020-04-12&date=gt2019-04-12&gender:not=male')
 })
 
 test('generateFiltersQuery - Filter by user', () => {
@@ -35,7 +35,7 @@ test('generateFiltersQuery - Filter by user', () => {
       operator: '==',
       value: 'Patient/4401'
     }
-  ])).toEqual("subject=Patient/4401")
+  ])).toEqual('subject=Patient/4401')
 })
 
 // Number value ----------------------------------------------------------------------------------------------------------------------
@@ -47,7 +47,7 @@ test('generateFiltersQuery - Number value, == operator', () => {
       operator: '==',
       value: 100
     }
-  ])).toEqual("value-quantity=100")
+  ])).toEqual('value-quantity=100')
 })
 
 test('generateFiltersQuery - Number value, < operator', () => {
@@ -57,7 +57,7 @@ test('generateFiltersQuery - Number value, < operator', () => {
       operator: '<',
       value: 100.5
     }
-  ])).toEqual("value-quantity=lt100.5")
+  ])).toEqual('value-quantity=lt100.5')
 })
 
 test('generateFiltersQuery - Number value, <= operator', () => {
@@ -67,7 +67,7 @@ test('generateFiltersQuery - Number value, <= operator', () => {
       operator: '<=',
       value: 100.5
     }
-  ])).toEqual("value-quantity=le100.5")
+  ])).toEqual('value-quantity=le100.5')
 })
 
 test('generateFiltersQuery - Number value, > operator', () => {
@@ -77,7 +77,7 @@ test('generateFiltersQuery - Number value, > operator', () => {
       operator: '>',
       value: 100.5
     }
-  ])).toEqual("value-quantity=gt100.5")
+  ])).toEqual('value-quantity=gt100.5')
 })
 
 test('generateFiltersQuery - Number value, >= operator', () => {
@@ -87,7 +87,7 @@ test('generateFiltersQuery - Number value, >= operator', () => {
       operator: '>=',
       value: 100.5
     }
-  ])).toEqual("value-quantity=ge100.5")
+  ])).toEqual('value-quantity=ge100.5')
 })
 
 test('generateFiltersQuery - Number value, != operator', () => {
@@ -97,7 +97,7 @@ test('generateFiltersQuery - Number value, != operator', () => {
       operator: '!=',
       value: 100.5
     }
-  ])).toEqual("value-quantity=ne100.5")
+  ])).toEqual('value-quantity=ne100.5')
 })
 
 test('generateFiltersQuery - Number value, +- operator', () => {
@@ -107,7 +107,7 @@ test('generateFiltersQuery - Number value, +- operator', () => {
       operator: '+-',
       value: 100.5
     }
-  ])).toEqual("value-quantity=ap100.5")
+  ])).toEqual('value-quantity=ap100.5')
 })
 
 // Date value ----------------------------------------------------------------------------------------------------------------------
@@ -117,9 +117,9 @@ test('generateFiltersQuery - Date value, == operator', () => {
     {
       target: 'date',
       operator: '==',
-      value: "2020-04-12"
+      value: '2020-04-12'
     }
-  ])).toEqual("date=2020-04-12")
+  ])).toEqual('date=2020-04-12')
 })
 
 test('generateFiltersQuery - Date value, < operator', () => {
@@ -127,9 +127,9 @@ test('generateFiltersQuery - Date value, < operator', () => {
     {
       target: 'date',
       operator: '<',
-      value: "2020-04-12"
+      value: '2020-04-12'
     }
-  ])).toEqual("date=lt2020-04-12")
+  ])).toEqual('date=lt2020-04-12')
 })
 
 test('generateFiltersQuery - Date value, <= operator', () => {
@@ -137,9 +137,9 @@ test('generateFiltersQuery - Date value, <= operator', () => {
     {
       target: 'date',
       operator: '<=',
-      value: "2020-04-12"
+      value: '2020-04-12'
     }
-  ])).toEqual("date=le2020-04-12")
+  ])).toEqual('date=le2020-04-12')
 })
 
 test('generateFiltersQuery - Date value, > operator', () => {
@@ -147,9 +147,9 @@ test('generateFiltersQuery - Date value, > operator', () => {
     {
       target: 'date',
       operator: '>',
-      value: "2020-04-12"
+      value: '2020-04-12'
     }
-  ])).toEqual("date=gt2020-04-12")
+  ])).toEqual('date=gt2020-04-12')
 })
 
 test('generateFiltersQuery - Date value, >= operator', () => {
@@ -157,9 +157,9 @@ test('generateFiltersQuery - Date value, >= operator', () => {
     {
       target: 'date',
       operator: '>=',
-      value: "2020-04-12"
+      value: '2020-04-12'
     }
-  ])).toEqual("date=ge2020-04-12")
+  ])).toEqual('date=ge2020-04-12')
 })
 
 test('generateFiltersQuery - Date value, != operator', () => {
@@ -167,9 +167,9 @@ test('generateFiltersQuery - Date value, != operator', () => {
     {
       target: 'date',
       operator: '!=',
-      value: "2020-04-12"
+      value: '2020-04-12'
     }
-  ])).toEqual("date=ne2020-04-12")
+  ])).toEqual('date=ne2020-04-12')
 })
 
 test('generateFiltersQuery - Date value, +- operator', () => {
@@ -177,9 +177,9 @@ test('generateFiltersQuery - Date value, +- operator', () => {
     {
       target: 'date',
       operator: '+-',
-      value: "2020-04-12"
+      value: '2020-04-12'
     }
-  ])).toEqual("date=ap2020-04-12")
+  ])).toEqual('date=ap2020-04-12')
 })
 
 // String value ----------------------------------------------------------------------------------------------------------------------
@@ -189,9 +189,9 @@ test('generateFiltersQuery - String value, == operator', () => {
     {
       target: 'gender',
       operator: '==',
-      value: "male"
+      value: 'male'
     }
-  ])).toEqual("gender=male")
+  ])).toEqual('gender=male')
 })
 
 test('generateFiltersQuery - String value, != operator', () => {
@@ -199,9 +199,9 @@ test('generateFiltersQuery - String value, != operator', () => {
     {
       target: 'gender',
       operator: '!=',
-      value: "male"
+      value: 'male'
     }
-  ])).toEqual("gender:not=male")
+  ])).toEqual('gender:not=male')
 })
 
 test('generateFiltersQuery - String value, contains operator', () => {
@@ -209,9 +209,9 @@ test('generateFiltersQuery - String value, contains operator', () => {
     {
       target: 'gender',
       operator: 'contains',
-      value: "male"
+      value: 'male'
     }
-  ])).toEqual("gender:contains=male")
+  ])).toEqual('gender:contains=male')
 })
 
 test('generateFiltersQuery - String value, exact operator', () => {
@@ -219,9 +219,9 @@ test('generateFiltersQuery - String value, exact operator', () => {
     {
       target: 'gender',
       operator: 'exact',
-      value: "male"
+      value: 'male'
     }
-  ])).toEqual("gender:exact=male")
+  ])).toEqual('gender:exact=male')
 })
 
 test('generateFiltersQuery - String value, in operator', () => {
@@ -229,9 +229,9 @@ test('generateFiltersQuery - String value, in operator', () => {
     {
       target: 'gender',
       operator: 'in',
-      value: "male"
+      value: 'male'
     }
-  ])).toEqual("gender:in=male")
+  ])).toEqual('gender:in=male')
 })
 
 // List of numbers value ----------------------------------------------------------------------------------------------------------------------
@@ -241,9 +241,9 @@ test('generateFiltersQuery - List of numbers value, == operator', () => {
     {
       target: 'code',
       operator: '==',
-      value: "12,13,14"
+      value: '12,13,14'
     }
-  ])).toEqual("code:eq=12,13,14")
+  ])).toEqual('code:eq=12,13,14')
 })
 
 // List of strings value ----------------------------------------------------------------------------------------------------------------------
@@ -253,9 +253,9 @@ test('generateFiltersQuery - List of strings value, == operator', () => {
     {
       target: 'code',
       operator: '==',
-      value: "weight,height"
+      value: 'weight,height'
     }
-  ])).toEqual("code=weight,height")
+  ])).toEqual('code=weight,height')
 })
 
 test('generateFiltersQuery - List of strings value, contains operator', () => {
@@ -263,9 +263,9 @@ test('generateFiltersQuery - List of strings value, contains operator', () => {
     {
       target: 'code',
       operator: 'contains',
-      value: "weight,height"
+      value: 'weight,height'
     }
-  ])).toEqual("code:contains=weight,height")
+  ])).toEqual('code:contains=weight,height')
 })
 
 test('generateFiltersQuery - List of strings value, exact operator', () => {
@@ -273,9 +273,9 @@ test('generateFiltersQuery - List of strings value, exact operator', () => {
     {
       target: 'code',
       operator: 'exact',
-      value: "weight,height"
+      value: 'weight,height'
     }
-  ])).toEqual("code:exact=weight,height")
+  ])).toEqual('code:exact=weight,height')
 })
 
 test('generateFiltersQuery - List of strings value, in operator', () => {
@@ -283,11 +283,10 @@ test('generateFiltersQuery - List of strings value, in operator', () => {
     {
       target: 'code',
       operator: 'in',
-      value: "weight,height"
+      value: 'weight,height'
     }
-  ])).toEqual("code:in=weight,height")
+  ])).toEqual('code:in=weight,height')
 })
-
 
 /**
  *
@@ -298,54 +297,54 @@ test('generateFiltersQuery - List of strings value, in operator', () => {
 test('searchInObject - Simple key', () => {
   expect(searchInObject(
     {
-      "keyA": "valueA",
-      "keyB": "valueB",
-      "meta": {
-        "versionId": "1",
-        "lastUpdated": "2022-01-019T10:31:25.513+00:00",
-        "source": "#zr1twgFjQgaHmFRK"
-      },
+      keyA: 'valueA',
+      keyB: 'valueB',
+      meta: {
+        versionId: '1',
+        lastUpdated: '2022-01-019T10:31:25.513+00:00',
+        source: '#zr1twgFjQgaHmFRK'
+      }
     },
     'keyA'
-  )).toEqual("valueA")
+  )).toEqual('valueA')
 })
 
 test('searchInObject - Key with 1 child', () => {
   expect(searchInObject(
     {
-      "keyA": "valueA",
-      "keyB": {
-        "childKeyA": "valueChildA",
-        "childKeyB": "valueChildB"
-      },
+      keyA: 'valueA',
+      keyB: {
+        childKeyA: 'valueChildA',
+        childKeyB: 'valueChildB'
+      }
     },
     'keyB.childKeyB'
-  )).toEqual("valueChildB")
+  )).toEqual('valueChildB')
 })
 
 test('searchInObject - Key with 2 child', () => {
   expect(searchInObject(
     {
-      "keyA": "valueA",
-      "keyB": {
-        "childKeyA": {
-          "2childKey": "2childValue"
+      keyA: 'valueA',
+      keyB: {
+        childKeyA: {
+          '2childKey': '2childValue'
         },
-        "childKeyB": "valueChildB"
-      },
+        childKeyB: 'valueChildB'
+      }
     },
     'keyB.childKeyA.2childKey'
-  )).toEqual("2childValue")
+  )).toEqual('2childValue')
 })
 
 test('searchInObject - No value for given key', () => {
   expect(searchInObject(
     {
-      "keyA": "valueA",
-      "keyB": {
-        "childKeyA": "valueChildA",
-        "childKeyB": "valueChildB"
-      },
+      keyA: 'valueA',
+      keyB: {
+        childKeyA: 'valueChildA',
+        childKeyB: 'valueChildB'
+      }
     },
     'keyB.childKeyA.2childKey'
   )).toEqual(null)
@@ -354,16 +353,15 @@ test('searchInObject - No value for given key', () => {
 test('searchInObject - Number value', () => {
   expect(searchInObject(
     {
-      "keyA": "valueA",
-      "keyB": {
-        "childKeyA": "valueChildA",
-        "childKeyB": 12
-      },
+      keyA: 'valueA',
+      keyB: {
+        childKeyA: 'valueChildA',
+        childKeyB: 12
+      }
     },
     'keyB.childKeyB'
   )).toEqual(12)
 })
-
 
 /**
  *
@@ -387,13 +385,13 @@ test('calculateAggregationObject - one field & one operator w/ custom name', () 
   expect(calculateAggregationObject(
     objectsArray, [
     {
-      target: "value",
-      name: "weight",
-      operator: "avg"
+      target: 'value',
+      name: 'weight',
+      operator: 'avg'
     }
   ]))
     .toEqual({
-      "weight.avg": avgResult
+      'weight.avg': avgResult
     })
 })
 
@@ -401,12 +399,12 @@ test('calculateAggregationObject - one field & one operator w/o custom name', ()
   expect(calculateAggregationObject(
     objectsArray, [
     {
-      target: "value",
-      operator: "avg"
+      target: 'value',
+      operator: 'avg'
     }
   ]))
     .toEqual({
-      "value.avg": avgResult
+      'value.avg': avgResult
     })
 })
 
@@ -414,17 +412,17 @@ test('calculateAggregationObject - one field & multiple operators w/ custom name
   expect(calculateAggregationObject(
     objectsArray, [
     {
-      target: "value",
-      name: "weight",
-      operator: ["avg", "min", "max", "sum", "count"]
+      target: 'value',
+      name: 'weight',
+      operator: ['avg', 'min', 'max', 'sum', 'count']
     }
   ]))
     .toEqual({
-      "weight.avg": avgResult,
-      "weight.min": minResult,
-      "weight.max": maxResult,
-      "weight.sum": sumResult,
-      "weight.count": countResult
+      'weight.avg': avgResult,
+      'weight.min': minResult,
+      'weight.max': maxResult,
+      'weight.sum': sumResult,
+      'weight.count': countResult
     })
 })
 
@@ -432,16 +430,16 @@ test('calculateAggregationObject - one field & multiple operators w/o custom nam
   expect(calculateAggregationObject(
     objectsArray, [
     {
-      target: "value",
-      operator: ["avg", "min", "max", "sum", "count"]
+      target: 'value',
+      operator: ['avg', 'min', 'max', 'sum', 'count']
     }
   ]))
     .toEqual({
-      "value.avg": avgResult,
-      "value.min": minResult,
-      "value.max": maxResult,
-      "value.sum": sumResult,
-      "value.count": countResult
+      'value.avg': avgResult,
+      'value.min': minResult,
+      'value.max': maxResult,
+      'value.sum': sumResult,
+      'value.count': countResult
     })
 })
 
@@ -449,13 +447,13 @@ test('calculateAggregationObject - one field & one operator w/ custom name & res
   expect(calculateAggregationObject(
     objectsArray, [
     {
-      target: "value",
-      name: "weight",
-      operator: "avg"
+      target: 'value',
+      name: 'weight',
+      operator: 'avg'
     }
-  ], "Observation"))
+  ], 'Observation'))
     .toEqual({
-      "Observation.weight.avg": avgResult
+      'Observation.weight.avg': avgResult
     })
 })
 
@@ -463,12 +461,12 @@ test('calculateAggregationObject - one field & one operator w/o custom name w/ r
   expect(calculateAggregationObject(
     objectsArray, [
     {
-      target: "value",
-      operator: "avg"
+      target: 'value',
+      operator: 'avg'
     }
-  ], "Observation"))
+  ], 'Observation'))
     .toEqual({
-      "Observation.value.avg": avgResult
+      'Observation.value.avg': avgResult
     })
 })
 
@@ -476,17 +474,17 @@ test('calculateAggregationObject - one field & multiple operators w/ custom name
   expect(calculateAggregationObject(
     objectsArray, [
     {
-      target: "value",
-      name: "weight",
-      operator: ["avg", "min", "max", "sum", "count"]
+      target: 'value',
+      name: 'weight',
+      operator: ['avg', 'min', 'max', 'sum', 'count']
     }
-  ], "Observation"))
+  ], 'Observation'))
     .toEqual({
-      "Observation.weight.avg": avgResult,
-      "Observation.weight.min": minResult,
-      "Observation.weight.max": maxResult,
-      "Observation.weight.sum": sumResult,
-      "Observation.weight.count": countResult
+      'Observation.weight.avg': avgResult,
+      'Observation.weight.min': minResult,
+      'Observation.weight.max': maxResult,
+      'Observation.weight.sum': sumResult,
+      'Observation.weight.count': countResult
     })
 })
 
@@ -494,16 +492,16 @@ test('calculateAggregationObject - one field & multiple operators w/o custom nam
   expect(calculateAggregationObject(
     objectsArray, [
     {
-      target: "value",
-      operator: ["avg", "min", "max", "sum", "count"]
+      target: 'value',
+      operator: ['avg', 'min', 'max', 'sum', 'count']
     }
-  ], "Observation"))
+  ], 'Observation'))
     .toEqual({
-      "Observation.value.avg": avgResult,
-      "Observation.value.min": minResult,
-      "Observation.value.max": maxResult,
-      "Observation.value.sum": sumResult,
-      "Observation.value.count": countResult
+      'Observation.value.avg': avgResult,
+      'Observation.value.min': minResult,
+      'Observation.value.max': maxResult,
+      'Observation.value.sum': sumResult,
+      'Observation.value.count': countResult
     })
 })
 
@@ -511,8 +509,8 @@ test('calculateAggregationObject - invalid fields', () => {
   expect(calculateAggregationObject(
     objectsArray, [
     {
-      target: "value",
-      name: "weight"
+      target: 'value',
+      name: 'weight'
     }
   ]))
     .toEqual({})

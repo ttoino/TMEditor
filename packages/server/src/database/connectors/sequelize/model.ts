@@ -12,7 +12,10 @@ export const generateModels = async (sequelize: Sequelize, id: string) => {
   const auto = new SequelizeAuto(sequelize, null, null, {
     closeConnectionAutomatically: false,
     directory: `${modelsBaseDir}/${id}`,
-    noAlias: true
+    noAlias: true,
+    additional: {
+      timestamps: false
+    }
   })
   await auto.run()
 
@@ -21,7 +24,7 @@ export const generateModels = async (sequelize: Sequelize, id: string) => {
   Object.keys(structure).forEach((modelName: string) => {
     const model = (<ModelStructureSQL>structure)[modelName]
 
-    model.relations.forEach((relation) => {
+    model.relations?.forEach((relation) => {
       const m = db[modelName]
       const target = db[relation.target]
 

@@ -8,13 +8,13 @@ import useParticipants from '../hooks/useParticipants'
 import useCohorts from '../hooks/useCohorts'
 
 export default function FilterBar () {
-  const participants = useParticipants()
+  const { data: participants } = useParticipants()
   const cohorts = useCohorts()
   const [searchParams, setSearchParams] = useSearchParams()
 
   const user = searchParams.get('user')
-  const optionsParticipant = participants.map(({ __key, __label }) => ({ value: __key, label: __label }))
-  const currentUser = optionsParticipant.find(item => item.value.toString() === user)
+  const optionsParticipant = participants?.map(({ __key, __label }) => ({ value: __key, label: __label }))
+  const currentUser = optionsParticipant?.find(item => item.value.toString() === user)
 
   const cohort = searchParams.get('cohort')
   const optionsCohorts = cohorts.map(item => ({ value: item, label: item }))

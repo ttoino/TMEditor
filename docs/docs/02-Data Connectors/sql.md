@@ -21,8 +21,6 @@ Or by passing the parameters individually using the `config` property:
 config:
   dialect: mariadb
   database: sql_db
-  username: user
-  password: user123
   host: 172.18.1.27
 ````
 
@@ -31,10 +29,20 @@ If you are using SQLite, you should do the following:
 ````yaml
 config:
   dialect: sqlite
-  storage: path/to/database.sqlite
+  storage: path/to/database.sqlite # Relative to config folder
 ````
 
 > Note that you have to manually install the [driver](https://sequelize.org/master/manual/getting-started.html) for your database of choice
+
+## Authentication
+
+If required, in the configuration of each database include an object named `authentication` with an `username` and `password` properties:
+
+```yaml
+authentication:
+  username: email@example.org
+  password: mypassword
+```
 
 ## Configuring the database structure
 
@@ -43,7 +51,6 @@ By default, the connector will try to generate the database models and their rel
 
 Each table comprises a common set of properties:
 - **PK** - a string that identifies the name of the primary key. This field is not needed for scenarios where its use is direct, in other words, the table will not be joined with others.
-- **attributes** - an array containing the list of attributes that will be used by the UI components.
 - **relations** - an array of relations. A relation contains a:
     - **type** - the type of relation, assuming as values: `belongsTo` | `belongsToMany` | `hasMany`
     - **target** - the table to which it is linked to

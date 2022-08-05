@@ -8,12 +8,14 @@ import { createCohortsMapByField } from '@app/utils/formatter'
 
 const getModule = (moduleName: string): any => {
   switch (moduleName) {
+    case 'sql':
+      return sequelizeModule
     case 'firebase':
       return firebaseModule
     case 'fhir':
       return fhirModule
-    default: // sequelize
-      return sequelizeModule
+    default:
+      throw new Error(`The connector ${moduleName} doesn't exit`)
   }
 }
 

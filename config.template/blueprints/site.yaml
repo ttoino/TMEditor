@@ -6,7 +6,7 @@ title: Trial Monitor
 
 databases:
   - id: database_id
-    type: sqlite
+    type: sql
     config:
       dialect: sqlite
       storage: sample.sqlite

@@ -1,5 +1,11 @@
 # Change Log
 
+## Version 0.2.1 (2022-08-05)-
+- Changed the configuration of the SQL connector 
+- Added logging of api calls
+- Improved handling of datetime in SQL
+- Bug fixes
+
 ## Version 0.2.0 (2022-07-01)
 
 - Support for Typescript

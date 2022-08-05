@@ -8,7 +8,7 @@ import {
 import { concatStringsByDot } from '@app/utils/formatter'
 import logger from '@app/utils/logger'
 import { CohortsMap, DatabaseQuery, DBConfigSQL, FieldAggregationOperator, FiltersQuery, SearchParams } from '@types'
-import { FindAttributeOptions, FindOptions, Includeable, Model, ModelStatic, Op, ProjectionAlias, Sequelize, WhereOperators, WhereOptions } from 'sequelize'
+import { DataTypes, FindAttributeOptions, FindOptions, Includeable, ModelStatic, Op, ProjectionAlias, Sequelize, WhereOperators, WhereOptions } from 'sequelize'
 import { containsAttribute, generateModels, getModelPrimaryKeys } from './model'
 import { getUniqueKeys } from '@app/utils'
 
@@ -34,8 +34,8 @@ export const connectToDatabase = async (dbConfig: DBConfigSQL) => {
   }
 
   let sequelize
-  if (dbConfig.config.uri) {
-    sequelize = new Sequelize(dbConfig.config.uri)
+  if (typeof dbConfig.config === 'string') {
+    sequelize = new Sequelize(dbConfig.config)
   } else if (dbConfig.config.storage) {
     sequelize = new Sequelize({
       ...dbConfig.config,
@@ -46,7 +46,7 @@ export const connectToDatabase = async (dbConfig: DBConfigSQL) => {
       dbConfig.config.database,
       dbConfig.authentication.username,
       dbConfig.authentication.password,
-      { host: dbConfig.config.host, dialect: dbConfig.config.dialect, ...defaultOverallOptions }
+      { ...defaultOverallOptions, ...dbConfig.config }
     )
   }
   sequelize.options.logging = false
@@ -104,9 +104,9 @@ const retrieveTableAttr = async (model: ModelStatic<any>,
       if (splittedProperty.length > 1 && splittedProperty[0] === tableName) {
         consumedProperties.push(rename
           ? [
-            splittedProperty[1],
-            splittedProperty[0] + '|' + splittedProperty[1]
-          ]
+              splittedProperty[1],
+              splittedProperty[0] + '|' + splittedProperty[1]
+            ]
           : splittedProperty[1])
       } else {
         const containsAttr = await containsAttribute(model, property)
@@ -182,7 +182,7 @@ const buildInnerJoinQuery = async (
   const innerJoin = async (modelName: string, include?: Includeable[]) => {
     const model = db[modelName]
     const innerJoinObject: Includeable = {
-      model: model,
+      model,
       required: true
     }
     if (include?.length) {
@@ -287,17 +287,12 @@ const buildQueryAndExec = async (
 
   // console.log('Running query >> ', queryOptions, innerJoinContent, dataAccessInfo?.groupby)
 
-  let queryResult
-  try {
-    queryResult = await db[firstEl].findAll({
-      raw: true,
-      ...queryOptions,
-      ...innerJoinContent,
-      group: dataAccessInfo?.groupby || undefined
-    })
-  } catch (error) {
-    logger.error(error)
-  }
+  const queryResult = await db[firstEl].findAll({
+    raw: true,
+    ...queryOptions,
+    ...innerJoinContent,
+    group: dataAccessInfo?.groupby || undefined
+  })
 
   // console.log('Query result >> ', queryResult)
 
@@ -341,14 +336,17 @@ export const getData = async (query: DatabaseQuery, params: SearchParams, dbInfo
       const timestampField = getTimestampField(query, dbInfo)
 
       if (timestampField) {
+        const type = db[table].getAttributes()[timestampField].type
+        const typeKey = typeof type === 'string' ? type : type.key
+
         filters.push({
           target: `${table}.${timestampField}`,
           operator: '>=',
-          value: params.startDate
+          value: typeKey === DataTypes.DATE.key ? new Date(params.startDate) : params.startDate
         }, {
           target: `${table}.${timestampField}`,
           operator: '<=',
-          value: params.endDate
+          value: typeKey === DataTypes.DATE.key ? new Date(params.endDate) : params.endDate
         })
       }
     }
@@ -381,9 +379,9 @@ export const getMeta = (query: DatabaseQuery, dbInfo: DBConfigSQL) => {
 }
 
 const getTimestampField = (query: DatabaseQuery, dbInfo: DBConfigSQL) => {
-  const timestampField = dbInfo?.timestampField ?? dbInfo.timestampField
-  const db = databases[query.database]
   const table = defaultAsArray(query.tables)[0]
+  const db = databases[query.database]
+  const timestampField = (dbInfo?.structure && dbInfo?.structure[table]?.timestampField) ?? dbInfo.timestampField
 
   if (timestampField) {
     const tableHasColumn = Object.keys(db[table].getAttributes()).includes(timestampField)

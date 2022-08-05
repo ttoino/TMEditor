@@ -46,7 +46,7 @@ const createRealm = async (kcAdminClient: KcAdminClient, credentials: Credential
       enabled: true
     })
 
-    logger.info('Created realmn >> ', createdRealm)
+    logger.info('Created realm >> ', createdRealm)
 
     // we need to reauthenticate for some reason after creating the realmn
     await kcAdminClient.auth(credentials)

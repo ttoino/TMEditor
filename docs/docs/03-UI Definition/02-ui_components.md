@@ -143,8 +143,8 @@ The `value` component provides a summative view of one or more measures. Values 
 - **precision:** `number` (optional) Default: 2. Controls the decimal places in the result
 
 ```yaml
-- type: table
-  title: Table title
+- type: value
+  title: Value title
   query:
     database: database_id
     tables: [table1]
@@ -168,8 +168,8 @@ The `summary` component provides summary statistics from a specific field. The c
 - **precision:** `number` (optional) Default: 2. Controls the decimal places in the result
 
 ```yaml
-- type: table
-  title: Table title
+- type: summary
+  title: Summary title
   query:
     database: database_id
     tables: [table1]

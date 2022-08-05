@@ -94,5 +94,5 @@ In development mode, Trial Monitor API will run by default on port `3001`, while
 When using Trial Monitor please cite the following publication:
 
 ```
-Ribeiro J., Lima P., Nunes F. "Trial Monitor: Scaffolding Personalised Web Dashboards for Human-Computer Interaction Field Trials". SoftwareX (under review) (2021).
+Ribeiro J., Lima P., Nunes F. "Trial Monitor: Scaffolding Personalised Web Dashboards for Human-Computer Interaction Field Trials". SoftwareX, 16. (2021).
 ```

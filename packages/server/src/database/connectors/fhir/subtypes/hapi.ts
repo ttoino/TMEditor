@@ -1,10 +1,10 @@
 import logger from '@app/utils/logger'
 import { DBConfigFhir, DBHapiFhir, UsersConfig, BundleEntry, HapiFhirDatabaseQuery, SearchParams, CohortsMap } from '@types'
 import { defaultAsArray } from '@app/utils/default-values-generator'
-import axios from 'axios';
+import axios from 'axios'
 import { ERROR_FETCHING_FHIR_DATA } from '@app/constants/logger-messages'
-import { formatData, formatUsersData, generateFiltersQuery } from '../fhir-data-formatter';
-import { formatDate } from '@app/utils/formatter';
+import { formatData, formatUsersData, generateFiltersQuery } from '../fhir-data-formatter'
+import { formatDate } from '@app/utils/formatter'
 
 const connectToDatabase = (dbConfig: DBConfigFhir): DBHapiFhir => {
   const { config, authentication } = dbConfig
@@ -34,9 +34,9 @@ const getData = async (dbInstance: DBHapiFhir, query: HapiFhirDatabaseQuery, par
   if (startDate) filters.push({ target: 'date', operator: '>=', value: formatDate(startDate) })
   if (endDate) filters.push({ target: 'date', operator: '<=', value: formatDate(endDate) })
 
-  if (cohort && cohorts.hasOwnProperty(cohort)) {
+  if (cohort && Object.prototype.hasOwnProperty.call(cohorts, cohort)) {
     const cohortUsers: string[] = cohorts[cohort]
-    filters.push({ target: 'subject', operator: 'in', value: cohortUsers.join(",") })
+    filters.push({ target: 'subject', operator: 'in', value: cohortUsers.join(',') })
   }
 
   const requestData: BundleEntry[] = await fetchData(dbInstance, query.tables, generateFiltersQuery(filters))
@@ -50,10 +50,10 @@ const fetchData = async (dbInstance: DBHapiFhir, resource: string, filters: stri
   let data: BundleEntry[] = []
   try {
     let headers: any
-    if (authentication && "bearer" in authentication) {
-      headers = { 'Authorization': `Bearer ${authentication.bearer}` }
-    } else if (authentication && "username" in authentication && "password" in authentication) {
-      headers = { 'Authorization': `Basic ${authentication.username}:${authentication.password}` }
+    if (authentication && 'bearer' in authentication) {
+      headers = { Authorization: `Bearer ${authentication.bearer}` }
+    } else if (authentication && 'username' in authentication && 'password' in authentication) {
+      headers = { Authorization: `Basic ${authentication.username}:${authentication.password}` }
     }
 
     // Hapi Fhir only allows to query a max of 500 entries
@@ -63,7 +63,7 @@ const fetchData = async (dbInstance: DBHapiFhir, resource: string, filters: stri
 
       // Recursively get all entries
       let tempResponse = response
-      while (tempResponse.data.link.length > 1 && tempResponse.data.link[1].relation === "next") {
+      while (tempResponse.data.link.length > 1 && tempResponse.data.link[1].relation === 'next') {
         const nextUrl = tempResponse.data.link[1].url
         tempResponse = await axios(nextUrl, { headers })
         if (tempResponse) {

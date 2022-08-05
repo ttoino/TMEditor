@@ -6,7 +6,13 @@ import RouterProvider from './RouterProvider'
 import { globalStyles } from './theme'
 import ThemeApplier from './theme/ThemeApplier'
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false
+    }
+  }
+})
 
 function App () {
   globalStyles()

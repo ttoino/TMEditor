@@ -41,12 +41,12 @@ export interface DBGeneric {
 }
 
 export interface DBConfigSQL extends DBGeneric {
-  type: 'sqlite' | 'mysql' | 'mariadb' | 'postgres' | 'mssql',
-  config: {
+  type: 'sql',
+  config: string | {
     database: string,
-    uri: string,
     host: string,
-    dialect: 'mysql' | 'mariadb' | 'postgres' | 'mssql',
+    port: number,
+    dialect: 'sqlite' | 'mysql' | 'mariadb' | 'postgres' | 'mssql',
     storage: string,
   },
   authentication: UserPassAuth,
@@ -106,7 +106,7 @@ export type ModelStructureRelationSQL = {
 export type ModelStructureSQL = {
   [key: string]: {
     timestampField?: string,
-    relations: ModelStructureRelationSQL[]
+    relations?: ModelStructureRelationSQL[]
   }
 }
 

@@ -1,57 +1,57 @@
-import axios from "axios";
-import MockAdapter from "axios-mock-adapter";
+import axios from 'axios'
+import MockAdapter from 'axios-mock-adapter'
 import { getData, setupDatabases } from '@app/database/api'
 import type { DatabaseQuery } from '@types'
-import { searchInObject } from "@app/database/connectors/fhir/fhir-data-formatter";
+import { searchInObject } from '@app/database/connectors/fhir/fhir-data-formatter'
 
 const DATABASE_IDS = ['hapi_fhir_test_api']
 const resource = 'Observation'
 const hapiFhirAssets = '../../../assets/hapi-fhir'
 
-let mock: MockAdapter;
+let mock: MockAdapter
 const obs = require(`${hapiFhirAssets}/obs.json`)
-const obs_weight = require(`${hapiFhirAssets}/obs-weight.json`)
-const obs_eq173 = require(`${hapiFhirAssets}/obs-eq173.json`)
-const obs_ne173 = require(`${hapiFhirAssets}/obs-ne173.json`)
-const obs_gt50 = require(`${hapiFhirAssets}/obs-gt50.json`)
-const obs_gt173 = require(`${hapiFhirAssets}/obs-gt173.json`)
-const obs_lt50 = require(`${hapiFhirAssets}/obs-lt50.json`)
-const obs_lt173 = require(`${hapiFhirAssets}/obs-lt173.json`)
-const obs_ge50 = require(`${hapiFhirAssets}/obs-ge50.json`)
-const obs_le173 = require(`${hapiFhirAssets}/obs-le173.json`)
-const obs_ge173 = require(`${hapiFhirAssets}/obs-ge173.json`)
-const obs_le50 = require(`${hapiFhirAssets}/obs-le50.json`)
-const obs_user1 = require(`${hapiFhirAssets}/obs-user1.json`)
-const obs_user1_2 = require(`${hapiFhirAssets}/obs-user1-2.json`)
-const obs_date = require(`${hapiFhirAssets}/obs-date.json`)
-const obs_date_user1 = require(`${hapiFhirAssets}/obs-date-user1.json`)
-const obs_contains = require(`${hapiFhirAssets}/obs-contains.json`)
-const obs_exact = require(`${hapiFhirAssets}/obs-exact.json`)
-const obs_not = require(`${hapiFhirAssets}/obs-not.json`)
-const obs_ap = require(`${hapiFhirAssets}/obs-ap.json`)
+const obsWeight = require(`${hapiFhirAssets}/obs-weight.json`)
+const obsEq173 = require(`${hapiFhirAssets}/obs-eq173.json`)
+const obsNe173 = require(`${hapiFhirAssets}/obs-ne173.json`)
+const obsGt50 = require(`${hapiFhirAssets}/obs-gt50.json`)
+const obsGt173 = require(`${hapiFhirAssets}/obs-gt173.json`)
+const obsLt50 = require(`${hapiFhirAssets}/obs-lt50.json`)
+const obsLt173 = require(`${hapiFhirAssets}/obs-lt173.json`)
+const obsGe50 = require(`${hapiFhirAssets}/obs-ge50.json`)
+const obsLe173 = require(`${hapiFhirAssets}/obs-le173.json`)
+const obsGe173 = require(`${hapiFhirAssets}/obs-ge173.json`)
+const obsLe50 = require(`${hapiFhirAssets}/obs-le50.json`)
+const obsUser1 = require(`${hapiFhirAssets}/obs-user1.json`)
+const obsUser12 = require(`${hapiFhirAssets}/obs-user1-2.json`)
+const obsDate = require(`${hapiFhirAssets}/obs-date.json`)
+const obsDateUser1 = require(`${hapiFhirAssets}/obs-date-user1.json`)
+const obsContains = require(`${hapiFhirAssets}/obs-contains.json`)
+const obsExact = require(`${hapiFhirAssets}/obs-exact.json`)
+const obsNot = require(`${hapiFhirAssets}/obs-not.json`)
+const obsAp = require(`${hapiFhirAssets}/obs-ap.json`)
 
 beforeAll(() => {
-  mock = new MockAdapter(axios);
-  mock.onGet('http://localhost:8080/fhir/Observation?_count=500&').reply(200, obs);
-  mock.onGet('http://localhost:8080/fhir/Observation?_count=500&code=weight').reply(200, obs_weight);
-  mock.onGet('http://localhost:8080/fhir/Observation?_count=500&value-quantity=173').reply(200, obs_eq173);
-  mock.onGet('http://localhost:8080/fhir/Observation?_count=500&value-quantity=ne173').reply(200, obs_ne173);
-  mock.onGet('http://localhost:8080/fhir/Observation?_count=500&value-quantity=gt50').reply(200, obs_gt50);
-  mock.onGet('http://localhost:8080/fhir/Observation?_count=500&value-quantity=gt173').reply(200, obs_gt173);
-  mock.onGet('http://localhost:8080/fhir/Observation?_count=500&value-quantity=lt50').reply(200, obs_lt50);
-  mock.onGet('http://localhost:8080/fhir/Observation?_count=500&value-quantity=lt173').reply(200, obs_lt173);
-  mock.onGet('http://localhost:8080/fhir/Observation?_count=500&value-quantity=ge50').reply(200, obs_ge50);
-  mock.onGet('http://localhost:8080/fhir/Observation?_count=500&value-quantity=le173').reply(200, obs_le173);
-  mock.onGet('http://localhost:8080/fhir/Observation?_count=500&value-quantity=ge173').reply(200, obs_ge173);
-  mock.onGet('http://localhost:8080/fhir/Observation?_count=500&value-quantity=le50').reply(200, obs_le50);
-  mock.onGet('http://localhost:8080/fhir/Observation?_count=500&subject=Patient/1').reply(200, obs_user1);
-  mock.onGet('http://localhost:8080/fhir/Observation?_count=500&subject:eq=1,2').reply(200, obs_user1_2);
-  mock.onGet('http://localhost:8080/fhir/Observation?_count=500&date=ge2022-01-01&date=le2022-02-01').reply(200, obs_date);
-  mock.onGet('http://localhost:8080/fhir/Observation?_count=500&subject=Patient/1&date=ge2022-01-01&date=le2022-02-01').reply(200, obs_date_user1);
-  mock.onGet('http://localhost:8080/fhir/Observation?_count=500&code:contains=weight,height').reply(200, obs_contains);
-  mock.onGet('http://localhost:8080/fhir/Observation?_count=500&code:exact=weight,height').reply(200, obs_exact);
-  mock.onGet('http://localhost:8080/fhir/Observation?_count=500&code:not=weight').reply(200, obs_not);
-  mock.onGet('http://localhost:8080/fhir/Observation?_count=500&value-quantity=ap80').reply(200, obs_ap);
+  mock = new MockAdapter(axios)
+  mock.onGet('http://localhost:8080/fhir/Observation?_count=500&').reply(200, obs)
+  mock.onGet('http://localhost:8080/fhir/Observation?_count=500&code=weight').reply(200, obsWeight)
+  mock.onGet('http://localhost:8080/fhir/Observation?_count=500&value-quantity=173').reply(200, obsEq173)
+  mock.onGet('http://localhost:8080/fhir/Observation?_count=500&value-quantity=ne173').reply(200, obsNe173)
+  mock.onGet('http://localhost:8080/fhir/Observation?_count=500&value-quantity=gt50').reply(200, obsGt50)
+  mock.onGet('http://localhost:8080/fhir/Observation?_count=500&value-quantity=gt173').reply(200, obsGt173)
+  mock.onGet('http://localhost:8080/fhir/Observation?_count=500&value-quantity=lt50').reply(200, obsLt50)
+  mock.onGet('http://localhost:8080/fhir/Observation?_count=500&value-quantity=lt173').reply(200, obsLt173)
+  mock.onGet('http://localhost:8080/fhir/Observation?_count=500&value-quantity=ge50').reply(200, obsGe50)
+  mock.onGet('http://localhost:8080/fhir/Observation?_count=500&value-quantity=le173').reply(200, obsLe173)
+  mock.onGet('http://localhost:8080/fhir/Observation?_count=500&value-quantity=ge173').reply(200, obsGe173)
+  mock.onGet('http://localhost:8080/fhir/Observation?_count=500&value-quantity=le50').reply(200, obsLe50)
+  mock.onGet('http://localhost:8080/fhir/Observation?_count=500&subject=Patient/1').reply(200, obsUser1)
+  mock.onGet('http://localhost:8080/fhir/Observation?_count=500&subject:eq=1,2').reply(200, obsUser12)
+  mock.onGet('http://localhost:8080/fhir/Observation?_count=500&date=ge2022-01-01&date=le2022-02-01').reply(200, obsDate)
+  mock.onGet('http://localhost:8080/fhir/Observation?_count=500&subject=Patient/1&date=ge2022-01-01&date=le2022-02-01').reply(200, obsDateUser1)
+  mock.onGet('http://localhost:8080/fhir/Observation?_count=500&code:contains=weight,height').reply(200, obsContains)
+  mock.onGet('http://localhost:8080/fhir/Observation?_count=500&code:exact=weight,height').reply(200, obsExact)
+  mock.onGet('http://localhost:8080/fhir/Observation?_count=500&code:not=weight').reply(200, obsNot)
+  mock.onGet('http://localhost:8080/fhir/Observation?_count=500&value-quantity=ap80').reply(200, obsAp)
   return setupDatabases()
 })
 
@@ -59,7 +59,7 @@ test.each(DATABASE_IDS)('Get all data from a resource >> %s', async databaseID =
   const data = await getData({
     database: databaseID,
     tables: resource,
-    filters: [{ target: "code", operator: "==", value: "weight" }]
+    filters: [{ target: 'code', operator: '==', value: 'weight' }]
   }, {})
 
   expect(data?.length).toBeGreaterThan(1)
@@ -74,7 +74,7 @@ test.each(DATABASE_IDS)('Field filters >> %s', async databaseID => {
     database: databaseID,
     tables: 'Observation',
     fields: ['valueQuantity.value', 'effectiveDateTime'],
-    filters: [{ target: "code", operator: "==", value: "weight" }]
+    filters: [{ target: 'code', operator: '==', value: 'weight' }]
   }
 
   const data = await getData(query, {})
@@ -90,7 +90,7 @@ test.each(DATABASE_IDS)('Field filters in different format >> %s', async databas
     database: databaseID,
     tables: 'Observation',
     fields: [{ target: 'valueQuantity.value' }, { target: 'effectiveDateTime' }],
-    filters: [{ target: "code", operator: "==", value: "weight" }]
+    filters: [{ target: 'code', operator: '==', value: 'weight' }]
   }
 
   const data = await getData(query, {})
@@ -100,7 +100,6 @@ test.each(DATABASE_IDS)('Field filters in different format >> %s', async databas
     expect(new Set(Object.keys(row))).toEqual(new Set(['Observation.valueQuantity.value', 'Observation.effectiveDateTime']))
   }
 })
-
 
 // ---------------------- GROUP BY -----------------------
 
@@ -114,7 +113,7 @@ test.each(DATABASE_IDS)('Group by >> %s', async databaseID => {
     },
     { target: 'valueQuantity.value', operator: 'count' }],
     groupby: 'subject.reference',
-    filters: [{ target: "code", operator: "==", value: "weight" }]
+    filters: [{ target: 'code', operator: '==', value: 'weight' }]
   }, {})
   expect(data).toBeTruthy()
   expect(data.length).toBeGreaterThan(1)
@@ -132,7 +131,6 @@ test.each(DATABASE_IDS)('Group by >> %s', async databaseID => {
   }
 })
 
-
 // ---------------------- OPERATORS -----------------------
 
 describe('Operator tests', () => {
@@ -141,7 +139,7 @@ describe('Operator tests', () => {
       database: databaseID,
       tables: 'Observation',
       fields: ['valueQuantity.value'],
-      filters: [{ target: "code", operator: "==", value: "weight" }]
+      filters: [{ target: 'code', operator: '==', value: 'weight' }]
     }
     const data = await getData(query, {})
     const aggregatedData = await getData({ ...query, fields: [{ target: 'valueQuantity.value', operator: 'avg' }] }, {})
@@ -161,7 +159,7 @@ describe('Operator tests', () => {
       database: databaseID,
       tables: 'Observation',
       fields: ['valueQuantity.value'],
-      filters: [{ target: "code", operator: "==", value: "weight" }]
+      filters: [{ target: 'code', operator: '==', value: 'weight' }]
     }
     const allData = await getData(query, {})
     const result = await getData({ ...query, fields: [{ target: 'valueQuantity.value', operator: 'max' }] }, {})
@@ -177,7 +175,7 @@ describe('Operator tests', () => {
       database: databaseID,
       tables: 'Observation',
       fields: ['valueQuantity.value'],
-      filters: [{ target: "code", operator: "==", value: "weight" }]
+      filters: [{ target: 'code', operator: '==', value: 'weight' }]
     }
     const allData = await getData(query, {})
     const result = await getData({ ...query, fields: [{ target: 'valueQuantity.value', operator: 'min' }] }, {})
@@ -193,7 +191,7 @@ describe('Operator tests', () => {
       database: databaseID,
       tables: 'Observation',
       fields: ['valueQuantity.value'],
-      filters: [{ target: "code", operator: "==", value: "weight" }]
+      filters: [{ target: 'code', operator: '==', value: 'weight' }]
     }
     const allData = await getData(query, {})
     const result = await getData({ ...query, fields: [{ target: 'valueQuantity.value', operator: 'sum' }] }, {})
@@ -213,7 +211,7 @@ describe('Operator tests', () => {
       database: databaseID,
       tables: 'Observation',
       fields: ['valueQuantity.value'],
-      filters: [{ target: "code", operator: "==", value: "weight" }]
+      filters: [{ target: 'code', operator: '==', value: 'weight' }]
     }
     const allData = await getData(query, {})
     const result = await getData({ ...query, fields: [{ target: 'valueQuantity.value', operator: 'count' }] }, {})
@@ -225,9 +223,7 @@ describe('Operator tests', () => {
   })
 })
 
-
 // ---------------------- FILTERS -----------------------
-
 
 const getMaxValue = async (databaseID: string) => (await getData({
   database: databaseID,
@@ -398,7 +394,7 @@ describe('Filter tests', () => {
     }
 
     const data = await getData(query, {})
-    const filteredData = await getData({ ...query, filters: [{ target: 'code', operator: 'contains', value: "weight,height" }] }, {})
+    const filteredData = await getData({ ...query, filters: [{ target: 'code', operator: 'contains', value: 'weight,height' }] }, {})
 
     expect(filteredData?.length).toBeGreaterThanOrEqual(1)
     expect(data.filter(entry => searchInObject(entry, 'code.coding.code') === 'weight' || searchInObject(entry, 'code.coding.code') === 'height').length).toEqual(filteredData.length)
@@ -411,7 +407,7 @@ describe('Filter tests', () => {
     }
 
     const data = await getData(query, {})
-    const filteredData = await getData({ ...query, filters: [{ target: 'code', operator: 'exact', value: "weight,height" }] }, {})
+    const filteredData = await getData({ ...query, filters: [{ target: 'code', operator: 'exact', value: 'weight,height' }] }, {})
 
     expect(filteredData?.length).toBeGreaterThanOrEqual(1)
     expect(data.filter(entry => searchInObject(entry, 'code.coding.code') === 'weight' || searchInObject(entry, 'code.coding.code') === 'height').length).toEqual(filteredData.length)
@@ -424,7 +420,7 @@ describe('Filter tests', () => {
     }
 
     const data = await getData(query, {})
-    const filteredData = await getData({ ...query, filters: [{ target: 'code', operator: '!=', value: "weight" }] }, {})
+    const filteredData = await getData({ ...query, filters: [{ target: 'code', operator: '!=', value: 'weight' }] }, {})
 
     expect(filteredData?.length).toBeGreaterThanOrEqual(1)
     expect(data.filter(entry => searchInObject(entry, 'code.coding.code') !== 'weight').length).toEqual(filteredData.length)
@@ -472,8 +468,8 @@ describe('Search params tests', () => {
     const rangeData = await getData(query, { startDate: '2022-01-01', endDate: '2022-02-01' })
 
     const filterByDate = (entry: any) => {
-      return new Date(entry['effectiveDateTime']).valueOf() >= new Date('2022-01-01').valueOf() &&
-        new Date(entry['effectiveDateTime']).valueOf() <= new Date('2022-02-02').valueOf()
+      return new Date(entry.effectiveDateTime).valueOf() >= new Date('2022-01-01').valueOf() &&
+        new Date(entry.effectiveDateTime).valueOf() <= new Date('2022-02-02').valueOf()
     }
 
     expect(rangeData?.length).toBeGreaterThan(1)
@@ -489,8 +485,8 @@ describe('Search params tests', () => {
     const rangeData = await getData(query, { startDate: '2022-01-01', endDate: '2022-02-01', user: '1' })
 
     const filterByDate = (entry: any) => {
-      return new Date(entry['effectiveDateTime']).valueOf() >= new Date('2022-01-01').valueOf() &&
-        new Date(entry['effectiveDateTime']).valueOf() <= new Date('2022-02-02').valueOf() &&
+      return new Date(entry.effectiveDateTime).valueOf() >= new Date('2022-01-01').valueOf() &&
+        new Date(entry.effectiveDateTime).valueOf() <= new Date('2022-02-02').valueOf() &&
         searchInObject(entry, 'subject.reference') === 'Patient/1'
     }
 
@@ -498,7 +494,6 @@ describe('Search params tests', () => {
     expect(data.filter(filterByDate).length).toEqual(rangeData.length)
   })
 })
-
 
 // ---------------------- FIELDS CUSTOM NAMES -----------------------
 

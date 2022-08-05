@@ -5,15 +5,16 @@ import { _ } from 'gridjs-react'
 import TableGeneric from '@app/components/TableGeneric'
 import LoadingIndicator from '@app/components/LoadingIndicator'
 import Card from '@app/components/Card'
-import { getConfig, getParticipants } from '@app/api'
+import { getConfig } from '@app/api'
 import { styled } from '@app/theme'
 import IconChevronRight from '@app/assets/ic_chevron_right.svgr.svg'
 import { useUIConfig } from '@app/config-provider'
+import useParticipants from '@app/hooks/useParticipants'
 
 const HomeContainer = () => {
   const uiConfig = useUIConfig()
-  const { data: { pages } } = useQuery('config', () => getConfig(uiConfig?.api_url))
-  const { data, isLoading } = useQuery('participants', () => getParticipants(uiConfig?.api_url))
+  const { data, isLoading } = useParticipants()
+  const { data: config } = useQuery('config', () => getConfig(uiConfig?.api_url))
 
   if (isLoading || !data) {
     return (
@@ -40,7 +41,7 @@ const HomeContainer = () => {
     },
     formatter: (cell: any, row: any) => {
       return _(
-        <StyledIconLink href={`pages/${pages[0].fileName}/?user=${data[row.cells[row.cells.length - 2].data].__key}`}>
+        <StyledIconLink href={`pages/${config?.pages[0].fileName}/?user=${data[row.cells[row.cells.length - 2].data].__key}`}>
           <IconChevronRight />
         </StyledIconLink>
       )

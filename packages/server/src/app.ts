@@ -9,6 +9,7 @@ import { STARTED_LISTENING } from './constants/logger-messages'
 import * as databaseAPI from './database/api'
 import { initializeCache } from './utils/cache'
 import { initAuth } from './auth'
+import { logApiCalls } from './utils/api-calls-logger'
 
 const API_BASE_URL = process.env.PUBLIC_URL || ''
 
@@ -21,6 +22,7 @@ initAuth(app).then(() => {
   app.use(cors())
   app.use(express.urlencoded({ extended: false }))
   app.use(cookieParser())
+  app.use(logApiCalls)
 
   app.use(`${API_BASE_URL}/api`, router)
 
@@ -30,7 +32,7 @@ initAuth(app).then(() => {
       logger.info('Listening in /' + API_BASE_URL)
       logger.info(STARTED_LISTENING(PORT))
     })
-  })
+  }).catch(error => logger.error(error))
 })
 
 export default app

@@ -1,10 +1,10 @@
 import useParticipants from './useParticipants'
 
 export default function useCohorts () {
-  const participants = useParticipants()
+  const { data } = useParticipants()
   const cohorts = new Set()
 
-  participants.forEach(({ __cohort }) => {
+  data?.forEach(({ __cohort }) => {
     if (__cohort) {
       cohorts.add(__cohort)
     }

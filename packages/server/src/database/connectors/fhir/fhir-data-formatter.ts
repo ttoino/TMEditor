@@ -6,33 +6,33 @@ import { Patient, BundleEntry, HapiFhirFiltersQuery, FieldAggregationOperator, F
 type TKeyValue = { [key: string]: any }
 
 export const formatUsersData = (data: BundleEntry[], fields: string[], idField: string) => {
-  let formattedData: object[] = []
+  const formattedData: object[] = []
 
-  for (let i in data) {
-    let user: { [key: string]: string } = {}
+  for (const i in data) {
+    const user: { [key: string]: string } = {}
     const resource: Patient | undefined = data[i].resource as Patient
 
-    for (let j in fields) {
+    for (const j in fields) {
       const field = fields[j]
 
-      if (resource && resource.hasOwnProperty(field)) {
-        if (field == 'name' && resource.name) {
-          let name = ""
+      if (resource && Object.prototype.hasOwnProperty.call(resource, field)) {
+        if (field === 'name' && resource.name) {
+          let name = ''
           const given = resource.name[0].given || []
           for (let k = 0; k < given.length; k++) {
             name += given[k]
-            if (k < given.length - 1) name += " "
+            if (k < given.length - 1) name += ' '
           }
 
-          const familyName = resource.name[0].family || ""
-          if (name !== "" && familyName) name += ` ${familyName}`
+          const familyName = resource.name[0].family || ''
+          if (name !== '' && familyName) name += ` ${familyName}`
           else name += familyName
 
           user[field] = name
         } else {
           user[field] = String(resource[field as keyof Patient])
         }
-      } else if (field.includes(".")) {
+      } else if (field.includes('.')) {
         user[field] = searchInObject(resource, field) || NODATA_LABEL
       } else {
         user[field] = NODATA_LABEL
@@ -52,15 +52,15 @@ export const formatData = (data: BundleEntry[], fields: (string | FieldAggregati
 
   // If no fields are specified get all data
   if (fields.length === 0) newData = data.map(entry => entry.resource)
-  else if (checkIfStringsArray(fields) || !checkPropertyInEveryObjectsArray(fields, "operator")) {
+  else if (checkIfStringsArray(fields) || !checkPropertyInEveryObjectsArray(fields, 'operator')) {
     // If fields do not require any kind of aggregation
     for (const entry of data) {
       const { resource } = entry
       if (!resource) continue
 
-      let newObj: TKeyValue = {}
+      const newObj: TKeyValue = {}
       for (const field of fields) {
-        if (typeof field === "string") newObj[`${resource.resourceType}.${field}`] = searchInObject(resource, field) || NODATA_LABEL
+        if (typeof field === 'string') newObj[`${resource.resourceType}.${field}`] = searchInObject(resource, field) || NODATA_LABEL
         else {
           let keyName = `${resource.resourceType}.${field.target}`
           if (field.name) keyName = `${resource.resourceType}.${field.name}`
@@ -72,11 +72,11 @@ export const formatData = (data: BundleEntry[], fields: (string | FieldAggregati
     }
   } else {
     // Fields that require aggregation calculations
-    const resourceType = data[0].resource?.resourceType
+    const resourceType = data[0]?.resource?.resourceType
 
     if (groupby) {
-      let groupedData: { [key: string]: object[] } = {
-        "null": []
+      const groupedData: { [key: string]: object[] } = {
+        null: []
       }
       for (const entry of data) {
         const { resource } = entry
@@ -84,7 +84,7 @@ export const formatData = (data: BundleEntry[], fields: (string | FieldAggregati
 
         const groupKey = searchInObject(resource, groupby)
         if (groupKey) {
-          groupedData[groupKey] = groupedData.hasOwnProperty(groupKey) ? groupedData[groupKey].concat(resource) : [resource]
+          groupedData[groupKey] = Object.prototype.hasOwnProperty.call(groupedData, groupKey) ? groupedData[groupKey].concat(resource) : [resource]
         } else {
           groupedData.null = groupedData.null.concat(resource)
         }
@@ -112,87 +112,85 @@ export const formatData = (data: BundleEntry[], fields: (string | FieldAggregati
  * @returns     A filters query ready to be used as url parameters
  */
 export const generateFiltersQuery = (filters: HapiFhirFiltersQuery[]) => {
-  let tempFilters = ""
+  let tempFilters = ''
   for (const filter of filters) {
-    if (tempFilters != "") tempFilters += "&"
+    if (tempFilters !== '') tempFilters += '&'
 
     tempFilters += filter.target.toLowerCase()
 
-    const dateRegExp = new RegExp('([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1]))?)?')
+    const dateRegExp = /([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1]))?)?/ // Regexp retrieved from FHIR documentation
 
     // Date available formats: YYYY, YYYY-MM, or YYYY-MM-DD
     // https://www.hl7.org/fhir/datatypes.html#date
-    if (typeof filter.value === "number" || dateRegExp.test(filter.value)) {
+    if (typeof filter.value === 'number' || dateRegExp.test(filter.value)) {
       switch (filter.operator) {
         case '==':
-          tempFilters += "="
+          tempFilters += '='
           break
         case '!=':
-          tempFilters += "=ne"
+          tempFilters += '=ne'
           break
         case '>':
-          tempFilters += "=gt"
+          tempFilters += '=gt'
           break
         case '>=':
-          tempFilters += "=ge"
+          tempFilters += '=ge'
           break
         case '<':
-          tempFilters += "=lt"
+          tempFilters += '=lt'
           break
         case '<=':
-          tempFilters += "=le"
+          tempFilters += '=le'
           break
         case '+-':
-          tempFilters += "=ap"
+          tempFilters += '=ap'
           break
         default:
-          tempFilters += "="
+          tempFilters += '='
           break
       }
-    }
-    else if (typeof filter.value === "string" && filter.value.includes(",")) {
-      const firstElement: any = filter.value.split(",")[0]
+    } else if (typeof filter.value === 'string' && filter.value.includes(',')) {
+      const firstElement: any = filter.value.split(',')[0]
       if (isNaN(firstElement)) {
         switch (filter.operator) {
           case '==':
-            tempFilters += "="
+            tempFilters += '='
             break
           case 'contains':
-            tempFilters += ":contains="
+            tempFilters += ':contains='
             break
           case 'exact':
-            tempFilters += ":exact="
+            tempFilters += ':exact='
             break
           case 'in':
-            tempFilters += ":in="
+            tempFilters += ':in='
             break
           default:
-            tempFilters += "="
+            tempFilters += '='
             break
         }
       } else {
-        tempFilters += ":eq="
+        tempFilters += ':eq='
       }
-    }
-    else if (typeof filter.value === "string") {
+    } else if (typeof filter.value === 'string') {
       switch (filter.operator) {
         case '==':
-          tempFilters += "="
+          tempFilters += '='
           break
         case '!=':
-          tempFilters += ":not="
+          tempFilters += ':not='
           break
         case 'contains':
-          tempFilters += ":contains="
+          tempFilters += ':contains='
           break
         case 'exact':
-          tempFilters += ":exact="
+          tempFilters += ':exact='
           break
         case 'in':
-          tempFilters += ":in="
+          tempFilters += ':in='
           break
         default:
-          tempFilters += "="
+          tempFilters += '='
           break
       }
     }
@@ -205,11 +203,11 @@ export const generateFiltersQuery = (filters: HapiFhirFiltersQuery[]) => {
 
 /**
  * Retrieves the value from the object @obj with the key @key.
- * The value to retrieve can be nested inside objects or arrays so the @key needs to reflect the desired location seperating with dots (.) the keys.
+ * The value to retrieve can be nested inside objects or arrays so the @key needs to reflect the desired location separating with dots (.) the keys.
  * By default, whenever an array is found this function chooses the first element of the array
  *
  * @param obj   The object from where to get the value.
- * @param key   The key of the value we wish to retreive seperated with dots (.) (e.g., quantity.value).
+ * @param key   The key of the value we wish to retrieve separated with dots (.) (e.g., quantity.value).
  * @returns     The value or null if no value was found
  */
 export const searchInObject: any = (obj: any, key: string) => {
@@ -222,14 +220,14 @@ export const searchInObject: any = (obj: any, key: string) => {
     const value = obj[tempKey]
     if (Array.isArray(value)) {
       return searchInObject(value[0], keyArray.join('.'))
-    } else if (typeof value === "object") {
+    } else if (typeof value === 'object') {
       return searchInObject(value, keyArray.join('.'))
     } else if (keyArray.length === 0) {
       return value
     }
   }
 
-  return null;
+  return null
 }
 
 /**
@@ -241,13 +239,13 @@ export const searchInObject: any = (obj: any, key: string) => {
  * @returns             An object with the all the resulting aggregations
  */
 export const calculateAggregationObject = (array: any[], fields: (string | FieldAggregation | FieldAggregationOperator)[], resourceType?: string) => {
-  let newObj: TKeyValue = {}
+  const newObj: TKeyValue = {}
   for (const field of fields) {
-    if (typeof field !== 'object' || !field.hasOwnProperty("operator")) continue;
+    if (typeof field !== 'object' || !Object.prototype.hasOwnProperty.call(field, 'operator')) continue
 
     const { name, target, operator } = field
 
-    let keyName = ""
+    let keyName = ''
     if (resourceType) keyName += `${resourceType}.`
 
     if (name) keyName += `${name}`

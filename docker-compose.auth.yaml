@@ -13,6 +13,7 @@ services:
     volumes:
       - ./config:/usr/config
       - ./deployment/wait-for-it.sh:/wait-for-it.sh
+      - ./data/logs/api/:/usr/src/app/logs/
     command: /bin/sh -c 'chmod +x /wait-for-it.sh && /wait-for-it.sh -t 0 keycloak:8080 -- node -r source-map-support/register dist/index.js'
     expose:
       - 80
@@ -38,6 +39,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./deployment/nginx.auth.conf:/etc/nginx/conf.d/default.conf.template
+      - ./data/logs/nginx/:/var/log/nginx/
     links:
       - api:api
       - frontend:frontend
@@ -66,7 +68,7 @@ services:
       - keycloak-db
     links:
       - keycloak-db:keycloak-db
-    entrypoint: /bin/sh -c 'chmod +x /wait-for-it.sh && /wait-for-it.sh -t 0 keycloak-db:5432 -- /opt/keycloak/bin/kc.sh start --auto-build'
+    entrypoint: /bin/sh -c 'chmod +x /wait-for-it.sh && /wait-for-it.sh -t 0 keycloak-db:5432 -- /opt/keycloak/bin/kc.sh start --auto-build --log=file,console'
     environment:
       - KC_HOSTNAME_STRICT_HTTPS=false
       - KC_HOSTNAME_STRICT=false
@@ -81,6 +83,7 @@ services:
       - KC_HTTP_RELATIVE_PATH=/auth
     volumes:
       - ./deployment/wait-for-it.sh:/wait-for-it.sh
+      - ./data/logs/keycloak/:/opt/keycloak/data/log/
   redis_cache:
     image: redis:alpine3.15
     command: redis-server --requirepass r3d1sc4ch3

@@ -29,12 +29,16 @@ export const getParticipants = async (apiUrl?: string): Promise<any[]> => {
 
 export const getPage = async (page: string | undefined, searchParams: URLSearchParams, apiUrl?: string): Promise<PageResponse> => {
   // Set default date filters
-  if (!searchParams.get('startDate')) {
-    searchParams.set('startDate', format(subDays(startOfToday(), 7), 'yyyy-MM-dd'))
-    searchParams.set('endDate', format(endOfToday(), 'yyyy-MM-dd'))
+  const defaultParams = {
+    startDate: format(subDays(startOfToday(), 7), 'yyyy-MM-dd'),
+    endDate: format(endOfToday(), 'yyyy-MM-dd')
   }
 
-  const response = await axios.get(`${getApiUrl(apiUrl)}/pages/${page}?${searchParams.toString()}`)
+  const params = (searchParams.has('startDate') && searchParams.has('endDate'))
+    ? searchParams
+    : new URLSearchParams(defaultParams)
+
+  const response = await axios.get(`${getApiUrl(apiUrl)}/pages/${page}?${params}`)
 
   return response.data
 }
