@@ -47,22 +47,16 @@ table: collection_name/subcollection_name
 
 ### Structure
 
-The **structure** field is what enables Trial Monitor to know how Firestore collections are connected to each other. Each collection is identified by its name, and has a `FK` property representing a foreign key which has a sub-property `name`(the name of the attribute) and `reference` (the name of the table to which it is linked to).
-
-Note that given how Cloud Firestore works, we are actually retrieving all fields from the document and filtering each document client side.
-
-- **fields**: Array with the name of fields you want to retrieve from the database
-- **FK**: Defines how the document is linked to other documents
+The ``structure`` field is what enables Trial Monitor to know how Firestore collections are connected to each other. To created a relation between collections, on the configuration of each collection, define a property named `relations`. Inside, create a new property with the name of the linked collection with the value of the property used to identify that collection.
 
 ````yaml
 structure:
-  User:
-    fields: [ name, age, gender ]
-  Activities:
-    fields: [ timestamp, value, type ]
-    FK:
-      name: userId
-      reference: User
+  users:
+    relations:
+      usersDetails: UserId
+  userDetails:
+    relations:
+      clinicalConditions: ClinicalConditionId
 ````
 
 ### Timestamps

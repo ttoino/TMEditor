@@ -1,4 +1,4 @@
-import type { FiltersQuery, HapiFhirFiltersQuery } from './database'
+import type { FiltersQuery, HapiFhirFiltersQuery, IncludeQuery } from './database'
 
 export interface Page {
   title: string,
@@ -41,23 +41,24 @@ interface BaseDBComponent extends BaseComponent {
 
 export interface DatabaseQuery {
   database: string,
-  tables?: string | string[],
+  // doc?: string,
+  table: string,
   fields?: (string | FieldAggregation | FieldAggregationOperator)[], // Get all if not provided
   groupby?: string,
-  filters?: FiltersQuery | FiltersQuery[]
+  filters?: FiltersQuery[],
+  include?: IncludeQuery[]
 }
 
 export interface HapiFhirDatabaseQuery extends Omit<DatabaseQuery, 'filters'> {
-  tables: string,
   filters?: HapiFhirFiltersQuery | HapiFhirFiltersQuery[]
 }
 
 export type AggregationOperator = 'avg' | 'max' | 'min' | 'sum' | 'count'
 
-
 export interface FieldAggregation {
   target: string,
-  name?: string
+  name?: string,
+  operator?: never
 }
 export interface FieldAggregationOperator {
   target: string,

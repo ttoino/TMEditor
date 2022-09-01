@@ -6,14 +6,14 @@ import { SearchParams, DatabaseQuery } from '@types'
 
 const { cache } = readPlatformConfig() || {}
 
-const RECONNECTION_ATTEMPS = 2
+const RECONNECTION_ATTEMPTS = 2
 const RECONNECTION_WAIT_TIME = 3000 // milliseconds
 const CACHE_EXPIRE_TIME = cache?.expireTime || 300 // seconds
 
 let CACHE_ENABLED = false
 
 const reconnectStrategy = (retries: number) => {
-  if (retries >= RECONNECTION_ATTEMPS) {
+  if (retries >= RECONNECTION_ATTEMPTS) {
     return new Error('Could not connect to Redis socket')
   }
   return RECONNECTION_WAIT_TIME
@@ -23,7 +23,7 @@ const client = createClient({
   socket: {
     port: process.env.REDIS_PORT ? parseInt(process.env.REDIS_PORT) : 6379,
     host: process.env.REDIS_HOST || 'localhost',
-    reconnectStrategy: reconnectStrategy
+    reconnectStrategy
   },
   password: process.env.REDIS_PASSWORD
 })

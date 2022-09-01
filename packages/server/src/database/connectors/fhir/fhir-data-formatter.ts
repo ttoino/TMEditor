@@ -245,6 +245,8 @@ export const calculateAggregationObject = (array: any[], fields: (string | Field
 
     const { name, target, operator } = field
 
+    if (!operator) continue
+
     let keyName = ''
     if (resourceType) keyName += `${resourceType}.`
 
@@ -253,11 +255,14 @@ export const calculateAggregationObject = (array: any[], fields: (string | Field
 
     if (Array.isArray(operator)) {
       for (const op of operator) {
-        newObj[`${keyName}.${op}`] = calculateAggregation(array.map(e => searchInObject(e, target)), op)
+        if (!(keyName in newObj)) newObj[keyName] = {}
+        newObj[keyName][op] = calculateAggregation(array.map(e => searchInObject(e, target)), op)
       }
     } else {
-      newObj[`${keyName}.${operator}`] = calculateAggregation(array.map(e => searchInObject(e, target)), operator)
+      if (!(keyName in newObj)) newObj[keyName] = {}
+      newObj[keyName][operator] = calculateAggregation(array.map(e => searchInObject(e, target)), operator)
     }
   }
+
   return newObj
 }

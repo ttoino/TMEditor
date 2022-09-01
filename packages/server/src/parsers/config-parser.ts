@@ -1,5 +1,5 @@
 import {
-  AUTH_CONFIG_FILE, BLUEPRINTS_ENTRY_POINT, BLUEPRINTS_PAGE, CONFIG_COHORTS_PATH, DASHBOARD_ENTRY_POINT,
+  AUTH_CONFIG_FILE, BLUEPRINTS_ENTRY_POINT, BLUEPRINTS_PAGE, CONFIG_COHORTS_PATH,
   UI_PAGE_CONFIG_FILE
 } from '@app/constants/config-file-paths'
 
@@ -127,14 +127,16 @@ export const readAuthConfigFile = (): AuthConfig => {
  */
 export const getAllPages = (): PageName[] => {
   const pages: PageName[] = []
+  const ignoreHiddenFiles = (path: string) => !(/(^|\/)\.[^/.]/g).test(path)
 
-  fs.readdirSync(BLUEPRINTS_PAGE).forEach(page => {
+  fs.readdirSync(BLUEPRINTS_PAGE).filter(ignoreHiddenFiles).forEach(page => {
     const fileName = page
       .split('.')
       .slice(0, -1)
       .join('.')
+
     const name = readUIMetadata(fileName).title
-    pages.push({ fileName: fileName, name: name || fileName })
+    pages.push({ fileName, name: name || fileName })
   })
 
   return pages

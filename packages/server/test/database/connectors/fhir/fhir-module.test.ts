@@ -58,7 +58,7 @@ beforeAll(() => {
 test.each(DATABASE_IDS)('Get all data from a resource >> %s', async databaseID => {
   const data = await getData({
     database: databaseID,
-    tables: resource,
+    table: resource,
     filters: [{ target: 'code', operator: '==', value: 'weight' }]
   }, {})
 
@@ -72,7 +72,7 @@ test.each(DATABASE_IDS)('Get all data from a resource >> %s', async databaseID =
 test.each(DATABASE_IDS)('Field filters >> %s', async databaseID => {
   const query: DatabaseQuery = {
     database: databaseID,
-    tables: 'Observation',
+    table: 'Observation',
     fields: ['valueQuantity.value', 'effectiveDateTime'],
     filters: [{ target: 'code', operator: '==', value: 'weight' }]
   }
@@ -88,7 +88,7 @@ test.each(DATABASE_IDS)('Field filters >> %s', async databaseID => {
 test.each(DATABASE_IDS)('Field filters in different format >> %s', async databaseID => {
   const query: DatabaseQuery = {
     database: databaseID,
-    tables: 'Observation',
+    table: 'Observation',
     fields: [{ target: 'valueQuantity.value' }, { target: 'effectiveDateTime' }],
     filters: [{ target: 'code', operator: '==', value: 'weight' }]
   }
@@ -106,7 +106,7 @@ test.each(DATABASE_IDS)('Field filters in different format >> %s', async databas
 test.each(DATABASE_IDS)('Group by >> %s', async databaseID => {
   const data = await getData({
     database: databaseID,
-    tables: 'Observation',
+    table: 'Observation',
     fields: [{
       target: 'valueQuantity.value',
       operator: ['avg', 'min', 'max', 'sum']
@@ -118,16 +118,16 @@ test.each(DATABASE_IDS)('Group by >> %s', async databaseID => {
   expect(data).toBeTruthy()
   expect(data.length).toBeGreaterThan(1)
 
-  expect(data.every(d => Object.keys(d).length === 6)).toBe(true)
+  expect(data.every(d => Object.keys(d['Observation.valueQuantity.value']).length === 5)).toBe(true)
   for (const row of data) {
     for (const key in row) {
       expect(row[key]).toBeTruthy()
       expect(row[key] !== 'NA').toBeTruthy()
     }
-    expect(row['Observation.valueQuantity.value.avg'] * row['Observation.valueQuantity.value.count']).toBeCloseTo(row['Observation.valueQuantity.value.sum'])
-    expect(row['Observation.valueQuantity.value.max']).toBeGreaterThanOrEqual(row['Observation.valueQuantity.value.min'])
-    expect(row['Observation.valueQuantity.value.max']).toBeGreaterThanOrEqual(row['Observation.valueQuantity.value.avg'])
-    expect(row['Observation.valueQuantity.value.min']).toBeLessThanOrEqual(row['Observation.valueQuantity.value.avg'])
+    expect(row['Observation.valueQuantity.value'].avg * row['Observation.valueQuantity.value'].count).toBeCloseTo(row['Observation.valueQuantity.value'].sum)
+    expect(row['Observation.valueQuantity.value'].max).toBeGreaterThanOrEqual(row['Observation.valueQuantity.value'].min)
+    expect(row['Observation.valueQuantity.value'].max).toBeGreaterThanOrEqual(row['Observation.valueQuantity.value'].avg)
+    expect(row['Observation.valueQuantity.value'].min).toBeLessThanOrEqual(row['Observation.valueQuantity.value'].avg)
   }
 })
 
@@ -137,7 +137,7 @@ describe('Operator tests', () => {
   test.each(DATABASE_IDS)('Average operator >> %s', async databaseID => {
     const query: DatabaseQuery = {
       database: databaseID,
-      tables: 'Observation',
+      table: 'Observation',
       fields: ['valueQuantity.value'],
       filters: [{ target: 'code', operator: '==', value: 'weight' }]
     }
@@ -146,7 +146,7 @@ describe('Operator tests', () => {
 
     expect(data?.length).toBeGreaterThan(1)
     expect(aggregatedData?.length).toEqual(1)
-    expect(aggregatedData[0]['Observation.valueQuantity.value.avg'])
+    expect(aggregatedData[0]['Observation.valueQuantity.value'].avg)
       .toBeCloseTo(data
         .map(d => d['Observation.valueQuantity.value'])
         .reduce(
@@ -157,7 +157,7 @@ describe('Operator tests', () => {
   test.each(DATABASE_IDS)('Max operator >> %s', async databaseID => {
     const query: DatabaseQuery = {
       database: databaseID,
-      tables: 'Observation',
+      table: 'Observation',
       fields: ['valueQuantity.value'],
       filters: [{ target: 'code', operator: '==', value: 'weight' }]
     }
@@ -166,14 +166,14 @@ describe('Operator tests', () => {
 
     expect(allData?.length).toBeGreaterThan(1)
     expect(result?.length).toEqual(1)
-    expect(result[0]['Observation.valueQuantity.value.max'])
+    expect(result[0]['Observation.valueQuantity.value'].max)
       .toEqual(Math.max(...allData.map(d => d['Observation.valueQuantity.value'])))
   })
 
   test.each(DATABASE_IDS)('Min operator >> %s', async databaseID => {
     const query: DatabaseQuery = {
       database: databaseID,
-      tables: 'Observation',
+      table: 'Observation',
       fields: ['valueQuantity.value'],
       filters: [{ target: 'code', operator: '==', value: 'weight' }]
     }
@@ -182,14 +182,14 @@ describe('Operator tests', () => {
 
     expect(allData?.length).toBeGreaterThan(1)
     expect(result?.length).toEqual(1)
-    expect(result[0]['Observation.valueQuantity.value.min'])
+    expect(result[0]['Observation.valueQuantity.value'].min)
       .toEqual(Math.min(...allData.map(d => d['Observation.valueQuantity.value'])))
   })
 
   test.each(DATABASE_IDS)('Sum operator >> %s', async databaseID => {
     const query: DatabaseQuery = {
       database: databaseID,
-      tables: 'Observation',
+      table: 'Observation',
       fields: ['valueQuantity.value'],
       filters: [{ target: 'code', operator: '==', value: 'weight' }]
     }
@@ -198,7 +198,7 @@ describe('Operator tests', () => {
 
     expect(allData?.length).toBeGreaterThan(1)
     expect(result?.length).toEqual(1)
-    expect(result[0]['Observation.valueQuantity.value.sum'])
+    expect(result[0]['Observation.valueQuantity.value'].sum)
       .toEqual(allData
         .map(d => d['Observation.valueQuantity.value'])
         .reduce(
@@ -209,7 +209,7 @@ describe('Operator tests', () => {
   test.each(DATABASE_IDS)('Count operator >> %s', async databaseID => {
     const query: DatabaseQuery = {
       database: databaseID,
-      tables: 'Observation',
+      table: 'Observation',
       fields: ['valueQuantity.value'],
       filters: [{ target: 'code', operator: '==', value: 'weight' }]
     }
@@ -218,7 +218,7 @@ describe('Operator tests', () => {
 
     expect(allData?.length).toBeGreaterThan(1)
     expect(result?.length).toEqual(1)
-    expect(result[0]['Observation.valueQuantity.value.count'])
+    expect(result[0]['Observation.valueQuantity.value'].count)
       .toEqual(allData.length)
   })
 })
@@ -227,28 +227,28 @@ describe('Operator tests', () => {
 
 const getMaxValue = async (databaseID: string) => (await getData({
   database: databaseID,
-  tables: 'Observation',
+  table: 'Observation',
   fields: [{ target: 'valueQuantity.value', operator: 'max' }]
-}, {}))[0]['Observation.valueQuantity.value.max']
+}, {}))[0]['Observation.valueQuantity.value'].max
 
 const getMinValue = async (databaseID: string) => (await getData({
   database: databaseID,
-  tables: 'Observation',
+  table: 'Observation',
   fields: [{ target: 'valueQuantity.value', operator: 'min' }]
-}, {}))[0]['Observation.valueQuantity.value.min']
+}, {}))[0]['Observation.valueQuantity.value'].min
 
 const getRowCount = async (databaseID: string) => (await getData({
   database: databaseID,
-  tables: 'Observation',
+  table: 'Observation',
   fields: [{ target: 'valueQuantity.value', operator: 'count' }]
-}, {}))[0]['Observation.valueQuantity.value.count']
+}, {}))[0]['Observation.valueQuantity.value'].count
 
 describe('Filter tests', () => {
   test.each(DATABASE_IDS)('== filter >> %s', async databaseID => {
     const maxValue = await getMaxValue(databaseID)
     const data = await getData({
       database: databaseID,
-      tables: 'Observation',
+      table: 'Observation',
       filters: [{
         operator: '==',
         target: 'value-quantity',
@@ -264,7 +264,7 @@ describe('Filter tests', () => {
     const maxValue = await getMaxValue(databaseID)
     const data = await getData({
       database: databaseID,
-      tables: 'Observation',
+      table: 'Observation',
       filters: [{
         operator: '!=',
         target: 'value-quantity',
@@ -281,7 +281,7 @@ describe('Filter tests', () => {
     const minValue = await getMinValue(databaseID)
     expect((await getData({
       database: databaseID,
-      tables: 'Observation',
+      table: 'Observation',
       filters: [{
         operator: '>',
         target: 'value-quantity',
@@ -290,7 +290,7 @@ describe('Filter tests', () => {
     }, {})).length).toEqual(totalCount - 1)
     expect((await getData({
       database: databaseID,
-      tables: 'Observation',
+      table: 'Observation',
       filters: [{
         operator: '>',
         target: 'value-quantity',
@@ -305,7 +305,7 @@ describe('Filter tests', () => {
     const minValue = await getMinValue(databaseID)
     expect((await getData({
       database: databaseID,
-      tables: 'Observation',
+      table: 'Observation',
       filters: [{
         operator: '<',
         target: 'value-quantity',
@@ -314,7 +314,7 @@ describe('Filter tests', () => {
     }, {})).length).toEqual(totalCount - 1)
     expect((await getData({
       database: databaseID,
-      tables: 'Observation',
+      table: 'Observation',
       filters: [{
         operator: '<',
         target: 'value-quantity',
@@ -329,7 +329,7 @@ describe('Filter tests', () => {
     const minValue = await getMinValue(databaseID)
     expect((await getData({
       database: databaseID,
-      tables: 'Observation',
+      table: 'Observation',
       filters: [{
         operator: '>=',
         target: 'value-quantity',
@@ -338,7 +338,7 @@ describe('Filter tests', () => {
     }, {})).length).toEqual(totalCount)
     expect((await getData({
       database: databaseID,
-      tables: 'Observation',
+      table: 'Observation',
       filters: [{
         operator: '>=',
         target: 'value-quantity',
@@ -353,7 +353,7 @@ describe('Filter tests', () => {
     const minValue = await getMinValue(databaseID)
     expect((await getData({
       database: databaseID,
-      tables: 'Observation',
+      table: 'Observation',
       filters: [{
         operator: '<=',
         target: 'value-quantity',
@@ -362,7 +362,7 @@ describe('Filter tests', () => {
     }, {})).length).toEqual(totalCount)
     expect((await getData({
       database: databaseID,
-      tables: 'Observation',
+      table: 'Observation',
       filters: [{
         operator: '<=',
         target: 'value-quantity',
@@ -374,7 +374,7 @@ describe('Filter tests', () => {
   test.each(DATABASE_IDS)('+- filter >> %s', async databaseID => {
     const query: DatabaseQuery = {
       database: databaseID,
-      tables: 'Observation'
+      table: 'Observation'
     }
 
     const data = await getData(query, {})
@@ -390,7 +390,7 @@ describe('Filter tests', () => {
   test.each(DATABASE_IDS)('contains filter >> %s', async databaseID => {
     const query: DatabaseQuery = {
       database: databaseID,
-      tables: 'Observation'
+      table: 'Observation'
     }
 
     const data = await getData(query, {})
@@ -403,7 +403,7 @@ describe('Filter tests', () => {
   test.each(DATABASE_IDS)('exact filter >> %s', async databaseID => {
     const query: DatabaseQuery = {
       database: databaseID,
-      tables: 'Observation'
+      table: 'Observation'
     }
 
     const data = await getData(query, {})
@@ -416,7 +416,7 @@ describe('Filter tests', () => {
   test.each(DATABASE_IDS)('not filter >> %s', async databaseID => {
     const query: DatabaseQuery = {
       database: databaseID,
-      tables: 'Observation'
+      table: 'Observation'
     }
 
     const data = await getData(query, {})
@@ -438,7 +438,7 @@ describe('Search params tests', () => {
   test.each(DATABASE_IDS)('Filter by user ID >> %s', async databaseID => {
     const query: DatabaseQuery = {
       database: databaseID,
-      tables: 'Observation'
+      table: 'Observation'
     }
     const data = await getData(query, {})
     const singleUser = await getData(query, { user: '1' })
@@ -450,7 +450,7 @@ describe('Search params tests', () => {
   test.each(DATABASE_IDS)('Filter by cohort >> %s', async databaseID => {
     const query: DatabaseQuery = {
       database: databaseID,
-      tables: 'Observation'
+      table: 'Observation'
     }
     const data = await getData(query, {})
     const cohortsData = await getData(query, { cohort: 'PT' })
@@ -462,7 +462,7 @@ describe('Search params tests', () => {
   test.each(DATABASE_IDS)('Filter by date >> %s', async databaseID => {
     const query: DatabaseQuery = {
       database: databaseID,
-      tables: 'Observation'
+      table: 'Observation'
     }
     const data = await getData(query, {})
     const rangeData = await getData(query, { startDate: '2022-01-01', endDate: '2022-02-01' })
@@ -479,7 +479,7 @@ describe('Search params tests', () => {
   test.each(DATABASE_IDS)('Filter by date & ID >> %s', async databaseID => {
     const query: DatabaseQuery = {
       database: databaseID,
-      tables: 'Observation'
+      table: 'Observation'
     }
     const data = await getData(query, {})
     const rangeData = await getData(query, { startDate: '2022-01-01', endDate: '2022-02-01', user: '1' })
@@ -501,7 +501,7 @@ test.each(DATABASE_IDS)('Custom name >> %s', async databaseID => {
   const ops = ['min', 'max'] as any[]
   const query: DatabaseQuery = {
     database: databaseID,
-    tables: 'Observation',
+    table: 'Observation',
     fields: ['valueQuantity.value']
   }
   const data = await getData(query, {})
@@ -511,14 +511,14 @@ test.each(DATABASE_IDS)('Custom name >> %s', async databaseID => {
   expect(aggregatedData?.length).toEqual(1)
 
   ops.forEach((op, index) => {
-    expect(Object.keys(aggregatedData[0])[index]).toEqual(`Observation.Custom name.${op}`)
+    expect(Object.keys(aggregatedData[0]['Observation.Custom name'])[index]).toEqual(op)
   })
 })
 
 test.each(DATABASE_IDS)('Custom name (string) >> %s', async databaseID => {
   const query: DatabaseQuery = {
     database: databaseID,
-    tables: 'Observation',
+    table: 'Observation',
     fields: ['valueQuantity.value']
   }
   const data = await getData(query, {})
@@ -526,13 +526,14 @@ test.each(DATABASE_IDS)('Custom name (string) >> %s', async databaseID => {
 
   expect(data?.length).toBeGreaterThan(1)
   expect(aggregatedData?.length).toEqual(1)
-  expect(Object.keys(aggregatedData[0])[0]).toEqual('Observation.Custom name.min')
+  expect(Object.keys(aggregatedData[0])[0]).toEqual('Observation.Custom name')
+  expect(Object.keys(aggregatedData[0]['Observation.Custom name'])[0]).toEqual('min')
 })
 
 test.each(DATABASE_IDS)('Custom name w/o operator (string) >> %s', async databaseID => {
   const query: DatabaseQuery = {
     database: databaseID,
-    tables: 'Observation',
+    table: 'Observation',
     fields: ['valueQuantity.value']
   }
   const data = await getData(query, {})

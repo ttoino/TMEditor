@@ -31,7 +31,7 @@ export default function QueryTooltip ({ query, meta }: Props) {
         </StyledInfoRow>
         <StyledInfoRow>
           <dt>Doc: </dt>
-          <StyledTimestampValue>{query.tables}</StyledTimestampValue>
+          <StyledTimestampValue>{query.table}</StyledTimestampValue>
         </StyledInfoRow>
         <StyledInfoRow>
 

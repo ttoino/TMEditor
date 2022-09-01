@@ -22,9 +22,12 @@ export const getConfig = async (apiUrl?: string): Promise<ResponseSiteConfig> =>
 }
 
 export const getParticipants = async (apiUrl?: string): Promise<any[]> => {
-  const response = await axios.get(`${getApiUrl(apiUrl)}/users`)
-
-  return response.data
+  try {
+    const response = await axios.get(`${getApiUrl(apiUrl)}/users`)
+    return response.data
+  } catch (error: any) {
+    throw new Error(error.response.data.message)
+  }
 }
 
 export const getPage = async (page: string | undefined, searchParams: URLSearchParams, apiUrl?: string): Promise<PageResponse> => {

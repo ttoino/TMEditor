@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 
 import { validatePermissions } from '@app/auth/keycloak-protect'
-import { readPagePermissions, readUIMetadata } from '@app/parsers/config-parser'
+import { readPagePermissions, readUIMetadata, getAllPages } from '@app/parsers/config-parser'
 import { getData, getMeta } from '@app/database/api'
 import { UIComponent, UIComponentResponse } from '@types'
 import { generateCacheKey, getCache, setCache } from '@app/utils/cache'
@@ -10,6 +10,12 @@ import logger from '@app/utils/logger'
 
 export default async function (req: Request, res: Response): Promise<void> {
   const { page } = req.params
+  const pages = getAllPages()
+
+  if (!pages.map(i => i.fileName).includes(page)) {
+    res.status(404).send('Page not found')
+    return
+  }
 
   if (await validatePermissions(req, res, readPagePermissions(page))) {
     try {
@@ -104,7 +110,7 @@ const validateDateQuery = (query: any) => {
   const hasStartDate = Object.prototype.hasOwnProperty.call(query, 'startDate')
   const hasEndDate = Object.prototype.hasOwnProperty.call(query, 'endDate')
   if (hasStartDate && hasEndDate) {
-    if (new Date(query.endDate) > new Date(query.startDate)) return true
+    if (new Date(query.endDate) >= new Date(query.startDate)) return true
     return false
   } else if (hasStartDate || hasEndDate) return false
   return true

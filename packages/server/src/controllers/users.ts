@@ -9,8 +9,10 @@ export default async function (req: Request, res: Response): Promise<void> {
     const data = await getUsers(selectedDB)
 
     res.status(200).send(data)
-  } catch (error) {
-    console.log(error)
-    res.sendStatus(500)
+  } catch (error: any) {
+    console.error(error)
+    res.status(500).send({
+      message: error.message
+    })
   }
 }

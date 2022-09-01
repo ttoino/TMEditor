@@ -8,6 +8,7 @@ import ComponentWrapper from '@app/components/ComponentWrapper'
 import FilterBar from '@app/components/FilterBar'
 import LoadingIndicator from '@app/components/LoadingIndicator'
 import { useUIConfig } from '@app/config-provider'
+import type { PageResponse } from '@types'
 
 const PageContainer = () => {
   const { page } = useParams()
@@ -17,7 +18,9 @@ const PageContainer = () => {
   const location = useLocation()
   const navigateTo = useNavigate()
 
-  const { data, isLoading } = useQuery(['page', page, params], () => getPage(page, searchParams, uiConfig?.api_url))
+  const { data, isLoading, error } = useQuery<PageResponse, any>(['page', page, params], () => getPage(page, searchParams, uiConfig?.api_url), {
+    retry: false
+  })
 
   useEffect(() => {
     if (!validateParams(params)) {
@@ -26,6 +29,18 @@ const PageContainer = () => {
       navigateTo({ pathname: location.pathname, search: new URLSearchParams(search).toString() })
     }
   })
+
+  if (error?.response?.status === 404) {
+    return (
+      <ErrorContainer>
+
+        <ImageContainer>
+          <img src={'../assets/ic_error.png'} alt="" width={24} />
+        </ImageContainer>
+        <div>{error.response.data}</div>
+      </ErrorContainer>
+    )
+  }
 
   if (isLoading || !data) {
     return (
@@ -79,11 +94,34 @@ const LoadingContainer = styled('div', {
   height: '100%'
 })
 
+const ImageContainer = styled('div', {
+  display: 'inline-flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  width: 70,
+  height: 70,
+  borderRadius: '50%',
+  backgroundColor: '$errorA10',
+  marginBottom: '$1'
+})
+
+const ErrorContainer = styled('div', {
+  height: '100vh',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  fontFamily: 'menlo, monospace',
+  fontSize: 12,
+  textAlign: 'center',
+  lineHeight: 1.4
+})
+
 const validateParams = (params: { [k: string]: string }) => {
   const hasStartDate = Object.prototype.hasOwnProperty.call(params, 'startDate')
   const hasEndDate = Object.prototype.hasOwnProperty.call(params, 'endDate')
   if (hasStartDate && hasEndDate) {
-    if (new Date(params.endDate) > new Date(params.startDate)) return true
+    if (new Date(params.endDate) >= new Date(params.startDate)) return true
     return false
   } else if (hasStartDate || hasEndDate) return false
   return true

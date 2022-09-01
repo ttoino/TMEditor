@@ -3,7 +3,7 @@ id: fhir
 title: FHIR
 ---
 
-The FHIR connector currently only supports [Hapi FHIR](https://hapifhir.io) implementation of the [HL7 FHIR](http://hl7.org/fhir/) standard (version R4). In this connector, the field `tables` links to the [resources](https://www.hl7.org/fhir/resourcelist.html) from the FHIR standard and for each one we use the [search](https://www.hl7.org/fhir/search.html) endpoints to retrieve the data, using the available and compatible filters if desired.
+The FHIR connector currently only supports [Hapi FHIR](https://hapifhir.io) implementation of the [HL7 FHIR](http://hl7.org/fhir/) standard (version R4). In this connector, the field `table` links to the [resources](https://www.hl7.org/fhir/resourcelist.html) from the FHIR standard and for each one we use the [search](https://www.hl7.org/fhir/search.html) endpoints to retrieve the data, using the available and compatible filters if desired.
 
 ## Database configuration
 
@@ -23,7 +23,7 @@ To use this connector with an Hapi FHIR API, you need to configure the connectio
 
 ### Config
 
-The **data access** is done by defining a property `config`. This property only requires an `url` which indicates where the Hapi Server can be accessed.
+The data access is done by defining a property `config`. This property only requires an `url` which indicates where the Hapi Server can be accessed.
 
 ```yaml
 config:
@@ -55,7 +55,7 @@ Since in the FHIR standard the values to get can be nested inside multiple objec
 
 #### Example
 
-In this example `fields: [valueQuantity.value]` will retrive the value `12`.
+In this example `fields: [valueQuantity.value]` will retrieve the value `12`.
 
 ```json
 {
@@ -85,6 +85,6 @@ In this example `fields: [valueQuantity.value]` will retrive the value `12`.
 
 The names for the fields and the targets may vary. Check this [link](http://hapi.fhir.org/resource?serverId=home_r4&pretty=true&_summary=&resource=Observation) to see the available targets to be filtered.
 
-In most Hapi FHIR APIs you can test the filterings for each resource in `https://<HAPI_FHIR_API_URL>/resource`.
+In most Hapi FHIR APIs you can test the filtering for each resource in `https://<HAPI_FHIR_API_URL>/resource`.
 
 :::

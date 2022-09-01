@@ -31,7 +31,15 @@ export interface UsersConfig {
   idField: string,
   labelField?: string, // Field to be used as label on the selection dropdown
   fields?: string[], // Get all if not set
-  filters?: FiltersQuery[]
+  filters?: FiltersQuery[],
+  include?: IncludeQuery[]
+}
+
+export interface IncludeQuery {
+  table: string,
+  fields?: string[],
+  filters?: FiltersQuery[],
+  include?: IncludeQuery[]
 }
 
 export interface DBGeneric {
@@ -88,10 +96,6 @@ export type ModelStructureRelationNoSQL = {
     timestampField?: TimestampNoSQL,
     relations: {
       [key: string]: string
-    },
-    FK: {
-      field: string,
-      target: string
     }
   }
 }
@@ -126,8 +130,8 @@ export interface MainConfig {
 export interface ResponseUsers {
   __key: string,
   __label: string,
-  __cohort: string,
-  [key: string]: string
+  __cohort: string | undefined,
+  [key: string]: any
 }
 
 export interface ResponseData {

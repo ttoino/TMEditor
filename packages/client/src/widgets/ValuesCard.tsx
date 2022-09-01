@@ -58,7 +58,7 @@ const ColumnValue = ({ entry, warning }: TColumnProps) => {
   return (
     <StyledColumn showWarning={showWarning}>
       <StyledValueRow>
-        <StyledValue>{value.toLocaleString()}</StyledValue>
+        <StyledValue>{value?.toLocaleString() ?? 'No data'}</StyledValue>
 
         <WarningIndicator size="large" warning={warning} value={value} />
       </StyledValueRow>

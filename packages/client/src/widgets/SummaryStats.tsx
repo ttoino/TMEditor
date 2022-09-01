@@ -30,7 +30,7 @@ const StatsLine = ({ row }: TStatsLineProps) => {
   const { field, value } = row
   return (
     <StyledRow>
-      <span>{field}</span> <StyledValue>{value}</StyledValue>
+      <span>{field}</span> <StyledValue>{value ?? 'No data'}</StyledValue>
     </StyledRow>
   )
 }

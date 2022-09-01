@@ -1,8 +1,7 @@
 import { AggregationOperator, CohortsMap } from '@types'
+import { NODATA_LABEL } from '@app/constants'
 
-export const concatStringsByDot = (s1: string, s2: string) => {
-  return s1 + '.' + s2
-}
+type TKeyValue = { [key: string]: any }
 
 export const replaceNullObjProps = (obj: any, value: any) => {
   Object.keys(obj).forEach(function (key) {
@@ -30,7 +29,7 @@ export const renameKeys = (data: any[]) => {
 
 export const createCohortsMapByField = (users: any[], groupByField: string): CohortsMap => {
   return users.reduce<{ [key: string]: any[] }>((acc, curr) => {
-    const key = curr[groupByField]
+    const key = flattenObject(curr)[groupByField]
     if (!acc[key]) {
       acc[key] = []
     }
@@ -49,6 +48,8 @@ export const createCohortsMapByField = (users: any[], groupByField: string): Coh
  * @returns         The resulting value of the aggregation
  */
 export const calculateAggregation = (values: any[], operator: AggregationOperator) => {
+  if (values.length === 0 && operator !== 'count') return null
+
   switch (operator) {
     case 'avg':
       return values.reduce(
@@ -72,7 +73,7 @@ export const calculateAggregation = (values: any[], operator: AggregationOperato
  * @returns       The date in the format YYYY-MM-DD or throws an error.
  */
 export const formatDate = (date: any) => {
-  const regEx = /^\d{4}-\d{2}-\d{2}$/;
+  const regEx = /^\d{4}-\d{2}-\d{2}$/
   if (date instanceof Date) {
     return date.toISOString().slice(0, 10)
   } else if (typeof date === 'string' && regEx.test(date)) {
@@ -80,4 +81,32 @@ export const formatDate = (date: any) => {
   } else {
     throw new Error(`Invalid date: ${date}`)
   }
+}
+
+/**
+ *
+ * @param data Flattens a nested object into a single level object. The parent key is added to duplicated keys.
+ * @returns { [key: string]: any }
+ */
+
+export const flattenObject = <Type extends TKeyValue>(data: Type) => {
+  let flat: any = {}
+
+  const flatten = (data: Type, parentKey = ''): Type => {
+    for (const key in data) {
+      if (data[key] && typeof data[key] === 'object' && Object.entries(data[key]).length > 0) {
+        flat = { ...flat, ...flatten(data[key], key) }
+      } else {
+        if (Object.keys(flat).includes(key)) {
+          flat[`${key} (${parentKey})`] = data[key]
+        } else {
+          flat[key] = data[key] ?? NODATA_LABEL
+        }
+      }
+    }
+
+    return flat
+  }
+
+  return flatten(data)
 }

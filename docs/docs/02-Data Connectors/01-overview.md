@@ -83,6 +83,24 @@ filters:
 For Hapi FHIR APIs check this [link](http://hapi.fhir.org/resource?serverId=home_r4&pretty=true&_summary=&resource=Observation) to see the available targets to be filtered.
 
 :::
+
+### Includes
+It is possible to join multiple tables/docs under a single data frame. Naturally, this requires some relation to exist between the different tables. In case of SQL databases, it uses the native relations defined in the model; for NoSQL these relations have to be defined manually. Please check [Firebase](firebase) for details.
+
+To combine multiple tables define the property `include` with a list of one or more linked tables. The `include` can also be nested.
+
+````yaml
+  - query:
+      database: database_id
+      table: table
+      include:
+        - table: nested_table
+          fields: [field1, field2]
+          include:
+            - table: nested_table_level_2
+      # ...
+````
+
 ### Timestamps
 
 The property `timestampField` allows the configuration of how the system will filter data by date. If no timestamp field is defined, or if the database doesn't have time data, all data will be retrieved.

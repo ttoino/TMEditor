@@ -5,6 +5,7 @@ import { _ } from 'gridjs-react'
 import TableGeneric from '@app/components/TableGeneric'
 import LoadingIndicator from '@app/components/LoadingIndicator'
 import Card from '@app/components/Card'
+import ErrorCard from '@app/components/ErrorCard'
 import { getConfig } from '@app/api'
 import { styled } from '@app/theme'
 import IconChevronRight from '@app/assets/ic_chevron_right.svgr.svg'
@@ -13,8 +14,16 @@ import useParticipants from '@app/hooks/useParticipants'
 
 const HomeContainer = () => {
   const uiConfig = useUIConfig()
-  const { data, isLoading } = useParticipants()
+  const { data, isLoading, error } = useParticipants()
   const { data: config } = useQuery('config', () => getConfig(uiConfig?.api_url))
+
+  if (error) {
+    return (
+      <Wrapper>
+        <ErrorCard error={error} />
+      </Wrapper>
+    )
+  }
 
   if (isLoading || !data) {
     return (
@@ -81,4 +90,23 @@ const StyledIconLink = styled('a', {
       stroke: '$primary'
     }
   }
+})
+
+const ErrorContainer = styled('div', {
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  height: '100%'
+})
+
+const ErrorBox = styled('p', {
+  maxWidth: 500,
+  padding: '$1',
+  margin: 0,
+  marginTop: '$2',
+  backgroundColor: '$errorA10',
+  fontFamily: 'menlo, monospace',
+  fontSize: 12,
+  textAlign: 'center',
+  lineHeight: 1.4
 })

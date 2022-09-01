@@ -5,10 +5,10 @@ databases:
     config:
       projectId: tm-demo-68396
     users:
-      table: users
+      table: userDetails
       idField: UserId
       labelField: name
-      fields: [userId, name, age, gender]
+      fields: [Gender, Age, Id]
       # filters:
       #   - target: age
       #     operator: '>'
@@ -17,14 +17,17 @@ databases:
       name: Date
       type: FirebaseTimestamp
     structure:
+      userDetails:
+        relations:
+          users: UserId
+          clinicalConditions: ClinicalConditionId
       activityLogs:
-        FK:
-          field: UserId
-          target: users
-      users:
-        FK:
-        field: UserId
-        target: activityLogs
+        relations:
+          activityTypes: ActivityTypesId
+      activityTypes:
+        relations:
+          difficultyDetails: DifficultyDetailsId
+
   - id: sqlite_test_db
     type: sql
     config:
@@ -35,6 +38,16 @@ databases:
       idField: userId
       fields: [userId, name, age, gender]
     timestampField: Date
+
+  # TODO: Add MySQL DB for testing to project
+  # - id: mysql_test_db
+  #   type: sql
+  #   config: mysql://root:root@127.0.0.1:3307/test_database
+  #   users:
+  #     table: users
+  #     idField: Id
+  #     fields: [Age, Gender]
+  #   timestampField: Date
 
   - id: hapi_fhir_test_api
     type: fhir

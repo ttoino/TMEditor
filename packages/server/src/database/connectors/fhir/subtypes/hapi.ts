@@ -1,6 +1,6 @@
 import logger from '@app/utils/logger'
 import { DBConfigFhir, DBHapiFhir, UsersConfig, BundleEntry, HapiFhirDatabaseQuery, SearchParams, CohortsMap } from '@types'
-import { defaultAsArray } from '@app/utils/default-values-generator'
+import { defaultAsArray } from '@app/utils'
 import axios from 'axios'
 import { ERROR_FETCHING_FHIR_DATA } from '@app/constants/logger-messages'
 import { formatData, formatUsersData, generateFiltersQuery } from '../fhir-data-formatter'
@@ -39,7 +39,7 @@ const getData = async (dbInstance: DBHapiFhir, query: HapiFhirDatabaseQuery, par
     filters.push({ target: 'subject', operator: 'in', value: cohortUsers.join(',') })
   }
 
-  const requestData: BundleEntry[] = await fetchData(dbInstance, query.tables, generateFiltersQuery(filters))
+  const requestData: BundleEntry[] = await fetchData(dbInstance, query.table, generateFiltersQuery(filters))
 
   return formatData(requestData, defaultAsArray(query.fields), query.groupby)
 }

@@ -1,6 +1,4 @@
-import { NODATA_LABEL } from '@app/constants'
 import { SIGN_IN_FAILED, SUCCESSFULLY_CONNECTED_TO_DB } from '@app/constants/logger-messages'
-import { concatStringsByDot } from '@app/utils/formatter'
 import logger from '@app/utils/logger'
 import { CohortsMap, DatabaseQuery, DBConfigFirebase, SearchParams } from '@types'
 import { initializeApp } from 'firebase/app'
@@ -8,8 +6,8 @@ import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import { connectFirestoreEmulator, Firestore, getFirestore } from 'firebase/firestore'
 import getDenormalizedData from './paradigms/denormalized-paradigm'
 import { queryData } from './query/cloudfirestore'
-import { defaultAsArray } from '../../../utils/default-values-generator'
-import { getTimestampKey } from './helpers'
+import { getUniqueKeys } from '@app/utils'
+import { buildIncludeQuery, filterObjectByKeys, getTimestampKey, recursiveMerge } from './helpers'
 
 type DBInstances = { [key: string]: Firestore }
 
@@ -48,23 +46,24 @@ export const getUsers = async (dbConfig: DBConfigFirebase) => {
   const { fields, filters = [] } = users
   const dbInstance = getDatabase(id)
 
-  const rawData = await queryData(dbInstance, users.table, filters)
+  const usersData = await queryData(dbInstance, users.table, filters)
+  const incData = await buildIncludeQuery(users.include, dbInstance)
 
-  return Object.keys(rawData).map(userKey => {
-    const user = rawData[userKey]
-    const newUser: { [key: string]: any } = {}
+  const uniqueKeys = getUniqueKeys(Object.values(usersData))
 
-    // Filter fields
-    getUserFieldNames(user, fields).forEach((key: string) => {
-      const fieldKey = concatStringsByDot(users.table, key)
-      newUser[key] = user[fieldKey] ?? NODATA_LABEL
-    })
+  const mergedData = Object.keys(usersData).map((userKey: string) => {
+    const tableFields = [users.idField, ...(fields ?? uniqueKeys)]
+    const user = filterObjectByKeys(usersData[userKey], tableFields)
 
-    // Adds user key for internal use
-    newUser.__key = userKey
+    const newUser = {
+      __key: userKey,
+      ...recursiveMerge(users, incData, dbConfig, user)
+    }
 
     return newUser
-  })
+  }).sort((a: any, b: any) => a[users.idField] - b[users.idField])
+
+  return mergedData
 }
 
 export const getData = async (query: DatabaseQuery, params: SearchParams, dbConfig: DBConfigFirebase, cohortsMap: CohortsMap) => {
@@ -76,19 +75,9 @@ export const getData = async (query: DatabaseQuery, params: SearchParams, dbConf
 }
 
 export const getMeta = async (query: DatabaseQuery, dbConfig: DBConfigFirebase) => {
-  const table = defaultAsArray(query.tables)[0]
-
   return {
-    timestamp: getTimestampKey(table, dbConfig)
+    timestamp: getTimestampKey(query.table, dbConfig)
   }
 }
 
 const getDatabase = (id: string) => databaseInstances[id]
-
-const getUserFieldNames = (user: any, fields?: string[]) => {
-  if (fields) return fields
-
-  return Object.keys(user).map((key) => {
-    return key.split('.')[1]
-  })
-}

@@ -21,9 +21,11 @@ export default function DatePicker () {
 
     setSelection(ranges.selection)
 
-    if (isCompleted) {
-      newSearchParams.set('startDate', format(ranges.selection.startDate, 'yyyy-MM-dd'))
-      newSearchParams.set('endDate', format(ranges.selection.endDate, 'yyyy-MM-dd'))
+    const startDate = format(ranges.selection.startDate, 'yyyy-MM-dd')
+    const endDate = format(ranges.selection.endDate, 'yyyy-MM-dd')
+    if (startDate !== endDate || isCompleted) {
+      newSearchParams.set('startDate', startDate)
+      newSearchParams.set('endDate', endDate)
 
       setSearchParams(newSearchParams)
     }
@@ -94,6 +96,6 @@ const PickerContainer = styled('div', {
   position: 'absolute',
   right: 16,
   top: 60,
-  zIndex: 9,
+  zIndex: 1001,
   border: '1px solid #eee'
 })

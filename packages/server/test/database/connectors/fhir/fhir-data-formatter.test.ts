@@ -391,7 +391,9 @@ test('calculateAggregationObject - one field & one operator w/ custom name', () 
     }
   ]))
     .toEqual({
-      'weight.avg': avgResult
+      weight: {
+        avg: avgResult
+      }
     })
 })
 
@@ -404,7 +406,9 @@ test('calculateAggregationObject - one field & one operator w/o custom name', ()
     }
   ]))
     .toEqual({
-      'value.avg': avgResult
+      value: {
+        avg: avgResult
+      }
     })
 })
 
@@ -418,11 +422,13 @@ test('calculateAggregationObject - one field & multiple operators w/ custom name
     }
   ]))
     .toEqual({
-      'weight.avg': avgResult,
-      'weight.min': minResult,
-      'weight.max': maxResult,
-      'weight.sum': sumResult,
-      'weight.count': countResult
+      weight: {
+        avg: avgResult,
+        min: minResult,
+        max: maxResult,
+        sum: sumResult,
+        count: countResult
+      }
     })
 })
 
@@ -435,11 +441,13 @@ test('calculateAggregationObject - one field & multiple operators w/o custom nam
     }
   ]))
     .toEqual({
-      'value.avg': avgResult,
-      'value.min': minResult,
-      'value.max': maxResult,
-      'value.sum': sumResult,
-      'value.count': countResult
+      value: {
+        avg: avgResult,
+        min: minResult,
+        max: maxResult,
+        sum: sumResult,
+        count: countResult
+      }
     })
 })
 
@@ -453,7 +461,7 @@ test('calculateAggregationObject - one field & one operator w/ custom name & res
     }
   ], 'Observation'))
     .toEqual({
-      'Observation.weight.avg': avgResult
+      'Observation.weight': { avg: avgResult }
     })
 })
 
@@ -466,7 +474,7 @@ test('calculateAggregationObject - one field & one operator w/o custom name w/ r
     }
   ], 'Observation'))
     .toEqual({
-      'Observation.value.avg': avgResult
+      'Observation.value': { avg: avgResult }
     })
 })
 
@@ -480,11 +488,13 @@ test('calculateAggregationObject - one field & multiple operators w/ custom name
     }
   ], 'Observation'))
     .toEqual({
-      'Observation.weight.avg': avgResult,
-      'Observation.weight.min': minResult,
-      'Observation.weight.max': maxResult,
-      'Observation.weight.sum': sumResult,
-      'Observation.weight.count': countResult
+      'Observation.weight': {
+        avg: avgResult,
+        min: minResult,
+        max: maxResult,
+        sum: sumResult,
+        count: countResult
+      }
     })
 })
 
@@ -497,11 +507,13 @@ test('calculateAggregationObject - one field & multiple operators w/o custom nam
     }
   ], 'Observation'))
     .toEqual({
-      'Observation.value.avg': avgResult,
-      'Observation.value.min': minResult,
-      'Observation.value.max': maxResult,
-      'Observation.value.sum': sumResult,
-      'Observation.value.count': countResult
+      'Observation.value': {
+        avg: avgResult,
+        min: minResult,
+        max: maxResult,
+        sum: sumResult,
+        count: countResult
+      }
     })
 })
 

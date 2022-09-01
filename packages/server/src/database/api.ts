@@ -1,4 +1,4 @@
-import * as sequelizeModule from './connectors/sequelize/sequelize-module'
+import * as sequelizeModule from './connectors/sql/sql-module'
 import * as firebaseModule from './connectors/firebase/firebase-module'
 import * as fhirModule from './connectors/fhir/fhir-module'
 import { ResponseData, ResponseUsers, SearchParams, DatabaseQuery, QueryMeta, CohortsMap } from '@types'
@@ -39,7 +39,11 @@ export const setupDatabases = async () => {
  * @param dbLocation DB identifier
  * @returns An array of objects that holds participants data
  *
- * [{ username: john, age: 56, gender: 'M' }, { username: 'Steve', age: 43, gender: 'M' }]
+ * [{
+ *  username: john, age: 56, gender: 'M'
+ * }, {
+ *  username: 'Steve', age: 43, gender: 'M'
+ * }]
  */
 export const getUsers = async (dbLocation?: string): Promise<ResponseUsers[]> => {
   const { databases, usersDB } = readPlatformConfig()
@@ -47,8 +51,6 @@ export const getUsers = async (dbLocation?: string): Promise<ResponseUsers[]> =>
 
   const rawData = await getModule(dbConfig.type).getUsers(dbConfig)
 
-  // TODO: Currently the rawData is an object in which the keys are the user ids, perhaps this it easier for Firebase...
-  // Check if it's better to keep this structure or use an array of objects. In any case the response should be an array of object to match the frontend
   return formatUserData(rawData, dbConfig)
 }
 
@@ -56,9 +58,13 @@ export const getUsers = async (dbLocation?: string): Promise<ResponseUsers[]> =>
  *
  * @param DatabaseQuery to execute
  * @param params Search params from the frontend (startDate, endDate, user, cohort)
- * @returns An array of objects with the data. It might aggregate data from multiple tables/docs
+ * @returns An array of objects with the data. Linked tables/docs are nested in the data object
  *
- * * [{ value: 2, type: 'A', userId: 1 }, { value: 20, type: 'B', userId: 2 }]
+ * [{
+ *  value: 2, type: 'A', userId: 1, nestedDoc: [{ label: "AAA"}]
+ * }, {
+ *  value: 20, type: 'B', userId: 2, nestedDoc: [{ label: "BBB"}]
+ * }]
  */
 export const getData = async (query: DatabaseQuery, params: SearchParams): Promise<ResponseData[]> => {
   const dbInfo = readDBInfoByID(query.database)

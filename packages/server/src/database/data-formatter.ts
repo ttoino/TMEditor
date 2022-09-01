@@ -2,17 +2,24 @@ import fs from 'fs'
 import { readCohortsConfigFile } from '@app/parsers/config-parser'
 import { REDUCERS_PATH } from '@app/constants/config-file-paths'
 import { ResponseUsers, DBConfig, DataComponent, ResponseData, ValueResponse } from '@types'
-import { createCohortsMapByField } from '@app/utils/formatter'
+import { createCohortsMapByField, flattenObject } from '@app/utils/formatter'
 import { round } from '@app/utils'
 
-export const formatUserData = (data: any[], dbConfig: DBConfig): ResponseUsers[] => {
+type TUserData = {
+  __key: string,
+  [key: string]: any
+}
+
+export const formatUserData = (data: TUserData[], dbConfig: DBConfig): ResponseUsers[] => {
   const { users: { labelField } } = dbConfig
 
   return data.map((user) => {
+    const newUser = flattenObject<TUserData>(user)
+
     return {
-      __label: labelField ? user[labelField] : user.__key,
-      __cohort: findCohortKey(data, user),
-      ...user
+      __label: labelField && newUser[labelField] ? newUser[labelField] : newUser.__key,
+      __cohort: findCohortKey(data, newUser),
+      ...newUser
     }
   })
 }
@@ -46,7 +53,7 @@ const applyReducers = (data: ResponseData[], component: DataComponent): Response
     case 'summary':
       return summaryReducer(data, component)
     default:
-      return data
+      return data.map(row => flattenObject(row))
   }
 }
 
@@ -61,21 +68,34 @@ const loadCustomReducers = () => {
 const valueReducer = (data: ResponseData[], component: Omit<ValueResponse, 'error'>) => {
   const { precision } = component
 
-  return Object.entries(data[0]).map(([field, value]) => {
-    const [name, op] = field.split('.')
+  return data.flatMap((row) => {
+    const rowEntries = []
 
-    return {
-      field: `${name} (${op})`,
-      value: round(value, precision)
+    for (const field in row) {
+      const values = row[field]
+      rowEntries.push(Object.entries(values).map(([op, value]: any) => ({
+        field: `${field} (${op})`,
+        value: typeof value === 'number' ? round(value, precision) : null
+      })))
     }
+    return rowEntries.flat()
   })
 }
 
+// The 'summaryReducer' is similar to the 'valueReducer', but with a different template for field
 const summaryReducer = (data: ResponseData[], component: Omit<ValueResponse, 'error'>) => {
   const { precision } = component
 
-  return Object.entries(data[0]).map(([field, value]) => ({
-    field: field.split('.').pop(),
-    value: round(value, precision)
-  }))
+  return data.flatMap((row) => {
+    const rowEntries = []
+
+    for (const field in row) {
+      const values = row[field]
+      rowEntries.push(Object.entries(values).map(([op, value]: any) => ({
+        field: op,
+        value: typeof value === 'number' ? round(value, precision) : null
+      })))
+    }
+    return rowEntries.flat()
+  })
 }

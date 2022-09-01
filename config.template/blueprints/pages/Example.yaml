@@ -14,8 +14,8 @@ components:
       title: Steps
       query:
         database: database_id
-        tables: activityLogs
-        fields: [Date, Duration, Activity, Steps]
+        table: activityLogs
+        fields: [Date, Calories, Steps]
       spec:
         mark: line
         encoding:
@@ -27,11 +27,11 @@ components:
             type: quantitative
     
     - type: chart
-      title: Steps / Duration
+      title: Steps / Calories
       query:
         database: database_id
-        tables: activityLogs
-        fields: [Date, Duration, Activity, Steps]
+        table: activityLogs
+        fields: [Date, Calories, Steps]
       spec:
         mark: point
         encoding:
@@ -39,7 +39,7 @@ components:
             field: Steps
             type: quantitative
           y:
-            field: Duration
+            field: Calories
             type: quantitative
   
   - type: value
@@ -47,24 +47,30 @@ components:
     # reducer: customReducer
     query:
       database: database_id
-      tables: [activityLogs]
+      table: [activityLogs]
       fields:
         - target: Calories
           operator: avg
         - target: Steps
-          operator: avg              
+          operator: avg
     warnings:
       Steps:
         threshold: 2000
-        operator: '>'            
+        operator: '>'
 
   - type: table
     title: All data
     query:
       database: database_id
-      tables: [activityLogs]
-      fields: [Duration, Date, ActivityType, Steps, Calories]
+      table: [activityLogs]
+      fields: [Date, Steps, Calories]
+      include:
+        - table: activityTypes
+          fields: [Description]
+          include:
+            - table: difficultyDetails
+              fields: [Description]
     warnings:
-      Duration:
-        threshold: 1222000
+      Calories:
+        threshold: 400
         operator: '>'

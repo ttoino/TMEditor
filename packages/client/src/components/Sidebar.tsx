@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useLocation } from 'react-router-dom'
 
 import { styled } from '@app/theme'
 import { useAuth } from '@app/auth'
@@ -13,6 +13,7 @@ interface Props {
 export default function Sidebar ({ pages }: Props) {
   const { signOut, hasAuth } = useAuth()
   const uiConfig = useUIConfig()
+  const { search } = useLocation()
 
   return (
     <Wrapper>
@@ -23,7 +24,7 @@ export default function Sidebar ({ pages }: Props) {
       <StyledList>
         {pages?.map(({ fileName, name }) => {
           return (
-            <li key={fileName}><StyledLink as={NavLink} to={`/pages/${fileName}`}>{name}</StyledLink></li>
+            <li key={fileName}><StyledLink as={NavLink} to={`/pages/${fileName}${search}`}>{name}</StyledLink></li>
           )
         })}
       </StyledList>

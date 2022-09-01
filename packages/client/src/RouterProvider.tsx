@@ -19,6 +19,7 @@ const RouterProvider = () => {
           </Route>
         </Route>
         <Route path="/login" element={<LoginContainer />} />
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </BrowserRouter>
   )

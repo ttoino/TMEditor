@@ -1,5 +1,5 @@
 title: Trial Monitor
-# usersDB: database_id
+usersDB: database_id
 
 # cache:
 #   expireTime: 3600
@@ -12,6 +12,12 @@ databases:
       storage: sample.sqlite
     users:
       table: users
-      idField: userId
-      fields: [ userId, name, age, gender ]
+      idField: Id
+      fields: [ Name ]
+      include:
+        - table: userDetails
+          fields: [Age, Gender]
+          include:
+            - table: clinicalConditions
+              fields: [Description]
     timestampField: Date

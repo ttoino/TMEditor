@@ -9,7 +9,7 @@ components:
     title: title info
     query:
       database: sqlite_db
-      tables: activityLogs
+      table: activityLogs
       x: Steps
       operator: avg
 
@@ -17,7 +17,7 @@ components:
     title: Chart title
     query:
       database: sqlite_db
-      tables: activityLogs
+      table: activityLogs
       x: Activity
     encoding:
       theta: Activity
@@ -27,7 +27,7 @@ components:
     title: Table title
     query:
       database: sqlite_db
-      tables: activityLogs
+      table: activityLogs
       fields: [UserId, ActivityType, Steps, Activity]
 
   - type: chart
@@ -35,7 +35,7 @@ components:
     plot: bar
     query:
       database: sqlite_db
-      tables: activityLogs
+      table: activityLogs
     encoding:
       x: ActivityType
       y: Steps
@@ -44,7 +44,7 @@ components:
     title: timeseries
     query:
       database: sqlite_db
-      tables: activityLogs
+      table: activityLogs
       fields: [Date, Duration, Activity, Steps]
 
     # spec:
@@ -76,7 +76,7 @@ components:
   #           title: Table title
   #           query:
   #             database: sqlite_db
-  #             tables: activityLogs
+  #             table: activityLogs
   #             fields: [userId, activityId, value, type]
   
   # - type: columns
@@ -88,6 +88,6 @@ components:
   #       title: Table title
   #       query:
   #         database: sqlite_db
-  #         tables: activityLogs
+  #         table: activityLogs
   #         fields: [userId, activityId, value, type]
 

@@ -11,7 +11,7 @@ All Data Component share the following properties:
 - **title:** a string that represents the component title
 - **query:** describes which data to retrieve from the database
   - **database:** database identifier
-  - **tables:** string or an array of strings identifying the docs/tables/resources holding data
+  - **table:** string or an array of strings identifying the docs/tables/resources holding data
   - **fields:** (optional) defines which fields should be retrieved. If not provided, all fields will be retrieved.
   - **filters:** (optional) defines how data should be filtered. Please check the [`filters`](../Databases/overview#filters) section for details.
   - **groupby:** (optional) groups data based on one of the table fields. Requires fields to have aggregation operations.
@@ -23,7 +23,7 @@ type: chart
 title: Component title
 query:
   database: database_id
-  tables: activities
+  table: table_name
   fields: [type, value]
   filters:
     - target: value
@@ -71,7 +71,7 @@ To define a warning, add a property named `warnings` and inside set as key the c
     title: All data
     query:
       database: database_id
-      tables: [activityLogs]
+      table: table_name
       fields: [Duration, Date, ActivityType, Steps, Calories]
     warnings:
       Duration:
@@ -127,7 +127,7 @@ The property `spec` accepts normal Vega-Lite specifications to describe charts. 
   title: Table title
   query:
     database: database_id
-    tables: [table1, table2]
+    table: table_name
     fields: [name, type, description, score]
   export: true
   pagination: 40
@@ -147,7 +147,7 @@ The `value` component provides a summative view of one or more measures. Values 
   title: Value title
   query:
     database: database_id
-    tables: [table1]
+    table: table_name
     fields:
       - target: Steps
         operator: min
@@ -172,7 +172,7 @@ The `summary` component provides summary statistics from a specific field. The c
   title: Summary title
   query:
     database: database_id
-    tables: [table1]
+    table: table_name
     fields: Steps
   precision: 0
 ```

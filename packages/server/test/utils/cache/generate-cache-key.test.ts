@@ -3,12 +3,12 @@ import { generateCacheKey } from '@app/utils/cache'
 test('Equal objects', () => {
   expect(generateCacheKey({
     database: 'lifanaMySQL',
-    tables: ['MealPlan', 'WeekPlan'],
+    table: 'MealPlan',
     fields: ['mealOfDay', 'IS_COUNT'],
     groupby: 'day'
   }, {})).toEqual(generateCacheKey({
     database: 'lifanaMySQL',
-    tables: ['MealPlan', 'WeekPlan'],
+    table: 'MealPlan',
     fields: ['mealOfDay', 'IS_COUNT'],
     groupby: 'day'
   }, {}))
@@ -17,12 +17,12 @@ test('Equal objects', () => {
 test('Different order of parameters', () => {
   expect(generateCacheKey({
     database: 'lifanaMySQL',
-    tables: ['MealPlan', 'WeekPlan'],
+    table: 'MealPlan',
     fields: ['mealOfDay', 'IS_COUNT'],
     groupby: 'day'
   }, {})).toEqual(generateCacheKey({
     database: 'lifanaMySQL',
-    tables: ['MealPlan', 'WeekPlan'],
+    table: 'MealPlan',
     groupby: 'day',
     fields: ['mealOfDay', 'IS_COUNT']
   }, {}))
@@ -31,29 +31,29 @@ test('Different order of parameters', () => {
 test('Arrays with different order of values', () => {
   expect(generateCacheKey({
     database: 'lifanaMySQL',
-    tables: ['MealPlan', 'WeekPlan'],
+    table: 'MealPlan',
     fields: ['mealOfDay', 'IS_COUNT'],
     groupby: 'day'
   }, {}))
     .not.toEqual(generateCacheKey({
       database: 'lifanaMySQL',
-      tables: ['WeekPlan', 'MealPlan'],
+      table: 'WeekPlan',
       groupby: 'day',
-      fields: ['mealOfDay', 'IS_COUNT']
+      fields: ['IS_COUNT', 'mealOfDay']
     }, {}))
 })
 
 test('Arrays with equal objects', () => {
   expect(generateCacheKey({
     database: 'lifanaMySQL',
-    tables: ['MealPlan', 'WeekPlan'],
+    table: 'MealPlan',
     fields: ['mealOfDay', 'IS_COUNT'],
     groupby: 'day',
     filters: [{ operator: '==', target: 'mealOfDay', value: 2 }]
   }, {}))
     .toEqual(generateCacheKey({
       database: 'lifanaMySQL',
-      tables: ['MealPlan', 'WeekPlan'],
+      table: 'MealPlan',
       fields: ['mealOfDay', 'IS_COUNT'],
       groupby: 'day',
       filters: [{ target: 'mealOfDay', operator: '==', value: 2 }]
@@ -63,14 +63,14 @@ test('Arrays with equal objects', () => {
 test('Arrays with different objects', () => {
   expect(generateCacheKey({
     database: 'lifanaMySQL',
-    tables: ['MealPlan', 'WeekPlan'],
+    table: 'MealPlan',
     fields: ['mealOfDay', 'IS_COUNT'],
     groupby: 'day',
     filters: [{ operator: '==', target: 'mealOfDay', value: 2 }]
   }, {}))
     .not.toEqual(generateCacheKey({
       database: 'lifanaMySQL',
-      tables: ['MealPlan', 'WeekPlan'],
+      table: 'MealPlan',
       fields: ['mealOfDay', 'IS_COUNT'],
       groupby: 'day',
       filters: [{ operator: '==', target: 'mealOfDay', value: 5 }]
