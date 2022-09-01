@@ -15,7 +15,6 @@ config
 ├──── pages
 ├────── page1.yaml
 ├────── page2.yaml
-├──── dashboard.yaml
 ├──── site.yaml
 ├── reducers
 ├── auth
@@ -35,8 +34,6 @@ The `blueprints` folder contains the configuration files with the database authe
 
 - `site.yaml` is the main configuration file and contains the configurations to the database, and overall settings for the platform (e.g. project title)
 - `pages/` contains the individual page configurations (one file per page)
-- `dashboard.yaml` (optional) contains the configuration of the web app main page. For more information please check the [Dashboard](../UI%20Definition/dashboard) page.
-
 
 ### `site.yaml`
 
@@ -57,7 +54,7 @@ databases:
 - **title**: Project name
 - **usersDB**: (optional) Users database
 - **cache**: (optional) Specify cache expire time (default value is 300 seconds). To use cache make sure `redis` service is running and accessible.
-- **databases**: Is an array that describes the configuration of one or more databases. Please check [Database](../Databases/overview) for details.
+- **databases**: Is an array that describes the configuration of one or more databases. Please check [Database](../Data%20Connectors/overview) for details.
 
 
 

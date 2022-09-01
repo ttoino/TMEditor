@@ -13,7 +13,7 @@ All Data Component share the following properties:
   - **database:** database identifier
   - **table:** string or an array of strings identifying the docs/tables/resources holding data
   - **fields:** (optional) defines which fields should be retrieved. If not provided, all fields will be retrieved.
-  - **filters:** (optional) defines how data should be filtered. Please check the [`filters`](../Databases/overview#filters) section for details.
+  - **filters:** (optional) defines how data should be filtered. Please check the [`filters`](../Data%20Connectors/overview#filters) section for details.
   - **groupby:** (optional) groups data based on one of the table fields. Requires fields to have aggregation operations.
 - **reducer:** (optional) name of a custom function to transform the data before being used by the component.
 
