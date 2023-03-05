@@ -27,12 +27,23 @@ services:
       - ./config/ui-config.json:/usr/share/nginx/html/ui-config.json
     expose:
       - 80
+  editor:
+    # image: ghcr.io/fraunhoferportugal/trialmonitor-ui:latest
+    build:
+      context: ./packages/editor/
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    volumes:
+      - ./config/ui-config.json:/usr/share/nginx/html/ui-config.json
+    expose:
+      - 80
   nginx_proxy:
     image: nginx:1.21-alpine
     environment:
       - API_PORT=80
       - FRONTEND_PORT=80
-    command: /bin/sh -c "envsubst '$${API_PORT} $${FRONTEND_PORT}' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"
+      - EDITOR_PORT=80
+    command: /bin/sh -c "envsubst '$${API_PORT} $${FRONTEND_PORT} $${EDITOR_PORT}' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"
     restart: unless-stopped
     volumes:
       - ./deployment/nginx.conf:/etc/nginx/conf.d/default.conf.template
@@ -40,9 +51,11 @@ services:
     links:
       - api:api
       - frontend:frontend
+      - editor:editor
     depends_on:
       - api
       - frontend
+      - editor
     ports:
       - "80:80"
   redis_cache:

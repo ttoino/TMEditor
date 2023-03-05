@@ -1,19 +1,20 @@
 {
-  "name": "trial-monitor",
-  "version": "0.3.0",
-  "license": "BSD 3-Clause License",
-  "private": true,
-  "scripts": {
-    "postinstall": "yarn --cwd packages/client install && yarn --cwd packages/server install",
-    "dev": "concurrently \"yarn client\" \"yarn nodemon\"",
-    "nodemon": "nodemon --watch config -e js --exec yarn run server",
-    "client": "yarn --cwd packages/client start",
-    "server": "yarn --cwd packages/server dev"
-  },
-  "devDependencies": {
-    "concurrently": "^7.2.0"
-  },
-  "dependencies": {
-    "nodemon": "^2.0.16"
-  }
+    "name": "trial-monitor",
+    "version": "0.3.0",
+    "license": "BSD 3-Clause License",
+    "private": true,
+    "scripts": {
+        "postinstall": "yarn --cwd packages/client install && yarn --cwd packages/server install",
+        "dev": "concurrently \"yarn client\" \"yarn nodemon\"",
+        "nodemon": "nodemon --watch config -e js --exec yarn run server",
+        "client": "yarn --cwd packages/client start",
+        "editor": "yarn --cwd packages/editor start",
+        "server": "yarn --cwd packages/server dev"
+    },
+    "devDependencies": {
+        "concurrently": "^7.2.0"
+    },
+    "dependencies": {
+        "nodemon": "^2.0.16"
+    }
 }

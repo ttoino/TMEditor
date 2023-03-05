@@ -25,14 +25,30 @@ services:
     #   - API_URL=
     volumes:
       - ./packages/client:/usr/src/app/
+      - ./packages/client-common:/usr/src/client-common/
     command: /bin/sh -c 'chmod +x /usr/src/app/dev-start.sh && /usr/src/app/dev-start.sh'
     ports:
       - '8080:8080'
+  editor:
+    image: node:16
+    working_dir: /usr/src/app/
+    # environment:
+    #   - PUBLIC_URL=/trial-monitor
+    #   - API_URL=
+    volumes:
+      - ./packages/editor:/usr/src/app/
+      - ./packages/client-common:/usr/src/client-common/
+    command: /bin/sh -c 'chmod +x /usr/src/app/dev-start.sh && /usr/src/app/dev-start.sh'
+    expose:
+      - 8080
+    ports:
+      - '8181:8080'
   nginx_proxy:
     image: nginx:1.21-alpine
     environment:
       - API_PORT=3001
       - FRONTEND_PORT=8080
+      - EDITOR_PORT=8080
     command: /bin/sh -c "envsubst < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"
     volumes:
       - ./deployment/nginx.conf:/etc/nginx/conf.d/default.conf.template
@@ -40,9 +56,11 @@ services:
     links:
       - api:api
       - frontend:frontend
+      - editor:editor
     depends_on:
       - api
       - frontend
+      - editor
     ports:
       - "80:80"
   redis_cache:
