@@ -2,13 +2,13 @@ import { Request, Response } from 'express'
 
 import { ResponseSiteConfig } from '@types'
 import { validatePermissions } from '@app/auth/keycloak-protect'
-import { readPlatformConfig, readPagePermissions, getAllPages } from '@app/parsers/config-parser'
+import { readPlatformConfig, readPagePermissions, getAllPages, writePlatformConfig } from '@app/parsers/config-parser'
 
-export default async (req: Request, res: Response): Promise<void> => {
+const get = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { title } = readPlatformConfig()
+    const config = readPlatformConfig()
     const mainConfig: ResponseSiteConfig = {
-      title,
+      ...config,
       pages: getAllPages()
     }
 
@@ -23,3 +23,18 @@ export default async (req: Request, res: Response): Promise<void> => {
     res.sendStatus(500)
   }
 }
+
+const put = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const config = req.body
+
+    writePlatformConfig(config)
+
+    res.status(200).send()
+  } catch (error) {
+    console.log(error)
+    res.sendStatus(500)
+  }
+}
+
+export default { get, put }

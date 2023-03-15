@@ -1,14 +1,14 @@
 import { Request, Response } from 'express'
 
 import { validatePermissions } from '@app/auth/keycloak-protect'
-import { readPagePermissions, readUIMetadata, getAllPages } from '@app/parsers/config-parser'
+import { readPagePermissions, readUIMetadata, getAllPages, writeUIMetadata } from '@app/parsers/config-parser'
 import { getData, getMeta } from '@app/database/api'
 import { UIComponent, UIComponentResponse } from '@types'
 import { generateCacheKey, getCache, setCache } from '@app/utils/cache'
 import { formatComponentData } from '@app/database/data-formatter'
 import logger from '@app/utils/logger'
 
-export default async function (req: Request, res: Response): Promise<void> {
+const get = async function (req: Request, res: Response): Promise<void> {
   const { page } = req.params
   const pages = getAllPages()
 
@@ -37,6 +37,15 @@ export default async function (req: Request, res: Response): Promise<void> {
   } else {
     res.status(403).send('No permission to view page')
   }
+}
+
+const put = async function (req: Request, res: Response): Promise<void> {
+  const { page } = req.params
+  const config = req.body
+
+  await writeUIMetadata(page, config)
+
+  res.sendStatus(200)
 }
 
 const parseComponentsData = async (req: Request, res: Response, components: UIComponent[]): Promise<UIComponentResponse[]> => {
@@ -106,6 +115,7 @@ const parseComponentsData = async (req: Request, res: Response, components: UICo
     }
   }))
 }
+
 const validateDateQuery = (query: any) => {
   const hasStartDate = Object.prototype.hasOwnProperty.call(query, 'startDate')
   const hasEndDate = Object.prototype.hasOwnProperty.call(query, 'endDate')
@@ -115,3 +125,5 @@ const validateDateQuery = (query: any) => {
   } else if (hasStartDate || hasEndDate) return false
   return true
 }
+
+export default { get, put }
