@@ -67,6 +67,10 @@ const PageContainer = () => {
             <Card>
                 <pre>{JSON.stringify(data, undefined, 4)}</pre>
             </Card>
+
+            <NewComponentButton>
+                <a href="">New Component</a>    
+            </NewComponentButton>
         </Wrapper>
     );
 };
@@ -124,3 +128,19 @@ const validateParams = (params: { [k: string]: string }) => {
     } else if (hasStartDate || hasEndDate) return false;
     return true;
 };
+
+const NewComponentButton = styled("div", {
+    padding: "0.7em 1.5em",
+    position: "fixed",
+    bottom: "2em",
+    right: "2em",
+    zIndex: 1, 
+    backgroundColor:  "#007eb2",
+    borderRadius: "0.3em",
+    boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+   
+    "& a": {
+        color: "white",
+        textDecoration: "none",
+    },
+});
