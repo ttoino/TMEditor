@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import {
     useParams,
@@ -29,6 +29,16 @@ const PageContainer = () => {
             retry: false,
         }
     );
+ 
+    const [components, setComponents] = useState<any[]>([]);
+
+    function addComponent(){
+        const newComponent = {
+            type: 'empty',
+            title: 'Component Name',
+        }
+        setComponents([...components, newComponent]);
+    }
 
     useEffect(() => {
         if (!validateParams(params)) {
@@ -68,8 +78,16 @@ const PageContainer = () => {
                 <pre>{JSON.stringify(data, undefined, 4)}</pre>
             </Card>
 
+            <StyledCompList>
+                {components.map((component, index) => (
+                    <Card>
+                        <StyledHeading>{component.title} {index}</StyledHeading>
+                    </Card>
+                ))}
+            </StyledCompList>
+
             <NewComponentButton>
-                <a href="">New Component</a>    
+                <button onClick={addComponent}>New Component</button>    
             </NewComponentButton>
         </Wrapper>
     );
@@ -81,10 +99,25 @@ const Wrapper = styled("div", {
     padding: "$2",
 });
 
+const StyledCompList = styled('div', {
+  marginTop: '$2',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '$2'
+})
+
 const StyledTitle = styled("h1", {
     marginBottom: "$4",
     fontSize: "1.8rem",
 });
+
+const StyledHeading = styled('h3', {
+    display: 'flex',
+    margin: 0,
+    marginBottom: '$2',
+    color: '$neutral20',
+    fontWeight: 400
+  })
 
 const LoadingContainer = styled("div", {
     display: "flex",
@@ -116,6 +149,26 @@ const ErrorContainer = styled("div", {
     lineHeight: 1.4,
 });
 
+const NewComponentButton = styled("div", {
+    padding: "0",
+    position: "fixed",
+    bottom: "2em",
+    right: "2em",
+    zIndex: 1, 
+    borderRadius: "0.3em",
+    boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+   
+    "& button": {
+        padding: "0.8em 1.5em",
+        fontSize: "1em",
+        border: "none",
+        borderRadius: "0.3em",
+        backgroundColor:  "#007eb2",
+        color: "white",
+        cursor: "pointer",
+    },
+});
+
 const validateParams = (params: { [k: string]: string }) => {
     const hasStartDate = Object.prototype.hasOwnProperty.call(
         params,
@@ -129,18 +182,3 @@ const validateParams = (params: { [k: string]: string }) => {
     return true;
 };
 
-const NewComponentButton = styled("div", {
-    padding: "0.7em 1.5em",
-    position: "fixed",
-    bottom: "2em",
-    right: "2em",
-    zIndex: 1, 
-    backgroundColor:  "#007eb2",
-    borderRadius: "0.3em",
-    boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-   
-    "& a": {
-        color: "white",
-        textDecoration: "none",
-    },
-});
