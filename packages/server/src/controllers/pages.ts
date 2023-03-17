@@ -8,7 +8,7 @@ import { generateCacheKey, getCache, setCache } from '@app/utils/cache'
 import { formatComponentData } from '@app/database/data-formatter'
 import logger from '@app/utils/logger'
 
-const get = async function (req: Request, res: Response): Promise<void> {
+export const get = async function (req: Request, res: Response): Promise<void> {
   const { page } = req.params
   const pages = getAllPages()
 
@@ -39,7 +39,7 @@ const get = async function (req: Request, res: Response): Promise<void> {
   }
 }
 
-const put = async function (req: Request, res: Response): Promise<void> {
+export const put = async function (req: Request, res: Response): Promise<void> {
   const { page } = req.params
   const config = req.body
 
@@ -125,5 +125,3 @@ const validateDateQuery = (query: any) => {
   } else if (hasStartDate || hasEndDate) return false
   return true
 }
-
-export default { get, put }

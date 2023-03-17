@@ -4,7 +4,7 @@ import { ResponseSiteConfig } from '@types'
 import { validatePermissions } from '@app/auth/keycloak-protect'
 import { readPlatformConfig, readPagePermissions, getAllPages, writePlatformConfig } from '@app/parsers/config-parser'
 
-const get = async (req: Request, res: Response): Promise<void> => {
+export const get = async (req: Request, res: Response): Promise<void> => {
   try {
     const config = readPlatformConfig()
     const mainConfig: ResponseSiteConfig = {
@@ -24,7 +24,7 @@ const get = async (req: Request, res: Response): Promise<void> => {
   }
 }
 
-const put = async (req: Request, res: Response): Promise<void> => {
+export const put = async (req: Request, res: Response): Promise<void> => {
   try {
     const config = req.body
 
@@ -36,5 +36,3 @@ const put = async (req: Request, res: Response): Promise<void> => {
     res.sendStatus(500)
   }
 }
-
-export default { get, put }
