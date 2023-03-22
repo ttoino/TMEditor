@@ -1,73 +1,61 @@
-import { useState } from "react";
 import {
     MutationKey,
     useQuery,
     useMutation,
     UseQueryResult,
-    UseMutationResult,
     useQueryClient,
+    UseMutateFunction,
 } from "react-query";
 
-type LocalState<T extends object> = T & {
-    __modified?: boolean | undefined;
+type Optional<T> = T | undefined;
+
+type UseLocalState = <T>(
+    key: MutationKey,
+    get: () => Promise<T>,
+    sync: (data: T) => Promise<T>
+) => {
+    state: UseQueryResult<T, any>;
+    update: (callback: (old: Optional<T>) => Optional<T>) => unknown;
+    sync: UseMutateFunction<T, any, void>;
 };
 
-const localState: Map<MutationKey, LocalState<any>> = new Map();
-
-const useLocalState: <T extends object>(
+const useLocalState: UseLocalState = <T>(
     key: MutationKey,
     get: () => Promise<T>,
     sync: (data: T) => Promise<T>
 ) => {
-    state: UseQueryResult<LocalState<T>, any>;
-    update: (callback: (old: T | undefined) => T | undefined) => unknown;
-    sync: UseMutationResult<T, any, void>;
-} = <T extends object>(
-    key: MutationKey,
-    get: () => Promise<T>,
-    sync: (data: T) => Promise<T>
-) => {
-    const [, setDummy] = useState(0);
-
     const queryClient = useQueryClient();
+
+    const serverData = useQuery<T, any>(key, get);
+    const localData = useQuery<T, any>(
+        [key, "local"],
+        async () => {
+            throw Error(`No data at ${key}`);
+        },
+        { retry: false, cacheTime: Infinity }
+    );
+
+    const data = localData.data ? localData : serverData;
+
     const mutation = useMutation(
         key,
-        () => {
-            const data = localState.get(key) as LocalState<T> | undefined;
-            delete data?.__modified;
-
-            if (!data) {
-                return Promise.reject(Error(`No data at ${key} to sync`));
-            }
-
-            return sync(data as T);
-        },
+        () =>
+            data.data
+                ? sync(data.data)
+                : Promise.reject(Error(`No data at ${key}`)),
         {
             onSuccess: (data: T) => {
                 queryClient.setQueryData(key, data);
+                queryClient.removeQueries([key, "local"]);
             },
         }
     );
 
-    const serverData = useQuery<T, any>(key, get);
-    const localData = localState.get(key) as LocalState<T> | undefined;
-
-    const data = localData?.__modified
-        ? { ...serverData, data: localData }
-        : serverData;
-
-    if (data.data) localState.set(key, data.data);
-
     return {
-        state: data as UseQueryResult<LocalState<T>, any>,
-        update: (callback) => {
-            // @ts-ignore
-            const localData = callback(data.data) as LocalState<T>;
-            if (localData) localData.__modified = true;
-            localState.set(key, localData);
-            setDummy((dummy) => dummy + 1);
-        },
-        sync: mutation,
+        state: data,
+        update: (callback: (old: Optional<T>) => Optional<T>) =>
+            queryClient.setQueryData([key, "local"], callback(data.data)),
+        sync: mutation.mutate,
     };
 };
 
