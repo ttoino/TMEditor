@@ -30,7 +30,7 @@ export const put = async (req: Request, res: Response): Promise<void> => {
 
     writePlatformConfig(config)
 
-    res.status(200).send()
+    res.status(200).send(config)
   } catch (error) {
     console.log(error)
     res.sendStatus(500)
