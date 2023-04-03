@@ -32,12 +32,22 @@ const PageContainer = () => {
  
     const [components, setComponents] = useState<any[]>([]);
 
-    function addComponent(){
+    const addComponent = () => {
         const newComponent = {
             type: 'empty',
             title: 'Component Name',
         }
         setComponents([...components, newComponent]);
+    }
+
+    const editComponent = () => {
+        //TODO
+    }
+
+    const deleteComponent = (index: number) => {
+        setComponents(components => {
+            return components.filter((_, i) => i !== index)
+        })
     }
 
     useEffect(() => {
@@ -78,14 +88,14 @@ const PageContainer = () => {
                 <pre>{JSON.stringify(data, undefined, 4)}</pre>
             </Card>
 
-            <StyledCompList>
-                {components.map((component, index) => (
-                    <Card>
-                        <StyledHeading>{component.title} {index}</StyledHeading>
-                    </Card>
-                ))}
-            </StyledCompList>
-
+            {components.map((component, index) => (
+                <Card>
+                    <StyledHeading>{component.title} {index}</StyledHeading>
+                    <EditComponentButton onClick={editComponent }>Edit</EditComponentButton>
+                    <DeleteComponentButton onClick={() => deleteComponent(index)}>Delete</DeleteComponentButton>
+                </Card>
+            ))}
+            
             <NewComponentButton>
                 <button onClick={addComponent}>New Component</button>    
             </NewComponentButton>
@@ -97,18 +107,34 @@ export default PageContainer;
 
 const Wrapper = styled("div", {
     padding: "$2",
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '$2'
 });
-
-const StyledCompList = styled('div', {
-  marginTop: '$2',
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '$2'
-})
 
 const StyledTitle = styled("h1", {
     marginBottom: "$4",
     fontSize: "1.8rem",
+});
+
+const EditComponentButton = styled("button", {
+    padding: "0.5em 1em",
+    fontSize: "1em",
+    border: "none",
+    borderRadius: "0.3em",
+    backgroundColor:  "#007eb2",
+    color: "white",
+    cursor: "pointer",
+}); 
+
+const DeleteComponentButton = styled("button", {
+    padding: "0.5em 1em",
+    fontSize: "1em",
+    border: "none",
+    borderRadius: "0.3em",
+    backgroundColor:  "#007eb2",
+    color: "white",
+    cursor: "pointer",
 });
 
 const StyledHeading = styled('h3', {
