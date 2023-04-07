@@ -5,10 +5,16 @@ import useReducers from "@app/hooks/useReducers";
 import ErrorCard from "@common/components/ErrorCard";
 import { styled } from "@common/theme";
 import LoadingIndicator from "@common/components/LoadingIndicator";
+import CodeEditor from "@app/components/CodeEditor";
 
 const ReducersContainer = () => {
-    const { state, update, sync } = useReducers();
+    const { state, update, updated, sync, syncing } = useReducers();
     const { data: reducers, error, isLoading } = state;
+    // const [reducers, update] = useState("test");
+    // const error = false; const isLoading = false; const updated = false; const syncing = false;
+    // const sync = () => {};
+
+    // console.log(reducers);
 
     if (error) {
         return (
@@ -18,7 +24,7 @@ const ReducersContainer = () => {
         );
     }
 
-    if (isLoading) {
+    if (isLoading || reducers === undefined) {
         return (
             <LoadingContainer>
                 <LoadingIndicator />
@@ -29,10 +35,11 @@ const ReducersContainer = () => {
     return (
         <Wrapper>
             <Card>
-                <textarea onInput={(e) => update((_) => e.currentTarget.value)}>
-                    {reducers}
-                </textarea>
-                <button onClick={() => sync()}>Save</button>
+                <CodeEditor onValueChange={update} value={reducers} />
+                <button disabled={!updated || syncing} onClick={() => sync()}>
+                    Save
+                </button>
+                {syncing && <LoadingIndicator />}
             </Card>
         </Wrapper>
     );
