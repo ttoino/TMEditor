@@ -5,7 +5,7 @@ import type { PageResponse, ResponseSiteConfig } from "@types";
 const NODE_ENV = `${import.meta.env.NODE_ENV}`;
 const API_URL = `${import.meta.env.API_URL}`;
 
-const getApiUrl = (apiUrl?: string) => {
+export const getApiUrl = (apiUrl?: string) => {
     if (NODE_ENV !== "production") return API_URL;
     return apiUrl || API_URL;
 };

@@ -72,8 +72,38 @@ const readFile = (pathResolver: (extension: string) => string, reportError: bool
   }
 }
 
+const writeFile = (pathResolver: (extension: string) => string, content: unknown, reportError: boolean) => {
+  const extension = fs.existsSync(pathResolver('yaml'))
+    ? 'yaml'
+    : fs.existsSync(pathResolver('yml'))
+      ? 'yml'
+      : fs.existsSync(pathResolver('json')) && 'json'
+
+  if (!extension) {
+    if (reportError) {
+      throw new Error('File does not exist >> ' + pathResolver('(extension)'))
+    } else {
+      return undefined
+    }
+  }
+
+  let data = ''
+
+  if (extension === 'yaml' || extension === 'yml') {
+    data = yaml.dump(content)
+  } else if (extension === 'json') {
+    data = JSON.stringify(content)
+  }
+
+  fs.writeFileSync(pathResolver(extension), data, 'utf8')
+}
+
 const readFileWErrorReport = (pathResolver: (extension: string) => string) => {
   return readFile(pathResolver, true)
+}
+
+const writeFileWErrorReport = (pathResolver: (extension: string) => string, content: unknown) => {
+  return writeFile(pathResolver, content, true)
 }
 
 /* Reads the UI metadata configuration based on the UI section */
@@ -81,8 +111,16 @@ export const readUIMetadata = (page: string): Page => {
   return readFileWErrorReport(UI_PAGE_CONFIG_FILE(page))
 }
 
+export const writeUIMetadata = (page: string, pageData: Page) => {
+  return writeFileWErrorReport(UI_PAGE_CONFIG_FILE(page), pageData)
+}
+
 export const readPlatformConfig = (): MainConfig => {
   return readFileWErrorReport(BLUEPRINTS_ENTRY_POINT)
+}
+
+export const writePlatformConfig = (config: MainConfig) => {
+  return writeFileWErrorReport(BLUEPRINTS_ENTRY_POINT, config)
 }
 
 /* Reads the database metadata configuration based on the name of the project */
