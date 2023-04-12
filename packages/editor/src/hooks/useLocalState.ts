@@ -55,8 +55,6 @@ const useLocalState: UseLocalState = <T>(
         }
     );
 
-    console.log(data.data);
-
     return {
         state: data,
         update: (updater: Updater<Optional<T>, T>) => {

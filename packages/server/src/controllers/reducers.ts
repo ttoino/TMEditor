@@ -16,8 +16,6 @@ export const put = async (req: Request, res: Response): Promise<void> => {
   try {
     const reducers = req.body
 
-    console.log(reducers)
-
     await fs.writeFile(`${REDUCERS_PATH}index.js`, reducers)
 
     res.status(200).type('.js').send(reducers)

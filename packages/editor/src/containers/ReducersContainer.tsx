@@ -10,11 +10,6 @@ import CodeEditor from "@app/components/CodeEditor";
 const ReducersContainer = () => {
     const { state, update, updated, sync, syncing } = useReducers();
     const { data: reducers, error, isLoading } = state;
-    // const [reducers, update] = useState("test");
-    // const error = false; const isLoading = false; const updated = false; const syncing = false;
-    // const sync = () => {};
-
-    // console.log(reducers);
 
     if (error) {
         return (
