@@ -37,7 +37,7 @@ export default function DashboardSkeleton() {
 
     return (
         <Wrapper>
-            <Sidebar pages={data.pages} />
+            <Sidebar pages={data.pages} databases={data.databases} />
             <Main>
                 <Outlet />
             </Main>

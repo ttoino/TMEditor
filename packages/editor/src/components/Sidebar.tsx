@@ -2,14 +2,15 @@ import React from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 
 import { styled } from "@common/theme";
-import type { PageName } from "@types";
+import type { DBConfig, PageName } from "@types";
 import { useUIConfig } from "@common/config-provider";
 
 interface Props {
     pages: PageName[];
+    databases: DBConfig[];
 }
 
-export default function Sidebar({ pages }: Props) {
+export default function Sidebar({ pages, databases }: Props) {
     const uiConfig = useUIConfig();
     const { search } = useLocation();
 
@@ -26,14 +27,14 @@ export default function Sidebar({ pages }: Props) {
             <StyledList>
                 <li><StyledList>
                     Connectors
-                    {pages?.map(({ fileName, name }) => { //depois adaptar para connectors
+                    {databases?.map(({ id }) => { //depois adaptar para connectors
                         return (
-                            <li key={fileName}>
+                            <li key={id}>
                                 <StyledLink
                                     as={NavLink}
-                                    to={`/pages/${fileName}${search}`}
+                                    to={`/databases/${id}${search}`}
                                 >
-                                    {name}
+                                    {id}
                                 </StyledLink>
                             </li>
                         );
@@ -74,26 +75,12 @@ export default function Sidebar({ pages }: Props) {
 
                 <li><StyledList>
                     Reducers
-                    {pages?.map(({ fileName, name }) => { //depois adaptar para reducers
-                        return (
-                            <li key={fileName}>
-                                <StyledLink
-                                    as={NavLink}
-                                    to={`/pages/${fileName}${search}`}
-                                >
-                                    {name}
-                                </StyledLink>
-                            </li>
-                        );
-                    })}
-                    <li>
-                        <StyledLink
-                            //as="Add Reducers"
-                            //to="/reducers/newrecuder"
-                        >
-                            Add Reducer
-                        </StyledLink>
-                    </li>
+                    <StyledLink
+                        as={NavLink}
+                        to={`/reducer`}
+                    >
+                        Reducer
+                    </StyledLink>
                 </StyledList></li>
 
                 <li>Cohorts</li>
