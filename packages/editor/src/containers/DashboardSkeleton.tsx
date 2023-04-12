@@ -1,7 +1,7 @@
 import { getConfig } from "@common/api";
 import LoadingIndicator from "@common/components/LoadingIndicator";
 import { useUIConfig } from "@common/config-provider";
-import Sidebar from "@common/components/Sidebar";
+import Sidebar from "@app/components/Sidebar";
 import React from "react";
 import { useQuery } from "react-query";
 import { Outlet } from "react-router-dom";
@@ -37,7 +37,7 @@ export default function DashboardSkeleton() {
 
     return (
         <Wrapper>
-            <Sidebar pages={data.pages} />
+            <Sidebar pages={data.pages} databases={data.databases} />
             <Main>
                 <Outlet />
             </Main>
