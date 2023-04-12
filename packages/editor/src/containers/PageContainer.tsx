@@ -13,6 +13,7 @@ import LoadingIndicator from "@common/components/LoadingIndicator";
 import { useUIConfig } from "@common/config-provider";
 import type { PageResponse } from "@types";
 import Card from "@common/components/Card";
+import Component from "@app/components/Component";
 
 const PageContainer = () => {
     const { page } = useParams();
@@ -38,16 +39,6 @@ const PageContainer = () => {
             title: 'Component Name',
         }
         setComponents([...components, newComponent]);
-    }
-
-    const editComponent = () => {
-        //TODO
-    }
-
-    const deleteComponent = (index: number) => {
-        setComponents(components => {
-            return components.filter((_, i) => i !== index)
-        })
     }
 
     useEffect(() => {
@@ -89,11 +80,7 @@ const PageContainer = () => {
             </Card>
 
             {components.map((component, index) => (
-                <Card>
-                    <StyledHeading>{component.title} {index}</StyledHeading>
-                    <EditComponentButton onClick={editComponent }>Edit</EditComponentButton>
-                    <DeleteComponentButton onClick={() => deleteComponent(index)}>Delete</DeleteComponentButton>
-                </Card>
+                <Component component={component} index={index}> </Component>
             ))}
             
             <NewComponentButton>
@@ -116,34 +103,6 @@ const StyledTitle = styled("h1", {
     marginBottom: "$4",
     fontSize: "1.8rem",
 });
-
-const EditComponentButton = styled("button", {
-    padding: "0.5em 1em",
-    fontSize: "1em",
-    border: "none",
-    borderRadius: "0.3em",
-    backgroundColor:  "#007eb2",
-    color: "white",
-    cursor: "pointer",
-}); 
-
-const DeleteComponentButton = styled("button", {
-    padding: "0.5em 1em",
-    fontSize: "1em",
-    border: "none",
-    borderRadius: "0.3em",
-    backgroundColor:  "#007eb2",
-    color: "white",
-    cursor: "pointer",
-});
-
-const StyledHeading = styled('h3', {
-    display: 'flex',
-    margin: 0,
-    marginBottom: '$2',
-    color: '$neutral20',
-    fontWeight: 400
-  })
 
 const LoadingContainer = styled("div", {
     display: "flex",
