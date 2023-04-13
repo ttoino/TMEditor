@@ -80,7 +80,7 @@ const PageContainer = () => {
             </Card>
 
             {components.map((component, index) => (
-                <Component component={component} index={index}> </Component>
+                <Component component={component} components={components} setComponents={setComponents} index={index}> </Component>
             ))}
             
             <NewComponentButton>

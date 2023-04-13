@@ -5,10 +5,12 @@ import Card from "@common/components/Card";
 type Props = {
     children: String,
     component: any,
-    index: number,
+    components: any[],
+    setComponents: (newComponents: any[]) => void,
+    index: number
 }
 
-const Component = ({component, index}: Props) => {
+const Component = ({component, components, setComponents, index}: Props) => {
     const [displayForm, setDisplayForm] = useState(false);
 
     const changeFormVisibility = () => {
@@ -20,7 +22,7 @@ const Component = ({component, index}: Props) => {
     }
 
     const deleteComponent = (index: number) => {
-        //TODO
+        setComponents(components.filter((_: any, i: number) => i !== index))
     }
 
     return(
@@ -88,12 +90,40 @@ const ComponentForm = styled('form', {
     display: 'flex',
     flexDirection: 'column',
     rowGap: '1em',
-    marginTop: '1em'
+    marginTop: '2.5em',
+
+    "& input": {
+        padding: "0.3em 0.5em",
+        fontSize: "1em",
+        borderRadius: "0.3em",
+        border:"1px solid $neutral50",
+        backgroundColor:  "$primaryTintHover",
+        outline: "none"
+    },
+
+    "& select": {
+        padding: "0.3em 0.5em",
+        fontSize: "1em",
+        borderRadius: "0.3em",
+        borderColor:"$neutral50",
+        backgroundColor: "$primaryTintHover",
+        color: "$neutral20",
+    },
 })
 
 const ComponentFormButtons = styled('div', {
     display: 'flex',
     flexDirection: 'row',
     columnGap: '0.5em',
-    
+    justifyContent: "right",
+
+    "& button": {
+        padding: "0.3em 0.8em",
+        fontSize: "1em",
+        border: "none",
+        borderRadius: "0.3em",
+        backgroundColor:  "#007eb2",
+        color: "white",
+        cursor: "pointer",
+    },
 })
