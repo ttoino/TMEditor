@@ -15,6 +15,12 @@ const Component = ({component, components, setComponents, index}: Props) => {
     const [displayForm, setDisplayForm] = useState(false);
     const [title, setTitle] = useState('');
     const [type, setType] = useState('');
+    const [pagination, setPagination] = useState('');
+    const [exportFlag, setExport] = useState(false);
+    const [search, setSearch] = useState(false);
+    const [sort, setSort] = useState(false);
+    
+    
 
     const editComponent = () => {
         //TODO
@@ -36,6 +42,23 @@ const Component = ({component, components, setComponents, index}: Props) => {
         setType(event.target.value);
     }
 
+    const changePagination = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setPagination(event.target.value);
+    }
+
+    const changeExport = () => {
+        setExport(!exportFlag);
+    }
+
+    const changeSearch = () => {
+        setSearch(!search);
+    }
+
+    const changeSort = () => {
+        setSort(!sort);
+    }
+    
+
     const componentFields = () => {
         switch (type) {
             case 'chart':
@@ -43,19 +66,19 @@ const Component = ({component, components, setComponents, index}: Props) => {
 
             case 'table':
                 return (<>
-                    <input type="number" placeholder="Pagination" />
+                    <input type="number" placeholder="Pagination" value={pagination} onChange={changePagination}/>
                     <input type="text" placeholder="Warnings" required/>
                     <CheckBoxes>
                         <div>
-                            <input type="checkbox" id="export" />
+                            <input type="checkbox" id="export" checked={exportFlag} onChange={changeExport}/>
                             <label htmlFor="export"> Export </label>
                         </div>
                         <div>
-                            <input type="checkbox" id="search" required/>
+                            <input type="checkbox" id="search" checked={search} onChange={changeSearch}/>
                             <label htmlFor="search"> Search </label>
                         </div>
                         <div>
-                            <input type="checkbox" id="sort" required/>
+                            <input type="checkbox" id="sort" checked={sort} onChange={changeSort}/>
                             <label htmlFor="sort"> Sort </label>
                         </div>
                     </CheckBoxes>
@@ -94,28 +117,28 @@ const Component = ({component, components, setComponents, index}: Props) => {
             </ActionButtons>
 
             {displayForm && (
-                <ComponentForm>
-                    <input type="text" placeholder="Component Title" value={title} onChange={changeTitle}/>
+            <ComponentForm>
+                <input type="text" placeholder="Component Title" value={title} onChange={changeTitle}/>
 
-                    <select name="type" value={type} onChange={changeType}>
-                        <option value="" selected disabled>Select type</option>
-                        <option value="chart">Chart</option>
-                        <option value="table">Table</option>
-                        <option value="value">Value</option>
-                        <option value="summary">Summary</option>
-                        <option value="columns">Columns</option>
-                        <option value="heading">Heading</option>
-                        <option value="info">Info</option>
-                        <option value="tabs">Tabs</option>
-                    </select>
+                <select name="type" value={type} onChange={changeType}>
+                    <option value="" selected disabled>Select type</option>
+                    <option value="chart">Chart</option>
+                    <option value="table">Table</option>
+                    <option value="value">Value</option>
+                    <option value="summary">Summary</option>
+                    <option value="columns">Columns</option>
+                    <option value="heading">Heading</option>
+                    <option value="info">Info</option>
+                    <option value="tabs">Tabs</option>
+                </select>
 
-                    {type && componentFields()}
+                {type && componentFields()}
 
-                    <ActionButtons>
-                        <StyledButton text={"Save"} onClick={editComponent}/>
-                        <StyledButton text={"Cancel"} onClick={changeFormVisibility}/>
-                    </ActionButtons>
-                </ComponentForm>)
+                <ActionButtons>
+                    <StyledButton text={"Save"} onClick={editComponent}/>
+                    <StyledButton text={"Cancel"} onClick={changeFormVisibility}/>
+                </ActionButtons>
+            </ComponentForm>)
             }
         </Card>
     )
