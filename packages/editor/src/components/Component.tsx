@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { styled } from "@common/theme";
 import Card from "@common/components/Card";
+import StyledButton from "./StyledButton";
 
 type Props = {
     children: String,
@@ -87,11 +88,13 @@ const Component = ({component, components, setComponents, index}: Props) => {
     return(
         <Card>
             <StyledHeading>New Component</StyledHeading>
-            <EditComponentButton onClick={changeFormVisibility}>Edit</EditComponentButton>
-            <DeleteComponentButton onClick={() => deleteComponent(index)}>Delete</DeleteComponentButton>
+            <ActionButtons>
+                <StyledButton text={"Edit"} onClick={changeFormVisibility}/>
+                <StyledButton text={"Delete"} onClick={() => deleteComponent(index)}/>
+            </ActionButtons>
 
             {displayForm && (
-                <ComponentForm onSubmit={editComponent}>
+                <ComponentForm>
                     <input type="text" placeholder="Component Title" value={title} onChange={changeTitle}/>
 
                     <select name="type" value={type} onChange={changeType}>
@@ -108,10 +111,10 @@ const Component = ({component, components, setComponents, index}: Props) => {
 
                     {type && componentFields()}
 
-                    <ComponentFormButtons>
-                        <button type="submit">Save</button>
-                        <button onClick={changeFormVisibility}> Cancel </button>
-                    </ComponentFormButtons>
+                    <ActionButtons>
+                        <StyledButton text={"Save"} onClick={editComponent}/>
+                        <StyledButton text={"Cancel"} onClick={changeFormVisibility}/>
+                    </ActionButtons>
                 </ComponentForm>)
             }
         </Card>
@@ -127,67 +130,30 @@ const StyledHeading = styled('h3', {
     fontWeight: 400
 })
 
-const EditComponentButton = styled("button", {
-    padding: "0.5em 1em",
-    fontSize: "1em",
-    border: "none",
-    borderRadius: "0.3em",
-    backgroundColor:  "#007eb2",
-    color: "white",
-    cursor: "pointer",
-}); 
-
-const DeleteComponentButton = styled("button", {
-    padding: "0.5em 1em",
-    fontSize: "1em",
-    border: "none",
-    borderRadius: "0.3em",
-    backgroundColor:  "#007eb2",
-    color: "white",
-    cursor: "pointer",
-});
-
 const ComponentForm = styled('form', {
     display: 'flex',
     flexDirection: 'column',
     rowGap: '1em',
     marginTop: '2.5em',
 
-    "& input": {
+    "& input, & select": {
         padding: "0.3em 0.5em",
+        color: "$neutral20",
         fontSize: "1em",
         borderRadius: "0.3em",
         border:"1px solid $neutral50",
         backgroundColor:  "$primaryTintHover",
         outline: "none"
-    },
-
-    "& select": {
-        padding: "0.3em 0.5em",
-        fontSize: "1em",
-        borderRadius: "0.3em",
-        borderColor:"$neutral50",
-        backgroundColor: "$primaryTintHover",
-        color: "$neutral20",
-    },
+    }
 })
 
-const ComponentFormButtons = styled('div', {
+const ActionButtons= styled('div', {
     display: 'flex',
     flexDirection: 'row',
     columnGap: '0.5em',
     justifyContent: "right",
-
-    "& button": {
-        padding: "0.3em 0.8em",
-        fontSize: "1em",
-        border: "none",
-        borderRadius: "0.3em",
-        backgroundColor:  "#007eb2",
-        color: "white",
-        cursor: "pointer",
-    },
 })
+
 
 const CheckBoxes = styled('div', {
     display: 'flex',
