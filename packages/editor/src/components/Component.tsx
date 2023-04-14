@@ -12,10 +12,8 @@ type Props = {
 
 const Component = ({component, components, setComponents, index}: Props) => {
     const [displayForm, setDisplayForm] = useState(false);
-
-    const changeFormVisibility = () => {
-        setDisplayForm(!displayForm);
-    }
+    const [title, setTitle] = useState('');
+    const [type, setType] = useState('');
 
     const editComponent = () => {
         //TODO
@@ -25,17 +23,78 @@ const Component = ({component, components, setComponents, index}: Props) => {
         setComponents(components.filter((_: any, i: number) => i !== index))
     }
 
+    const changeFormVisibility = () => {
+        setDisplayForm(!displayForm);
+    }
+
+    const changeTitle = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+        setTitle(event.target.value);
+    }
+
+    const changeType = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+        setType(event.target.value);
+    }
+
+    const componentFields = () => {
+        switch (type) {
+            case 'chart':
+                return <input type="text" placeholder="Spec"  />;
+
+            case 'table':
+                return (<>
+                    <input type="number" placeholder="Pagination" />
+                    <input type="text" placeholder="Warnings" required/>
+                    <CheckBoxes>
+                        <div>
+                            <input type="checkbox" id="export" />
+                            <label htmlFor="export"> Export </label>
+                        </div>
+                        <div>
+                            <input type="checkbox" id="search" required/>
+                            <label htmlFor="search"> Search </label>
+                        </div>
+                        <div>
+                            <input type="checkbox" id="sort" required/>
+                            <label htmlFor="sort"> Sort </label>
+                        </div>
+                    </CheckBoxes>
+                    </>);
+
+            case 'value':
+                return (<>
+                    <input type="number" placeholder="Precision" />
+                    <input type="text" placeholder="Warnings" />
+                    </>);
+
+            case 'summary':
+                return <input type="number" placeholder="Precision" />;
+
+            case 'columns':
+                return <input type="text" placeholder="Components" />
+
+            case 'info':
+                return <input type="text" placeholder="Text" />;
+
+            case 'tabs':
+                return <input type="text" placeholder="Panels" />;
+
+            default:
+                return null;
+        }
+      }
+
+
     return(
         <Card>
-            <StyledHeading>{component.title} {index}</StyledHeading>
+            <StyledHeading>New Component</StyledHeading>
             <EditComponentButton onClick={changeFormVisibility}>Edit</EditComponentButton>
             <DeleteComponentButton onClick={() => deleteComponent(index)}>Delete</DeleteComponentButton>
 
             {displayForm && (
                 <ComponentForm onSubmit={editComponent}>
-                    <input type="text" placeholder="Component Title"/>
+                    <input type="text" placeholder="Component Title" value={title} onChange={changeTitle}/>
 
-                    <select name="type">
+                    <select name="type" value={type} onChange={changeType}>
                         <option value="" selected disabled>Select type</option>
                         <option value="chart">Chart</option>
                         <option value="table">Table</option>
@@ -43,12 +102,14 @@ const Component = ({component, components, setComponents, index}: Props) => {
                         <option value="summary">Summary</option>
                         <option value="columns">Columns</option>
                         <option value="heading">Heading</option>
-                        <option value="Info">Info</option>
-                        <option value="Tabs">Tabs</option>
+                        <option value="info">Info</option>
+                        <option value="tabs">Tabs</option>
                     </select>
 
+                    {type && componentFields()}
+
                     <ComponentFormButtons>
-                        <button type="submit">Sync</button>
+                        <button type="submit">Save</button>
                         <button onClick={changeFormVisibility}> Cancel </button>
                     </ComponentFormButtons>
                 </ComponentForm>)
@@ -126,4 +187,11 @@ const ComponentFormButtons = styled('div', {
         color: "white",
         cursor: "pointer",
     },
+})
+
+const CheckBoxes = styled('div', {
+    display: 'flex',
+    flexDirection: 'row',
+    columnGap: '4em',
+    justifyContent: "left",
 })
