@@ -27,7 +27,7 @@ export default function Sidebar({ pages, databases }: Props) {
             <StyledList>
                 <li><StyledList>
                     Connectors
-                    {databases?.map(({ id }) => { //depois adaptar para connectors
+                    {databases?.map(({ id }) => {
                         return (
                             <li key={id}>
                                 <StyledLink

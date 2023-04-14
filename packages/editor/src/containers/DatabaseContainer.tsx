@@ -7,6 +7,7 @@ import LoadingIndicator from "@common/components/LoadingIndicator";
 import { useUIConfig } from "@common/config-provider";
 import useParticipants from "@common/hooks/useParticipants";
 import Card from "@common/components/Card";
+import ConnectorForm from "@app/components/ConnectorForm";
 
 const DatabaseContainer = () => {
     const uiConfig = useUIConfig();
@@ -41,6 +42,8 @@ const DatabaseContainer = () => {
             <Card>
                 <pre>{JSON.stringify(config, undefined, 4)}</pre>
             </Card>
+            
+            <ConnectorForm></ConnectorForm>
         </Wrapper>
     );
 };
