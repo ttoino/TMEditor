@@ -58,8 +58,8 @@ export const containsAttribute = (model: ModelStatic<any>, attr: string): Promis
   })
 }
 
-const importModels = async (sequelize: Sequelize, id: string): Promise<any> => {
-  const initModels = await import(/* webpackIgnore: true */ `${modelsBaseDir}/${id}/init-models`)
+const importModels = (sequelize: Sequelize, id: string): any => {
+  const initModels = require(/* webpackIgnore: true */ `${modelsBaseDir}/${id}/init-models.js`)
 
   return initModels.default(sequelize)
 }

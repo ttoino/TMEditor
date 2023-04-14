@@ -28,3 +28,22 @@ export const putPage = async (
 
     return response.data;
 };
+
+export const getReducers = async (apiUrl?: string): Promise<string> => {
+    const response = await axios.get(`${getApiUrl(apiUrl)}/reducers`);
+
+    return response.data;
+};
+
+export const putReducers = async (
+    reducers: string,
+    apiUrl?: string
+): Promise<string> => {
+    const response = await axios.put(
+        `${getApiUrl(apiUrl)}/reducers`,
+        reducers,
+        { headers: { "Content-Type": "text/plain" } }
+    );
+
+    return response.data;
+};
