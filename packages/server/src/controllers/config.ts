@@ -7,10 +7,15 @@ import { readPlatformConfig, readPagePermissions, getAllPages, writePlatformConf
 export const get = async (req: Request, res: Response): Promise<void> => {
   try {
     const config = readPlatformConfig()
-    const mainConfig: ResponseSiteConfig = {
-      ...config,
-      pages: getAllPages()
-    }
+    const mainConfig: ResponseSiteConfig = process.env.NODE_ENV !== 'production'
+      ? {
+          ...config,
+          pages: getAllPages()
+        }
+      : {
+          title: config.title,
+          pages: getAllPages()
+        }
 
     // filter out pages without permissions
     mainConfig.pages = await Promise.all(

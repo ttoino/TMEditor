@@ -21,6 +21,7 @@ initAuth(app).then(() => {
   app.use(express.json())
   app.use(cors())
   app.use(express.urlencoded({ extended: false }))
+  app.use(express.text())
   app.use(cookieParser())
   app.use(logApiCalls)
 
