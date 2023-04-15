@@ -19,7 +19,8 @@ const Component = ({component, components, setComponents, index}: Props) => {
     const [exportFlag, setExport] = useState(false);
     const [search, setSearch] = useState(false);
     const [sort, setSort] = useState(false);
-    
+    const [precision, setPrecision] = useState('');
+    const [text, setText] = useState('');
     
 
     const editComponent = () => {
@@ -57,17 +58,39 @@ const Component = ({component, components, setComponents, index}: Props) => {
     const changeSort = () => {
         setSort(!sort);
     }
+
+    const changePrecision = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+        setPrecision(event.target.value);
+    }
+
+    const changeText = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+        setText(event.target.value);
+    }
     
 
     const componentFields = () => {
         switch (type) {
             case 'chart':
-                return <input type="text" placeholder="Spec"  />;
+                return (<>
+                    <div>
+                        <label htmlFor="spec">Spec:</label>
+                        <input type="text" placeholder="Spec" id="spec"/>
+                    </div>
+                    
+                </>);
 
             case 'table':
                 return (<>
-                    <input type="number" placeholder="Pagination" value={pagination} onChange={changePagination}/>
-                    <input type="text" placeholder="Warnings" required/>
+                    <div>
+                        <label htmlFor="pagination">Pagination:</label>
+                        <input type="number" placeholder="Pagination" id="pagination" value={pagination} onChange={changePagination}/>
+                    </div>
+                    
+                    <div>
+                        <label htmlFor="warnings">Warnings:</label>
+                        <input type="text" placeholder="Warnings" id="warnings" required/>
+                    </div>
+                    
                     <CheckBoxes>
                         <div>
                             <input type="checkbox" id="export" checked={exportFlag} onChange={changeExport}/>
@@ -82,25 +105,52 @@ const Component = ({component, components, setComponents, index}: Props) => {
                             <label htmlFor="sort"> Sort </label>
                         </div>
                     </CheckBoxes>
-                    </>);
+                </>);
 
             case 'value':
                 return (<>
-                    <input type="number" placeholder="Precision" />
-                    <input type="text" placeholder="Warnings" />
-                    </>);
+                    <div>
+                        <label htmlFor="precision">Precision:</label>
+                        <input type="number" placeholder="Precision" id="precision" value={precision} onChange={changePrecision}/>
+                    </div>
+                    
+                    <div>
+                        <label htmlFor="warnings">Warnings:</label>
+                        <input type="text" placeholder="Warnings" id="warnings"/>
+                    </div>
+                </>);
 
             case 'summary':
-                return <input type="number" placeholder="Precision" />;
+                return (<>
+                    <div>
+                        <label htmlFor="precision">Precision:</label>
+                        <input type="number" placeholder="Precision" id="precision" value={precision} onChange={changePrecision}/>
+                    </div>
+                </>);
 
             case 'columns':
-                return <input type="text" placeholder="Components" />
+                return (<>
+                    <div>
+                        <label htmlFor="components">Components:</label> 
+                        <input type="text" placeholder="Components" id="components"/>
+                    </div>
+                </>);
 
             case 'info':
-                return <input type="text" placeholder="Text" />;
+                return (<>
+                    <div>
+                        <label htmlFor="text">Text:</label> 
+                        <input type="text" placeholder="Text" id="text" value={text} onChange={changeText}/>
+                    </div>
+                </>);
 
             case 'tabs':
-                return <input type="text" placeholder="Panels" />;
+                return (<> 
+                <div>
+                    <label htmlFor="panels">Panels:</label>
+                    <input type="text" placeholder="Panels" id="panels"/>
+                </div>
+                </>);
 
             default:
                 return null;
@@ -118,19 +168,25 @@ const Component = ({component, components, setComponents, index}: Props) => {
 
             {displayForm && (
             <ComponentForm>
-                <input type="text" placeholder="Component Title" value={title} onChange={changeTitle}/>
-
-                <select name="type" value={type} onChange={changeType}>
-                    <option value="" selected disabled>Select type</option>
-                    <option value="chart">Chart</option>
-                    <option value="table">Table</option>
-                    <option value="value">Value</option>
-                    <option value="summary">Summary</option>
-                    <option value="columns">Columns</option>
-                    <option value="heading">Heading</option>
-                    <option value="info">Info</option>
-                    <option value="tabs">Tabs</option>
-                </select>
+                <div>
+                    <label htmlFor="title"> Component title: </label>
+                    <input type="text" placeholder="Component Title" id="title" value={title} onChange={changeTitle}/>
+                </div>
+                
+                <div>
+                    <label htmlFor="type"> Component type: </label>
+                    <select name="type" value={type} onChange={changeType} id="type">
+                        <option value="" selected disabled>Select type</option>
+                        <option value="chart">Chart</option>
+                        <option value="table">Table</option>
+                        <option value="value">Value</option>
+                        <option value="summary">Summary</option>
+                        <option value="columns">Columns</option>
+                        <option value="heading">Heading</option>
+                        <option value="info">Info</option>
+                        <option value="tabs">Tabs</option>
+                    </select>
+                </div>
 
                 {type && componentFields()}
 
@@ -159,14 +215,26 @@ const ComponentForm = styled('form', {
     rowGap: '1em',
     marginTop: '2.5em',
 
-    "& input, & select": {
-        padding: "0.3em 0.5em",
-        color: "$neutral20",
-        fontSize: "1em",
-        borderRadius: "0.3em",
-        border:"1px solid $neutral50",
-        backgroundColor:  "$primaryTintHover",
-        outline: "none"
+    "& > div": {
+        display: "flex",
+        alignItems: "center",
+
+        "& > label": {
+            flexShrink: '0',
+            marginRight: "0.6em",
+        },
+
+        "& > input, & > select": {
+            padding: "0.3em 0.5em",
+            color: "$neutral20",
+            fontSize: "1em",
+            borderRadius: "0.3em",
+            border:"1px solid $neutral50",
+            backgroundColor:  "$primaryTintHover",
+            outline: "none",
+            flexGrow: '1',
+            width: '100%',
+        },
     }
 })
 
@@ -176,7 +244,6 @@ const ActionButtons= styled('div', {
     columnGap: '0.5em',
     justifyContent: "right",
 })
-
 
 const CheckBoxes = styled('div', {
     display: 'flex',
