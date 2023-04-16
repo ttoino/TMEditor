@@ -1,7 +1,7 @@
 import { UpdateFn } from "@app/hooks/useLocalState";
 
 // FIXME: The current version of snowpack doesn't support this
-// type FromPath<T extends object, P extends string> = T extends unknown[]
+// export type FromPath<T extends object, P extends string> = T extends unknown[]
 //     ? P extends `${infer K extends number}.${infer R}`
 //         ? K extends keyof T
 //             ? T[K] extends object
@@ -25,7 +25,7 @@ import { UpdateFn } from "@app/hooks/useLocalState";
 //         : never
 //     : never;
 
-type FromPath<T extends object, P extends string> = T extends object
+export type FromPath<T extends object, P extends string> = T extends object
     ? P extends string
         ? any
         : never
