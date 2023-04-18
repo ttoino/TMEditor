@@ -31,7 +31,6 @@ export interface Warning {
 interface BaseComponent {
   title: string,
   requiredPermissions?: string[],
-  error?: ErrorComponent
 }
 
 interface BaseDBComponent extends BaseComponent {
