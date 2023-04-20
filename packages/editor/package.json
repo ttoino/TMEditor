@@ -29,7 +29,7 @@
         "react-simple-code-editor": "^0.13.1",
         "react-vega": "^7.6.0",
         "vega": "^5.22.1",
-        "vega-lite": "^5.2.0"
+        "vega-lite": "^5.7.1"
     },
     "devDependencies": {
         "@snowpack/plugin-dotenv": "^2.2.0",
