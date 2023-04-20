@@ -46,6 +46,13 @@ const updateAt: <T extends object, P extends string, D = FromPath<T, P>>(
                 throw Error("No data");
             }
 
+            if (!path) {
+                const newData =
+                    updater instanceof Function ? updater(data) : updater;
+
+                return newData;
+            }
+
             const oldData =
                 // @ts-ignore
                 data instanceof Array ? data[parseInt(k)] : data[k];

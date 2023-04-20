@@ -33,7 +33,7 @@ interface BaseComponent {
   requiredPermissions?: string[],
 }
 
-interface BaseDBComponent extends BaseComponent {
+export interface BaseDBComponent extends BaseComponent {
   query: DatabaseQuery,
   reducer?: string
 }
