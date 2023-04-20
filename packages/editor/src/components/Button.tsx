@@ -2,21 +2,20 @@ import { styled } from "@common/theme";
 
 export default styled("button", {
     display: "inline-flex",
-    background: "none",
+    paddingBlock: "$1",
+    paddingInline: "$2",
+    fontSize: "1em",
     border: "none",
-    margin: "0",
-    padding: "0",
-    lineHeight: "1",
-    fontSize: "24px",
-    borderRadius: "50%",
-    transition: "$hover",
+    borderRadius: "$card",
+    backgroundColor: "$surface",
+    color: "$text",
     cursor: "pointer",
     boxSizing: "border-box",
-    width: "1.5em",
-    height: "1.5em",
+    transition: "$hover",
     placeItems: "center",
     placeContent: "center",
-    flexShrink: 0,
+    gap: "$1",
+    boxShadow: "$card",
 
     "&:hover": {
         backgroundColor: "$primaryTint",
@@ -28,14 +27,7 @@ export default styled("button", {
     },
 
     "&:focus": {
-        outline: "none",
-        border: "1px solid $primary",
+        outline: "1px solid $primary",
         color: "$primary",
-    },
-
-    "&:disabled": {
-        cursor: "unset",
-        color: "$neutral30",
-        background: "none",
     },
 });
