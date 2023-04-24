@@ -45,7 +45,7 @@ export const put = async function (req: Request, res: Response): Promise<void> {
 
   await writeUIMetadata(page, config)
 
-  res.sendStatus(200).send(config)
+  res.status(200).send(config)
 }
 
 const parseComponentsData = async (req: Request, res: Response, components: UIComponent[]): Promise<UIComponentResponse[]> => {

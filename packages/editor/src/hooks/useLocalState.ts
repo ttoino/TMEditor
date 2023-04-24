@@ -9,7 +9,7 @@ import {
 } from "react-query";
 import type { Updater } from "react-query/types/core/utils";
 
-type Optional<T> = T | undefined;
+export type UpdateFn<T> = (updater: Updater<T | undefined, T>) => unknown;
 
 type UseLocalState = <T>(
     key: MutationKey,
@@ -17,7 +17,7 @@ type UseLocalState = <T>(
     sync: (data: T) => Promise<T>
 ) => {
     state: UseQueryResult<T, any>;
-    update: (updater: Updater<Optional<T>, T>) => unknown;
+    update: UpdateFn<T>;
     updated: boolean;
     sync: UseMutateFunction<T, any, void>;
     syncing: boolean;
@@ -57,10 +57,13 @@ const useLocalState: UseLocalState = <T>(
 
     return {
         state: data,
-        update: (updater: Updater<Optional<T>, T>) => {
+        update: (updater: Updater<T | undefined, T>) => {
             // HACK: This forces react-query to re-render synchronously
             const oldSchedule = notifyManager.schedule;
             notifyManager.schedule = (callback) => callback();
+            if (localData.data === undefined && data.data !== undefined) {
+                queryClient.setQueryData([key, "local"], data.data);
+            }
             queryClient.setQueryData([key, "local"], updater);
             notifyManager.schedule = oldSchedule;
         },
