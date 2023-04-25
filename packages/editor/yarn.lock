@@ -6318,6 +6318,11 @@ react-dom@^18.2.0:
     loose-envify "^1.1.0"
     scheduler "^0.23.0"
 
+react-icons@^4.8.0:
+  version "4.8.0"
+  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-4.8.0.tgz#621e900caa23b912f737e41be57f27f6b2bff445"
+  integrity sha512-N6+kOLcihDiAnj5Czu637waJqSnwlMNROzVZMhfX68V/9bu9qHaMIJC4UdozWoOk57gahFCNHwVvWzm0MTzRjg==
+
 react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
@@ -7263,10 +7268,10 @@ typedarray-to-buffer@^3.1.5:
   dependencies:
     is-typedarray "^1.0.0"
 
-typescript@^4.7.4:
-  version "4.9.5"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.9.5.tgz#095979f9bcc0d09da324d58d03ce8f8374cbe65a"
-  integrity sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==
+typescript@^5.0.4:
+  version "5.0.4"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.0.4.tgz#b217fd20119bd61a94d4011274e0ab369058da3b"
+  integrity sha512-cW9T5W9xY37cc+jfEnaUvX91foxtHkza3Nw3wkoF4sSlKn0MONdkdEndig/qPBWXNkmplh3NzayQzCiHM4/hqw==
 
 typical@^4.0.0:
   version "4.0.0"
@@ -7536,10 +7541,10 @@ vega-label@~1.2.1:
     vega-scenegraph "^4.9.2"
     vega-util "^1.15.2"
 
-vega-lite@^5.2.0:
-  version "5.6.1"
-  resolved "https://registry.yarnpkg.com/vega-lite/-/vega-lite-5.6.1.tgz#538e50f6cd90a7c267f48acd06a2c1d29acf413a"
-  integrity sha512-Dij2OkJcmK+/2pIcLambjV/vWmhP11ypL3YqDVryBfJxP1m+ZgZU+8/SOEP3B2R1MhmmT7JDYQUtiNcGi1/2ig==
+vega-lite@^5.7.1:
+  version "5.7.1"
+  resolved "https://registry.yarnpkg.com/vega-lite/-/vega-lite-5.7.1.tgz#21e203f0f8e1f5d40f8d6fdba35ed272a1be24c8"
+  integrity sha512-EhFMH2yo5MvrHAK/KSWgA9jnsJIv4/nrMgAbjkGTjalfsEkxvGnsO1EOlbDWXKF4Vud+4lDmEYuCs7VvZk9nSg==
   dependencies:
     "@types/clone" "~2.1.1"
     clone "~2.1.2"
@@ -7550,7 +7555,7 @@ vega-lite@^5.2.0:
     vega-event-selector "~3.0.0"
     vega-expression "~5.0.0"
     vega-util "~1.17.0"
-    yargs "~17.6.2"
+    yargs "~17.7.0"
 
 vega-loader@^4.5.1, vega-loader@~4.5.1:
   version "4.5.1"
@@ -7981,10 +7986,10 @@ yargs@^16.2.0:
     y18n "^5.0.5"
     yargs-parser "^20.2.2"
 
-yargs@~17.6.2:
-  version "17.6.2"
-  resolved "https://registry.yarnpkg.com/yargs/-/yargs-17.6.2.tgz#2e23f2944e976339a1ee00f18c77fedee8332541"
-  integrity sha512-1/9UrdHjDZc0eOU0HxOHoS78C69UD3JRMvzlJ7S79S2nTaWRA/whGCTV8o9e/N/1Va9YIV7Q4sOxD8VV4pCWOw==
+yargs@~17.7.0:
+  version "17.7.1"
+  resolved "https://registry.yarnpkg.com/yargs/-/yargs-17.7.1.tgz#34a77645201d1a8fc5213ace787c220eabbd0967"
+  integrity sha512-cwiTb08Xuv5fqF4AovYacTFNxk62th7LKJ6BL9IGUpTJrWoU7/7WdQGTP2SjKf1dUNBGzDd28p/Yfs/GI6JrLw==
   dependencies:
     cliui "^8.0.1"
     escalade "^3.1.1"
