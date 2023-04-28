@@ -86,10 +86,7 @@ export interface Value extends BaseDBComponent {
   type: 'value',
   precision?: number,
   warnings?: {
-    [key: string]: {
-      threshold: number | number[],
-      operator: string | string[]
-    }
+    [key: string]: Warning
   }
 }
 

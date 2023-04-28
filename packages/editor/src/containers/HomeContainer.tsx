@@ -8,6 +8,7 @@ import { getConfig } from "@common/api";
 import { styled } from "@common/theme";
 import { useUIConfig } from "@common/config-provider";
 import useParticipants from "@common/hooks/useParticipants";
+import ValueComponent from "@app/components/ValueComponent";
 
 const HomeContainer = () => {
     const uiConfig = useUIConfig();
@@ -37,6 +38,8 @@ const HomeContainer = () => {
             <Card>
                 <pre>{JSON.stringify(config, undefined, 4)}</pre>
             </Card>
+
+            <ValueComponent component={{precision: 10}}/>
         </Wrapper>
     );
 };

@@ -2,6 +2,8 @@ import React from "react";
 import type { Value } from "@types";
 import { UpdateFn } from "@app/hooks/useLocalState";
 import FormComponent from "../FormComponent";
+import WarningForm from "./WarningForm";
+import WarningsForm from "./WarningsForm";
 import updateAt from "@app/util/updateAt";
 
 interface Props {
@@ -27,5 +29,11 @@ export default function ValueForm({ component, update }: Props) {
             value={component.precision}
             onValueChange={updateAt(update, "precision")}
             ></FormComponent>
+
+        <WarningsForm
+            warnings={component.warnings ?? {}}
+            update={updateAt(update, "warnings")}
+        ></WarningsForm>
+
     </>;
 }
