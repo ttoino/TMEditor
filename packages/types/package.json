@@ -8,6 +8,6 @@
   },
   "license": "BSD 3-Clause License",
   "devDependencies": {
-    "typescript": "^4.3.5"
+    "typescript": "^5.0.4"
   }
 }

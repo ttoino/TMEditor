@@ -3,6 +3,7 @@ import ThemeApplier from "@common/theme/ThemeApplier";
 import React from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import RouterProvider from "./RouterProvider";
+import globalStyles from "@common/theme/globalStyles";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -13,6 +14,8 @@ const queryClient = new QueryClient({
 });
 
 function App() {
+    globalStyles();
+
     return (
         <QueryClientProvider client={queryClient}>
             <UIConfigProvider>

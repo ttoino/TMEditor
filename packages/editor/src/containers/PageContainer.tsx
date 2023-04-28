@@ -1,45 +1,19 @@
-import React, { useEffect } from "react";
-import { useQuery } from "react-query";
-import {
-    useParams,
-    useSearchParams,
-    useLocation,
-    useNavigate,
-} from "react-router-dom";
+import React from "react";
+import { useParams } from "react-router-dom";
 
 import { styled } from "@common/theme";
-import { getPage } from "@common/api";
 import LoadingIndicator from "@common/components/LoadingIndicator";
-import { useUIConfig } from "@common/config-provider";
-import type { PageResponse } from "@types";
-import Card from "@common/components/Card";
+import usePageConfig from "@app/hooks/usePageConfig";
+import updateAt from "@app/util/updateAt";
+import FormComponent from "@app/components/FormComponent";
+import ComponentList from "@app/components/ComponentList";
 
 const PageContainer = () => {
     const { page } = useParams();
-    const [searchParams] = useSearchParams();
-    const params = Object.fromEntries(searchParams);
-    const uiConfig = useUIConfig();
-    const location = useLocation();
-    const navigateTo = useNavigate();
+    const { state, update } = usePageConfig(page);
+    const { data, isLoading, error } = state;
 
-    const { data, isLoading, error } = useQuery<PageResponse, any>(
-        ["page", page, params],
-        () => getPage(page, searchParams, uiConfig?.api_url),
-        {
-            retry: false,
-        }
-    );
-
-    useEffect(() => {
-        if (!validateParams(params)) {
-            const { startDate, endDate, ...search } = params;
-
-            navigateTo({
-                pathname: location.pathname,
-                search: new URLSearchParams(search).toString(),
-            });
-        }
-    });
+    const updateTitle = updateAt(update, "title");
 
     if (error?.response?.status === 404) {
         return (
@@ -62,11 +36,20 @@ const PageContainer = () => {
 
     return (
         <Wrapper>
-            <StyledTitle>{data.title}</StyledTitle>
+            <FormComponent
+                label="Title"
+                hideLabel
+                component="input"
+                type="text"
+                value={data.title}
+                onValueChange={updateTitle}
+                css={{ fontSize: "1.5em", fontWeight: "500" }}
+            />
 
-            <Card>
-                <pre>{JSON.stringify(data, undefined, 4)}</pre>
-            </Card>
+            <ComponentList
+                components={data.components}
+                update={updateAt(update, "components")}
+            />
         </Wrapper>
     );
 };
@@ -75,11 +58,9 @@ export default PageContainer;
 
 const Wrapper = styled("div", {
     padding: "$2",
-});
-
-const StyledTitle = styled("h1", {
-    marginBottom: "$4",
-    fontSize: "1.8rem",
+    display: "flex",
+    flexDirection: "column",
+    gap: "$2",
 });
 
 const LoadingContainer = styled("div", {
@@ -111,16 +92,3 @@ const ErrorContainer = styled("div", {
     textAlign: "center",
     lineHeight: 1.4,
 });
-
-const validateParams = (params: { [k: string]: string }) => {
-    const hasStartDate = Object.prototype.hasOwnProperty.call(
-        params,
-        "startDate"
-    );
-    const hasEndDate = Object.prototype.hasOwnProperty.call(params, "endDate");
-    if (hasStartDate && hasEndDate) {
-        if (new Date(params.endDate) >= new Date(params.startDate)) return true;
-        return false;
-    } else if (hasStartDate || hasEndDate) return false;
-    return true;
-};

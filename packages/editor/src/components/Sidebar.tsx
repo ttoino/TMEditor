@@ -77,7 +77,7 @@ export default function Sidebar({ pages, databases }: Props) {
                     Reducers
                     <StyledLink
                         as={NavLink}
-                        to={`/reducer`}
+                        to={`/reducers`}
                     >
                         Reducer
                     </StyledLink>
