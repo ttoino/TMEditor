@@ -12,6 +12,7 @@ interface Props {
 export default function SummaryForm({ component, update }: Props) {
     const updateTitle = updateAt(update, "title");
     const updatePrecision = (value: any) => updateAt(update, "precision")(parseInt(value));
+    const updateReducer = updateAt(update, "reducer");
 
     return (
         <>
@@ -20,6 +21,14 @@ export default function SummaryForm({ component, update }: Props) {
                 label="Title"
                 value={component.title}
                 onValueChange={updateTitle}
+            >
+            </FormComponent>
+            
+            <FormComponent
+                component="input"
+                label="Reducer"
+                value={component.reducer}
+                onValueChange={updateReducer}
             >
             </FormComponent>
 
