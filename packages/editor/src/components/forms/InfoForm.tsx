@@ -11,6 +11,7 @@ interface Props {
 
 export default function InfoForm({ component, update }: Props) {
     const updateTitle = updateAt(update, "title");
+    const updateText = updateAt(update, "text");
 
     return (
         <>
@@ -19,6 +20,14 @@ export default function InfoForm({ component, update }: Props) {
                 label="Title"
                 value={component.title}
                 onValueChange={updateTitle}
+            >
+            </FormComponent>
+
+            <FormComponent
+                component="input"
+                label="Text"
+                value={component.text}
+                onValueChange={updateText}
             >
             </FormComponent>
 
