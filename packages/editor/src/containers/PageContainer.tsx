@@ -7,10 +7,11 @@ import usePageConfig from "@app/hooks/usePageConfig";
 import updateAt from "@app/util/updateAt";
 import FormComponent from "@app/components/FormComponent";
 import ComponentList from "@app/components/ComponentList";
+import Button from "@app/components/Button";
 
 const PageContainer = () => {
     const { page } = useParams();
-    const { state, update } = usePageConfig(page);
+    const { state, update, sync } = usePageConfig(page);
     const { data, isLoading, error } = state;
 
     const updateTitle = updateAt(update, "title");
@@ -50,6 +51,8 @@ const PageContainer = () => {
                 components={data.components}
                 update={updateAt(update, "components")}
             />
+
+            <Button onClick={() => sync()} >Save</Button>
         </Wrapper>
     );
 };
