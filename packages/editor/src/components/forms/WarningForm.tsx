@@ -4,7 +4,7 @@ import { UpdateFn } from "@app/hooks/useLocalState";
 import FormComponent from "../FormComponent";
 import updateAt from "@app/util/updateAt";
 import DatabaseContainer from "@app/containers/DatabaseContainer";
-
+import { styled } from '@common/theme';
 
 interface Props {
     component: Warning;
@@ -13,6 +13,7 @@ interface Props {
 
 export default function WarningForm({ component, update }: Props) {
     return <>
+    <StyleWarnings>
         <FormComponent
             component="select"
             label="Operator"
@@ -26,15 +27,24 @@ export default function WarningForm({ component, update }: Props) {
                 <option title="less than or equal to" value="<=">≤</option>
                 <option title="greater than or equal to" value=">=">≥</option>
 
-            </FormComponent>
+        </FormComponent>
+    </StyleWarnings>
 
+    <StyleWarnings>
         <FormComponent
             component="input"
             label="Threshold"
             type="number"
             value={component.threshold}
             onValueChange={updateAt(update, "threshold")}
-            ></FormComponent>
+        ></FormComponent>
+    </StyleWarnings>
 
     </>;
 }
+
+const StyleWarnings = styled('div', {
+    marginLeft: "$4",
+    gap: '$1'
+  })
+  

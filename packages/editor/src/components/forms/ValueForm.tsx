@@ -6,6 +6,7 @@ import WarningForm from "./WarningForm";
 import WarningsForm from "./WarningsForm";
 import updateAt from "@app/util/updateAt";
 
+
 interface Props {
     component: Value;
     update: UpdateFn<Value>;
@@ -22,6 +23,7 @@ export default function ValueForm({ component, update }: Props) {
             onValueChange={updateAt(update, "title")}
             ></FormComponent>
 
+
         <FormComponent
             component="input"
             label="Precision"
@@ -30,10 +32,13 @@ export default function ValueForm({ component, update }: Props) {
             onValueChange={updateAt(update, "precision")}
             ></FormComponent>
 
+
         <WarningsForm
             warnings={component.warnings ?? {}}
             update={updateAt(update, "warnings")}
         ></WarningsForm>
 
+
     </>;
 }
+

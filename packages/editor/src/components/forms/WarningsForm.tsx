@@ -7,6 +7,7 @@ import DatabaseContainer from "@app/containers/DatabaseContainer";
 import WarningForm from "./WarningForm";
 
 
+
 interface Props {
     warnings: Record<string, Warning>;
     update: UpdateFn<Record<string, Warning>>;
@@ -20,20 +21,22 @@ export default function WarningsForm({ warnings, update }: Props) {
                 <>
                 <FormComponent
                     component="input"
-                    label="Warning Key"
+                    label="Warning Field"
                     type="text"
                     value={key}
                     onValueChange={updateAt(update, "key")}
                 ></FormComponent>
-                
+
                 <WarningForm
                     key={key}
                     component={warning}
                     update={updateAt(update, key)}
                 ></WarningForm>
+
                 </>
 
             ))
         }
     </>;
 }
+
