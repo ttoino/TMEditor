@@ -24,7 +24,7 @@ export default function InfoForm({ component, update }: Props) {
             </FormComponent>
 
             <FormComponent
-                component="input"
+                component="textarea"
                 label="Text"
                 value={component.text}
                 onValueChange={updateText}
