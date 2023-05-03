@@ -1,17 +1,6 @@
-import React from "react";
-import type * as Stitches from "@stitches/react";
-
 import { styled } from "@common/theme";
-interface Props {
-    children: React.ReactNode;
-    css?: Stitches.CSS;
-}
 
-export default function Card({ children, css }: Props) {
-    return <StyledContainer css={css}>{children}</StyledContainer>;
-}
-
-const StyledContainer = styled("div", {
+export default styled("div", {
     backgroundColor: "#fff",
     padding: "$2",
     borderRadius: "$card",
