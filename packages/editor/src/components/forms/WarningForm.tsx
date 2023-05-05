@@ -44,7 +44,11 @@ export default function WarningForm({ component, update }: Props) {
 }
 
 const StyleWarnings = styled('div', {
-    marginLeft: "$4",
+    label: {
+    paddingLeft: "$4",
     gap: '$1'
+
+    }
+
   })
   
