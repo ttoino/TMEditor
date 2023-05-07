@@ -111,8 +111,8 @@ export default function FormComponent(props: Props) {
     const { component, label, hideLabel, labelProps, onValueChange, ...rest } =
         props;
 
-    props.onChange ??= defaultOnChange;
-    props.id ??= defaultId;
+    rest.onChange ??= defaultOnChange;
+    rest.id ??= defaultId;
 
     return (
         <Wrapper>

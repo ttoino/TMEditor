@@ -17,8 +17,8 @@ const appendAt: <
         return (data = defaultValue) =>
             // @ts-ignore
             updater((oldData) => {
-                if (oldData === undefined) {
-                    throw Error("No data");
+                if (oldData === undefined || !(oldData instanceof Array)) {
+                    return [data];
                 }
 
                 return [...oldData, data];

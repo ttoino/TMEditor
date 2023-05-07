@@ -25,7 +25,9 @@ import { UpdateFn } from "@app/hooks/useLocalState";
 //         : never
 //     : never;
 
-export type FromPath<T extends object, P extends string> = T extends object
+export type FromPath<T extends object, P extends string> = P extends ""
+    ? T
+    : T extends object
     ? P extends keyof T
         ? T[P]
         : never

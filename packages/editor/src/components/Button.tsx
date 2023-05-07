@@ -16,6 +16,7 @@ export default styled("button", {
     placeContent: "center",
     gap: "$1",
     boxShadow: "$card",
+    position: "relative",
 
     "&:hover": {
         backgroundColor: "$primaryTint",
@@ -27,7 +28,12 @@ export default styled("button", {
     },
 
     "&:focus": {
+        zIndex: 1,
         outline: "1px solid $primary",
         color: "$primary",
+    },
+
+    "&:disabled": {
+        opacity: 0.5,
     },
 });
