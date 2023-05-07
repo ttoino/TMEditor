@@ -48,8 +48,8 @@ const useLocalState: UseLocalState = <T>(
                 ? sync(data.data)
                 : Promise.reject(Error(`No data at ${key}`)),
         {
-            onSuccess: (data: T) => {
-                queryClient.setQueryData(key, data);
+            onSuccess: () => {
+                queryClient.setQueryData(key, data.data);
                 queryClient.removeQueries([key, "local"]);
             },
         }
