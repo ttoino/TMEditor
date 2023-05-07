@@ -2,18 +2,18 @@ import React from "react";
 import { Link, NavLink } from "react-router-dom";
 
 import { styled } from "@common/theme";
-import type { DBConfig, PageName } from "@types";
 import { useUIConfig } from "@common/config-provider";
-import { MdAdd } from "react-icons/md";
-import IconButton from "./IconButton";
+import { NewPage, NewConnector } from "./New";
+import useConfig from "@app/hooks/useConfig";
 
-interface Props {
-    pages: PageName[];
-    databases: DBConfig[];
-}
-
-export default function Sidebar({ pages, databases }: Props) {
+export default function Sidebar() {
     const uiConfig = useUIConfig();
+    const { state } = useConfig();
+    const { data, isError, isLoading } = state;
+
+    if (isLoading || isError || !data) {
+        return null;
+    }
 
     return (
         <Wrapper>
@@ -30,12 +30,10 @@ export default function Sidebar({ pages, databases }: Props) {
                     <StyledSubList>
                         <StyledListTitle>
                             Connectors
-                            <IconButton>
-                                <MdAdd />
-                            </IconButton>
+                            <NewConnector config={data} />
                         </StyledListTitle>
 
-                        {databases?.map(({ id }) => (
+                        {data.databases?.map(({ id }) => (
                             <li key={id}>
                                 <StyledLink to={`/databases/${id}`}>
                                     {id}
@@ -49,12 +47,10 @@ export default function Sidebar({ pages, databases }: Props) {
                     <StyledSubList>
                         <StyledListTitle>
                             Pages
-                            <IconButton>
-                                <MdAdd />
-                            </IconButton>
+                            <NewPage />
                         </StyledListTitle>
 
-                        {pages?.map(({ fileName, name }) => (
+                        {data.pages?.map(({ fileName, name }) => (
                             <li key={fileName}>
                                 <StyledLink to={`/pages/${fileName}`}>
                                     {name}

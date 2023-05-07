@@ -72,20 +72,12 @@ const readFile = (pathResolver: (extension: string) => string, reportError: bool
   }
 }
 
-const writeFile = (pathResolver: (extension: string) => string, content: unknown, reportError: boolean) => {
+const writeFile = (pathResolver: (extension: string) => string, content: unknown) => {
   const extension = fs.existsSync(pathResolver('yaml'))
     ? 'yaml'
     : fs.existsSync(pathResolver('yml'))
       ? 'yml'
-      : fs.existsSync(pathResolver('json')) && 'json'
-
-  if (!extension) {
-    if (reportError) {
-      throw new Error('File does not exist >> ' + pathResolver('(extension)'))
-    } else {
-      return undefined
-    }
-  }
+      : 'json'
 
   let data = ''
 
@@ -103,7 +95,7 @@ const readFileWErrorReport = (pathResolver: (extension: string) => string) => {
 }
 
 const writeFileWErrorReport = (pathResolver: (extension: string) => string, content: unknown) => {
-  return writeFile(pathResolver, content, true)
+  return writeFile(pathResolver, content)
 }
 
 /* Reads the UI metadata configuration based on the UI section */
