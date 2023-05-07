@@ -1,6 +1,5 @@
 import React from "react";
 import type { UIComponent } from "@types";
-import { UpdateFn } from "@app/hooks/useLocalState";
 import updateAt from "@app/util/updateAt";
 import FormComponent from "../FormComponent";
 import ChartForm from "./ChartForm";
@@ -11,11 +10,7 @@ import SummaryForm from "./SummaryForm";
 import TableForm from "./TableForm";
 import TabsForm from "./TabsForm";
 import ValueForm from "./ValueForm";
-
-interface Props {
-    component: UIComponent;
-    update: UpdateFn<UIComponent>;
-}
+import FormProps from "./FormProps";
 
 const forms = {
     chart: ChartForm,
@@ -28,18 +23,20 @@ const forms = {
     value: ValueForm,
 } as const;
 
-export default function ComponentForm({ component, update }: Props) {
-    const updateType = updateAt(update, "type");
-
-    const ChildForm = forms[component.type];
+export default function ComponentForm({
+    component,
+    update,
+}: FormProps<UIComponent>) {
+    const ChildForm = forms[component?.type ?? "heading"];
 
     return (
         <>
             <FormComponent
                 component="select"
                 label="Type"
-                value={component.type}
-                onValueChange={updateType}
+                required
+                value={component?.type}
+                onValueChange={updateAt(update, "type")}
             >
                 <option value="chart">Chart</option>
                 <option value="columns">Columns</option>

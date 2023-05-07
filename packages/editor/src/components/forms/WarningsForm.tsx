@@ -1,42 +1,33 @@
 import React from "react";
-import type { Warning } from "@types";
-import { UpdateFn } from "@app/hooks/useLocalState";
+import type { Warnings } from "@types";
 import FormComponent from "../FormComponent";
 import updateAt from "@app/util/updateAt";
-import DatabaseContainer from "@app/containers/DatabaseContainer";
 import WarningForm from "./WarningForm";
+import FormProps from "./FormProps";
 
+export default function WarningsForm({
+    warnings,
+    update,
+}: FormProps<Warnings, "warnings">) {
+    return (
+        <>
+            {Object.entries(warnings ?? {}).map(([key, warning]) => (
+                <React.Fragment key={key}>
+                    <FormComponent
+                        component="input"
+                        label="Warning field"
+                        type="text"
+                        required
+                        value={key}
+                        onValueChange={updateAt(update, "key")}
+                    />
 
-
-interface Props {
-    warnings: Record<string, Warning>;
-    update: UpdateFn<Record<string, Warning>>;
+                    <WarningForm
+                        warning={warning}
+                        update={updateAt(update, key)}
+                    />
+                </React.Fragment>
+            ))}
+        </>
+    );
 }
-
-export default function WarningsForm({ warnings, update }: Props) {
-    return <>
-        {
-
-            Object.entries(warnings ?? {}).map(([key, warning]) => (
-                <>
-                <FormComponent
-                    component="input"
-                    label="Warning Field"
-                    type="text"
-                    value={key}
-                    onValueChange={updateAt(update, "key")}
-                ></FormComponent>
-
-                <WarningForm
-                    key={key}
-                    component={warning}
-                    update={updateAt(update, key)}
-                ></WarningForm>
-
-                </>
-
-            ))
-        }
-    </>;
-}
-

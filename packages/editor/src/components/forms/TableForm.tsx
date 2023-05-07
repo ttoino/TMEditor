@@ -1,12 +1,7 @@
 import React from "react";
 import type { Table } from "@types";
-import { UpdateFn } from "@app/hooks/useLocalState";
+import FormProps from "./FormProps";
 
-interface Props {
-    component: Table;
-    update: UpdateFn<Table>;
-}
-
-export default function TableForm({ component, update }: Props) {
+export default function TableForm({ component, update }: FormProps<Table>) {
     return <></>;
 }

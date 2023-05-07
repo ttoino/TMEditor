@@ -1,12 +1,7 @@
 import React from "react";
 import type { Heading } from "@types";
-import { UpdateFn } from "@app/hooks/useLocalState";
+import FormProps from "./FormProps";
 
-interface Props {
-    component: Heading;
-    update: UpdateFn<Heading>;
-}
-
-export default function HeadingForm({ component, update }: Props) {
+export default function HeadingForm({ component, update }: FormProps<Heading>) {
     return <></>;
 }

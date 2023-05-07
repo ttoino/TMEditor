@@ -1,12 +1,22 @@
 import React from "react";
 import type { Chart } from "@types";
-import { UpdateFn } from "@app/hooks/useLocalState";
+import FormComponent from "../FormComponent";
+import updateAt from "@app/util/updateAt";
+import SpecForm from "./chart/SpecForm";
+import FormProps from "./FormProps";
 
-interface Props {
-    component: Chart;
-    update: UpdateFn<Chart>;
-}
+export default function ChartForm({ component, update }: FormProps<Chart>) {
+    return (
+        <>
+            <FormComponent
+                label="Title"
+                component="input"
+                required
+                value={component?.title}
+                onValueChange={updateAt(update, "title")}
+            />
 
-export default function ChartForm({ component, update }: Props) {
-    return <></>;
+            <SpecForm spec={component?.spec} update={updateAt(update, "spec")} />
+        </>
+    );
 }

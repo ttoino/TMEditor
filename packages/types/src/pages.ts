@@ -28,6 +28,8 @@ export interface Warning {
   operator: string
 }
 
+export type Warnings = Record<string, Warning>
+
 interface BaseComponent {
   title: string,
   requiredPermissions?: string[],
@@ -77,17 +79,13 @@ export interface Table extends BaseDBComponent {
   pagination?: boolean | number, // Number of rows per page
   search: boolean,
   sort: boolean,
-  warnings?: {
-    [key: string]: Warning
-  }
+  warnings?: Warnings
 }
 
 export interface Value extends BaseDBComponent {
   type: 'value',
   precision?: number,
-  warnings?: {
-    [key: string]: Warning
-  }
+  warnings?: Warnings
 }
 
 export interface Summary extends BaseDBComponent {

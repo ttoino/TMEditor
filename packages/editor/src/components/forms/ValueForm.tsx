@@ -1,44 +1,36 @@
 import React from "react";
 import type { Value } from "@types";
-import { UpdateFn } from "@app/hooks/useLocalState";
 import FormComponent from "../FormComponent";
-import WarningForm from "./WarningForm";
 import WarningsForm from "./WarningsForm";
 import updateAt from "@app/util/updateAt";
+import FormProps from "./FormProps";
 
+export default function ValueForm({ component, update }: FormProps<Value>) {
+    return (
+        <>
+            <FormComponent
+                component="input"
+                label="Title"
+                type="text"
+                required
+                value={component?.title}
+                onValueChange={updateAt(update, "title")}
+            />
 
-interface Props {
-    component: Value;
-    update: UpdateFn<Value>;
+            <FormComponent
+                component="input"
+                label="Precision"
+                type="number"
+                min="0"
+                step="1"
+                value={component?.precision}
+                onValueChange={updateAt(update, "precision")}
+            />
+
+            <WarningsForm
+                warnings={component?.warnings ?? {}}
+                update={updateAt(update, "warnings")}
+            />
+        </>
+    );
 }
-
-
-export default function ValueForm({ component, update }: Props) {
-    return <>
-        <FormComponent
-            component="input"
-            label="Title"
-            type="text"
-            value={component.title}
-            onValueChange={updateAt(update, "title")}
-            ></FormComponent>
-
-
-        <FormComponent
-            component="input"
-            label="Precision"
-            type="number"
-            value={component.precision}
-            onValueChange={updateAt(update, "precision")}
-            ></FormComponent>
-
-
-        <WarningsForm
-            warnings={component.warnings ?? {}}
-            update={updateAt(update, "warnings")}
-        ></WarningsForm>
-
-
-    </>;
-}
-

@@ -1,36 +1,27 @@
 import React from "react";
 import type { Info } from "@types";
-import { UpdateFn } from "@app/hooks/useLocalState";
 import FormComponent from "../FormComponent";
 import updateAt from "@app/util/updateAt";
+import FormProps from "./FormProps";
 
-interface Props {
-    component: Info;
-    update: UpdateFn<Info>;
-}
-
-export default function InfoForm({ component, update }: Props) {
-    const updateTitle = updateAt(update, "title");
-    const updateText = updateAt(update, "text");
-
+export default function InfoForm({ component, update }: FormProps<Info>) {
     return (
         <>
             <FormComponent
                 component="input"
                 label="Title"
-                value={component.title}
-                onValueChange={updateTitle}
-            >
-            </FormComponent>
+                required
+                value={component?.title}
+                onValueChange={updateAt(update, "title")}
+            />
 
             <FormComponent
                 component="textarea"
                 label="Text"
-                value={component.text}
-                onValueChange={updateText}
-            >
-            </FormComponent>
-
+                required
+                value={component?.text}
+                onValueChange={updateAt(update, "text")}
+            />
         </>
     );
 }
