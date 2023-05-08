@@ -1,13 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { MdAdd } from "react-icons/md";
-import IconButton from "./IconButton";
 import Dialog, { DialogTitle } from "./Dialog";
 import FormComponent from "./FormComponent";
 import Button from "./Button";
 import { MutationFunction, MutationKey, useMutation } from "react-query";
 import { putPage, putConfig } from "@app/api";
 import { useNavigate } from "react-router-dom";
-import { MainConfig } from "@types";
+import { MainConfig, ResponseSiteConfig } from "@types";
 
 interface Props {
     item: string;
@@ -23,6 +22,8 @@ const Common = ({
     url,
     children,
 }: React.PropsWithChildren<Props>) => {
+    const form = useRef<HTMLFormElement>(null);
+
     const [open, setOpen] = useState(false);
 
     const navigate = useNavigate();
@@ -36,17 +37,22 @@ const Common = ({
 
     return (
         <>
-            <IconButton onClick={() => setOpen(true)}>
+            <Button icon onClick={() => setOpen(true)}>
                 <MdAdd />
-            </IconButton>
+            </Button>
 
             <Dialog open={open} onCancel={() => setOpen(false)}>
                 <DialogTitle>New {item}</DialogTitle>
 
-                {children}
+                <form ref={form} style={{ display: "contents" }}>
+                    {children}
+                </form>
 
                 <Button
-                    disabled={mutation.isLoading}
+                    disabled={
+                        mutation.isLoading ||
+                        form.current?.checkValidity() === false
+                    }
                     onClick={() => mutation.mutate(undefined)}
                 >
                     Create {item}
@@ -56,23 +62,31 @@ const Common = ({
     );
 };
 
-export const NewPage = () => {
+export const NewPage = ({
+    config,
+}: {
+    config: MainConfig & ResponseSiteConfig;
+}) => {
     const [title, setTitle] = useState("");
-    const [slug, setSlug] = useState("");
+    const [fileName, setFileName] = useState("");
 
-    const createPage = async () => putPage(slug, { title, components: [] });
+    const pattern = `^(?!(${config.pages
+        .map((d) => d.fileName)
+        .join("|")})$)\\w+$`;
+
+    const createPage = async () => putPage(fileName, { title, components: [] });
 
     return (
         <Common
             item="page"
-            url={`/pages/${slug}`}
-            mutationKey={["page", slug]}
+            url={`/pages/${fileName}`}
+            mutationKey={["page", fileName]}
             mutationFn={createPage}
         >
             <FormComponent
                 component="input"
                 type="text"
-                label="Page Title"
+                label="Page title"
                 value={title}
                 onValueChange={setTitle}
                 required
@@ -81,11 +95,11 @@ export const NewPage = () => {
             <FormComponent
                 component="input"
                 type="text"
-                label="Page Slug"
-                value={slug}
-                onValueChange={setSlug}
+                label="Page file name"
+                value={fileName}
+                onValueChange={setFileName}
                 required
-                pattern="^\w+$"
+                pattern={pattern}
                 maxLength={100}
             />
         </Common>
@@ -94,6 +108,10 @@ export const NewPage = () => {
 
 export const NewConnector = ({ config }: { config: MainConfig }) => {
     const [id, setId] = useState("");
+
+    const pattern = `^(?!(${config.databases
+        .map((d) => d.id)
+        .join("|")})$)\\w+$`;
 
     const createConnector = () =>
         putConfig({ ...config, databases: [...config.databases, { id }] });
@@ -112,6 +130,7 @@ export const NewConnector = ({ config }: { config: MainConfig }) => {
                 value={id}
                 onValueChange={setId}
                 required
+                pattern={pattern}
             />
         </Common>
     );

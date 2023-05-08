@@ -11,7 +11,7 @@ import {
     MdExpandLess,
     MdExpandMore,
 } from "react-icons/md";
-import IconButton from "./IconButton";
+import Button from "./Button";
 import ComponentIcon from "./ComponentIcon";
 
 type Props = {
@@ -36,15 +36,15 @@ const Component = ({ component, update, remove }: Props) => {
                     {component.title && ` – ${component.title}`}
                 </StyledHeading>
 
-                <IconButton onClick={() => setDisplayForm(!displayForm)}>
+                <Button icon onClick={() => setDisplayForm(!displayForm)}>
                     {displayForm ? <MdExpandLess /> : <MdExpandMore />}
-                </IconButton>
-                <IconButton onClick={() => setDisplayJson(!displayJson)}>
+                </Button>
+                <Button icon onClick={() => setDisplayJson(!displayJson)}>
                     {displayJson ? <MdCodeOff /> : <MdCode />}
-                </IconButton>
-                <IconButton onClick={() => remove()}>
+                </Button>
+                <Button icon onClick={() => remove()}>
                     <MdDeleteOutline />
-                </IconButton>
+                </Button>
             </StyledHeader>
 
             {displayForm && (

@@ -47,7 +47,7 @@ export default function Sidebar() {
                     <StyledSubList>
                         <StyledListTitle>
                             Pages
-                            <NewPage />
+                            <NewPage config={data} />
                         </StyledListTitle>
 
                         {data.pages?.map(({ fileName, name }) => (
