@@ -1,5 +1,5 @@
 import React from "react";
-import type { FiltersQuery, Warning } from "@types";
+import type { FiltersQuery } from "@types";
 import { UpdateFn } from "@app/hooks/useLocalState";
 import FormComponent from "../FormComponent";
 import updateAt from "@app/util/updateAt";
