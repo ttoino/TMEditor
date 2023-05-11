@@ -13,6 +13,8 @@ import {
 } from "react-icons/md";
 import IconButton from "./IconButton";
 import ComponentIcon from "./ComponentIcon";
+import capitalize from "@app/util/capitalize";
+import useResizeAnimation from "@app/hooks/useResizeAnimation";
 
 type Props = {
     component: UIComponent;
@@ -21,17 +23,19 @@ type Props = {
 };
 
 const Component = ({ component, update, remove }: Props) => {
+    const ref = React.useRef<HTMLDivElement>(null);
+    useResizeAnimation(ref, false);
+
     const [displayForm, setDisplayForm] = useState(false);
     const [displayJson, setDisplayJson] = useState(false);
 
     return (
-        <Card>
+        <Card ref={ref}>
             <StyledHeader>
                 <ComponentIcon component={component} />
 
                 <StyledHeading>
-                    {component.type.charAt(0).toUpperCase()}
-                    {component.type.slice(1)}
+                    {capitalize(component.type)}
 
                     {component.title && ` – ${component.title}`}
                 </StyledHeading>
