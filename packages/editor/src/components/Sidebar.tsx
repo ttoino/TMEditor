@@ -1,9 +1,11 @@
 import React from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 import { styled } from "@common/theme";
 import type { DBConfig, PageName } from "@types";
 import { useUIConfig } from "@common/config-provider";
+import { MdAdd } from "react-icons/md";
+import IconButton from "./IconButton";
 
 interface Props {
     pages: PageName[];
@@ -12,7 +14,6 @@ interface Props {
 
 export default function Sidebar({ pages, databases }: Props) {
     const uiConfig = useUIConfig();
-    const { search } = useLocation();
 
     return (
         <Wrapper>
@@ -25,69 +26,56 @@ export default function Sidebar({ pages, databases }: Props) {
             </Logo>
 
             <StyledList>
-                <li><StyledList>
-                    Connectors
-                    {databases?.map(({ id }) => { //depois adaptar para connectors
-                        return (
+                <li>
+                    <StyledSubList>
+                        <StyledListTitle>
+                            Connectors
+                            <IconButton>
+                                <MdAdd />
+                            </IconButton>
+                        </StyledListTitle>
+
+                        {databases?.map(({ id }) => (
                             <li key={id}>
-                                <StyledLink
-                                    as={NavLink}
-                                    to={`/databases/${id}${search}`}
-                                >
+                                <StyledLink to={`/databases/${id}`}>
                                     {id}
                                 </StyledLink>
                             </li>
-                        );
-                    })}
-                    <li>
-                        <StyledLink
-                            //as="Add Connectors"
-                            //to="/connectors/newconnector"
-                        >
-                            Add Connector
-                        </StyledLink>
-                    </li>
-                </StyledList></li>
+                        ))}
+                    </StyledSubList>
+                </li>
 
-                <li><StyledList>
-                    Pages
-                    {pages?.map(({ fileName, name }) => {
-                        return (
+                <li>
+                    <StyledSubList>
+                        <StyledListTitle>
+                            Pages
+                            <IconButton>
+                                <MdAdd />
+                            </IconButton>
+                        </StyledListTitle>
+
+                        {pages?.map(({ fileName, name }) => (
                             <li key={fileName}>
-                                <StyledLink
-                                    as={NavLink}
-                                    to={`/pages/${fileName}${search}`}
-                                >
+                                <StyledLink to={`/pages/${fileName}`}>
                                     {name}
                                 </StyledLink>
                             </li>
-                        );
-                    })}
-                    <li>
-                        <StyledLink
-                            //as="Add Pages"
-                            //to="/pages/newpage"
-                        >
-                            Add Pages
-                        </StyledLink>
-                    </li>
-                </StyledList></li>
+                        ))}
+                    </StyledSubList>
+                </li>
 
-                <li><StyledList>
-                    Reducers
-                    <StyledLink
-                        as={NavLink}
-                        to={`/reducers`}
-                    >
-                        Reducer
-                    </StyledLink>
-                </StyledList></li>
+                <li>
+                    <StyledLink to="/reducers">Reducers</StyledLink>
+                </li>
 
-                <li>Cohorts</li>
+                {/* TODO */}
+                {/* <li>Cohorts</li> */}
 
-                <li>Auth</li>
+                {/* TODO */}
+                {/* <li>Auth</li> */}
 
-                <li>UI</li>
+                {/* TODO */}
+                {/* <li>UI</li> */}
             </StyledList>
 
             <StyledFooter>
@@ -108,6 +96,7 @@ const Logo = styled(Link, {
 const Wrapper = styled("div", {
     display: "flex",
     flexDirection: "column",
+    gap: "$4",
     backgroundColor: "$surface",
     padding: "$1",
 });
@@ -117,14 +106,34 @@ const StyledFooter = styled("footer", {
 });
 
 const StyledList = styled("ul", {
+    display: "flex",
+    flexDirection: "column",
+    gap: "$2",
     listStyle: "none",
-    marginTop: "$4",
     padding: 0,
 });
 
-const StyledLink = styled("a", {
-    display: "block",
-    marginBottom: "$0",
+const StyledSubList = styled("ul", {
+    display: "flex",
+    flexDirection: "column",
+    gap: "$0",
+    listStyle: "none",
+    padding: 0,
+});
+
+const StyledListTitle = styled("span", {
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginInlineStart: "$2",
+    marginBlockEnd: "$0",
+    fontWeight: "600",
+});
+
+const StyledLink = styled(NavLink, {
+    display: "flex",
+    alignItems: "center",
+    gap: "$1",
     padding: "$2",
     borderRadius: "$button",
     textDecoration: "none",
