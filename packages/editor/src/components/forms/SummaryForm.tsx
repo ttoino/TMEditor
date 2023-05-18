@@ -62,7 +62,7 @@ export default function SummaryForm({ component, update }: Props) {
             </FormComponent>
 
             <FiltersQueryForms
-                filters={component.query.filters ?? {}}
+                filters={component.query?.filters ?? {}}
                 update={updateAt(update, "component.query.filters")}
             ></FiltersQueryForms>
 

@@ -25,9 +25,11 @@ import { UpdateFn } from "@app/hooks/useLocalState";
 //         : never
 //     : never;
 
-export type FromPath<T extends object, P extends string> = T extends object
-    ? P extends string
-        ? any
+export type FromPath<T extends object, P extends string> = P extends ""
+    ? T
+    : T extends object
+    ? P extends keyof T
+        ? T[P]
         : never
     : never;
 
@@ -43,7 +45,8 @@ const updateAt: <T extends object, P extends string, D = FromPath<T, P>>(
         // @ts-ignore
         update((data) => {
             if (data === undefined) {
-                throw Error("No data");
+                // @ts-ignore
+                data = isNaN(k) ? {} : [];
             }
 
             if (!path) {

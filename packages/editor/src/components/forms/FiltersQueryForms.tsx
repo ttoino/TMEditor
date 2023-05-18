@@ -26,7 +26,6 @@ export default function FiltersQueryForms({ filters, update }: Props) {
                 ></FiltersQueryForm>
 
                 </>
-
             ))
         }
     </>;
