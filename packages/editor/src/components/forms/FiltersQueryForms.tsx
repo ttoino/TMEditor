@@ -9,8 +9,8 @@ import FiltersQueryForm from "./FiltersQueryForm";
 
 
 interface Props {
-    filters: Record<string, FiltersQuery>;
-    update: UpdateFn<Record<string, FiltersQuery>>;
+    filters: FiltersQuery[] | {};
+    update: UpdateFn<FiltersQuery[]> | {};
 }
 
 export default function FiltersQueryForms({ filters, update }: Props) {
@@ -19,18 +19,10 @@ export default function FiltersQueryForms({ filters, update }: Props) {
 
             Object.entries(filters ?? {}).map(([key, filter]) => (
                 <>
-                <FormComponent
-                    component="input"
-                    label="Filters Query"
-                    type="text"
-                    value={key}
-                    onValueChange={updateAt(update, "key")}
-                ></FormComponent>
 
                 <FiltersQueryForm
-                    key={key}
                     component={filter}
-                    update={updateAt(update, key)}
+                    update={updateAt(update as UpdateFn<FiltersQuery[]>, key)}
                 ></FiltersQueryForm>
 
                 </>

@@ -2,6 +2,7 @@ import React from "react";
 import type { Summary } from "@types";
 import { UpdateFn } from "@app/hooks/useLocalState";
 import FormComponent from "../FormComponent";
+import FiltersQueryForms from "./FiltersQueryForms";
 import updateAt from "@app/util/updateAt";
 import useConfig from "@app/hooks/useConfig";
 
@@ -60,7 +61,10 @@ export default function SummaryForm({ component, update }: Props) {
             >
             </FormComponent>
 
-            {/*TODO: Add filters input*/}
+            <FiltersQueryForms
+                filters={component.query.filters ?? {}}
+                update={updateAt(update, "component.query.filters")}
+            ></FiltersQueryForms>
 
             {/*TODO: Add include input*/}
 
