@@ -15,10 +15,6 @@ export default function SummaryForm({ component, update }: Props) {
     const databases = useConfig().state.data?.databases.map(database => database.id);
 
     const updateTitle = updateAt(update, "title");
-    const updateDatabase = updateAt(update, "component.query.database");
-    const updateTable = updateAt(update, "component.query.table");
-    const updateGroupby = updateAt(update, "component.query.groupby");
-    const updateReducer = updateAt(update, "component.reducer");
     const updatePrecision = (value: any) => updateAt(update, "precision")(parseInt(value));
 
     return (
@@ -35,7 +31,7 @@ export default function SummaryForm({ component, update }: Props) {
                 component="select"
                 label="Database"
                 value={component.query?.database}
-                onValueChange={updateDatabase}
+                onValueChange={updateAt(update, "component.query.database")}
             >
                 {databases?.map(database => 
                     <option value={database}>{database}</option>)
@@ -47,7 +43,7 @@ export default function SummaryForm({ component, update }: Props) {
                 component="input"
                 label="Table"
                 value={component.query?.table}
-                onValueChange={updateTable}
+                onValueChange={updateAt(update, "component.query.table")}
             >
             </FormComponent>
 
@@ -57,7 +53,7 @@ export default function SummaryForm({ component, update }: Props) {
                 component="input"
                 label="Group by"
                 value={component.query?.groupby}
-                onValueChange={updateGroupby}
+                onValueChange={updateAt(update, "component.query.groupby")}
             >
             </FormComponent>
 
@@ -67,12 +63,13 @@ export default function SummaryForm({ component, update }: Props) {
             ></FiltersQueryForms>
 
             {/*TODO: Add include input*/}
+            
 
             <FormComponent
                 component="input"
                 label="Reducer"
                 value={component.reducer}
-                onValueChange={updateReducer}
+                onValueChange={updateAt(update, "component.reducer")}
             >
             </FormComponent>
 
