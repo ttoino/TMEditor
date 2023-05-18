@@ -7,12 +7,12 @@ import ComponentForm from "./forms/ComponentForm";
 import {
     MdCode,
     MdCodeOff,
-    MdDeleteOutline,
     MdExpandLess,
     MdExpandMore,
 } from "react-icons/md";
 import Button from "./Button";
 import ComponentIcon from "./ComponentIcon";
+import DeleteButton from "./DeleteButton";
 
 type Props = {
     component: UIComponent;
@@ -42,9 +42,7 @@ const Component = ({ component, update, remove }: Props) => {
                 <Button icon onClick={() => setDisplayJson(!displayJson)}>
                     {displayJson ? <MdCodeOff /> : <MdCode />}
                 </Button>
-                <Button icon onClick={() => remove()}>
-                    <MdDeleteOutline />
-                </Button>
+                <DeleteButton onClick={remove} />
             </StyledHeader>
 
             {displayForm && (
