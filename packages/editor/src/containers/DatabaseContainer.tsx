@@ -1,20 +1,28 @@
 import React from "react";
 import { useQuery } from "react-query";
+import { useParams } from "react-router-dom";
 
 import { styled } from "@common/theme";
-import { getConfig } from "@common/api";
 import LoadingIndicator from "@common/components/LoadingIndicator";
-import { useUIConfig } from "@common/config-provider";
-import useParticipants from "@common/hooks/useParticipants";
+import useConfig from "@app/hooks/useConfig";
 import Card from "@common/components/Card";
 import ConnectorForm from "@app/components/ConnectorForm";
+import FormComponent from "@app/components/FormComponent";
+import updateAt from "@app/util/updateAt";
 
 const DatabaseContainer = () => {
-    const uiConfig = useUIConfig();
-    const { data, isLoading, error } = useParticipants();
-    const { data: config } = useQuery("config", () =>
-        getConfig(uiConfig?.api_url)
-    );
+    const { database } = useParams();
+    const { state, update } = useConfig();
+    const { data, isLoading, error } = state;
+
+    let index;
+    for (var i in data.databases) {
+        if (data.databases[i].id === database) {
+            index = i;
+            break;
+        }
+    }
+    let db = data.databases[index];
 
     if (error?.response?.status === 404) {
         return (
@@ -37,13 +45,14 @@ const DatabaseContainer = () => {
 
     return (
         <Wrapper>
-            <StyledTitle>{data.title}</StyledTitle>
-
-            <Card>
-                <pre>{JSON.stringify(config, undefined, 4)}</pre>
-            </Card>
-            
-            <ConnectorForm></ConnectorForm>
+            <FormComponent
+                label="Id"
+                hideLabel
+                component="input"
+                type="text"
+                value={db.id}
+                css={{ fontSize: "1.5em", fontWeight: "500" }}
+            />
         </Wrapper>
     );
 };
