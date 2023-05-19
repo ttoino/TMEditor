@@ -20,6 +20,7 @@ export default function IncludeForm({ component, update }: Props) {
             label="Table"
             value={component.table}
             onValueChange={updateAt(update, "table")}
+            required
         >
         </FormComponent>
     </StyleInclude>

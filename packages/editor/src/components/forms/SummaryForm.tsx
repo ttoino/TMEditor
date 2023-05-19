@@ -24,6 +24,7 @@ export default function SummaryForm({ component, update }: Props) {
                 label="Title"
                 value={component.title}
                 onValueChange={updateTitle}
+                required
             >
             </FormComponent>
 
@@ -32,6 +33,7 @@ export default function SummaryForm({ component, update }: Props) {
                 label="Database"
                 value={component.query?.database}
                 onValueChange={updateAt(update, "component.query.database")}
+                required
             >
                 {databases?.map(database => 
                     <option value={database}>{database}</option>)
@@ -44,6 +46,7 @@ export default function SummaryForm({ component, update }: Props) {
                 label="Table"
                 value={component.query?.table}
                 onValueChange={updateAt(update, "component.query.table")}
+                required
             >
             </FormComponent>
 

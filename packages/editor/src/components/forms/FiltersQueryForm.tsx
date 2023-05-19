@@ -19,6 +19,7 @@ export default function FiltersQueryForm({ component, update }: Props) {
             label="Target"
             value={component.target}
             onValueChange={updateAt(update, "target")}
+            required
         >
         </FormComponent>
     </StyleFiltersQuery>
@@ -29,7 +30,8 @@ export default function FiltersQueryForm({ component, update }: Props) {
             label="Operator"
             value={component.operator}
             onValueChange={updateAt(update, "operator")}
-            >
+            required
+        >
                 <option title="equal to" value="==">=</option>
                 <option title="different from" value="!=">≠</option>
                 <option title="greater than" value=">">&#62;</option>
@@ -46,6 +48,7 @@ export default function FiltersQueryForm({ component, update }: Props) {
             type="number"
             value={component.value}
             onValueChange={updateAt(update, "value")}
+            required
         ></FormComponent>
     </StyleFiltersQuery>
 
