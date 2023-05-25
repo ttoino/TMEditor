@@ -7,11 +7,14 @@ import usePageConfig from "@app/hooks/usePageConfig";
 import updateAt from "@app/util/updateAt";
 import FormComponent from "@app/components/FormComponent";
 import ComponentList from "@app/components/ComponentList";
+import SaveButton from "@app/components/SaveButton";
+import appendAt from "@app/util/appendAt";
 import Button from "@app/components/Button";
+import { MdAdd } from "react-icons/md";
 
 const PageContainer = () => {
     const { page } = useParams();
-    const { state, update, sync } = usePageConfig(page);
+    const { state, update, updated, sync, syncing } = usePageConfig(page);
     const { data, isLoading, error } = state;
 
     const updateTitle = updateAt(update, "title");
@@ -37,22 +40,41 @@ const PageContainer = () => {
 
     return (
         <Wrapper>
-            <FormComponent
-                label="Title"
-                hideLabel
-                component="input"
-                type="text"
-                value={data.title}
-                onValueChange={updateTitle}
-                css={{ fontSize: "1.5em", fontWeight: "500" }}
-            />
+            <TitleWrapper>
+                <FormComponent
+                    label="Title"
+                    hideLabel
+                    component="input"
+                    type="text"
+                    value={data.title}
+                    onValueChange={updateTitle}
+                    css={{ fontSize: "1.5em", fontWeight: "500" }}
+                />
+
+                <Button
+                    onClick={() =>
+                        appendAt(
+                            update,
+                            "components"
+                        )({
+                            // @ts-ignore
+                            _open: true,
+                            type: "heading",
+                            title: "",
+                        })
+                    }
+                >
+                    <MdAdd />
+                    New component
+                </Button>
+
+                <SaveButton sync={sync} syncing={syncing} updated={updated} />
+            </TitleWrapper>
 
             <ComponentList
                 components={data.components}
                 update={updateAt(update, "components")}
             />
-
-            <Button onClick={() => sync()} >Save</Button>
         </Wrapper>
     );
 };
@@ -64,6 +86,22 @@ const Wrapper = styled("div", {
     display: "flex",
     flexDirection: "column",
     gap: "$2",
+});
+
+const TitleWrapper = styled("div", {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: "$1",
+    position: "sticky",
+    margin: "-$2",
+    padding: "$2",
+    background: "$neutral50",
+    top: 0,
+
+    "& > :first-child": {
+        flex: 1,
+    },
 });
 
 const LoadingContainer = styled("div", {
