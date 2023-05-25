@@ -38,9 +38,7 @@ export default function DashboardSkeleton() {
     return (
         <Wrapper>
             <Sidebar pages={data.pages} databases={data.databases} />
-            <Main>
-                <Outlet />
-            </Main>
+            <Outlet />
         </Wrapper>
     );
 }
@@ -50,10 +48,6 @@ const Wrapper = styled("div", {
     gridTemplateColumns: "300px 1fr",
     minHeight: "100vh",
     backgroundColor: "$neutral50",
-});
-
-const Main = styled("div", {
-    overflow: "hidden",
 });
 
 const WrapperSpinner = styled("div", {

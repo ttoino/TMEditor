@@ -26,8 +26,12 @@ const Component = ({ component, update, remove }: Props) => {
     const ref = React.useRef<HTMLDivElement>(null);
     useResizeAnimation(ref, false);
 
-    const [displayForm, setDisplayForm] = useState(false);
+    // @ts-ignore
+    const [displayForm, setDisplayForm] = useState(component._open ?? false);
     const [displayJson, setDisplayJson] = useState(false);
+
+    // @ts-ignore
+    delete component._open;
 
     return (
         <Card ref={ref}>
