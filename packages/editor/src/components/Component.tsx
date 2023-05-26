@@ -13,6 +13,8 @@ import {
 import Button from "./Button";
 import ComponentIcon from "./ComponentIcon";
 import DeleteButton from "./DeleteButton";
+import capitalize from "@app/util/capitalize";
+import useResizeAnimation from "@app/hooks/useResizeAnimation";
 
 type Props = {
     component: UIComponent;
@@ -21,17 +23,23 @@ type Props = {
 };
 
 const Component = ({ component, update, remove }: Props) => {
-    const [displayForm, setDisplayForm] = useState(false);
+    const ref = React.useRef<HTMLDivElement>(null);
+    useResizeAnimation(ref, false);
+
+    // @ts-ignore
+    const [displayForm, setDisplayForm] = useState(component._open ?? false);
     const [displayJson, setDisplayJson] = useState(false);
 
+    // @ts-ignore
+    delete component._open;
+
     return (
-        <Card>
+        <Card ref={ref}>
             <StyledHeader>
                 <ComponentIcon component={component} />
 
                 <StyledHeading>
-                    {component.type.charAt(0).toUpperCase()}
-                    {component.type.slice(1)}
+                    {capitalize(component.type)}
 
                     {component.title && ` – ${component.title}`}
                 </StyledHeading>
