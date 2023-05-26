@@ -14,6 +14,7 @@ const removeData = (component: UIComponentResponse) => {
     delete component.data;
     // @ts-ignore
     delete component.meta;
+    // @ts-ignore
     delete component.error;
 
     return component as UIComponent;
