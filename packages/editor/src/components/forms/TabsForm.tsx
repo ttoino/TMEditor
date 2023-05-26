@@ -5,8 +5,8 @@ import TabsPanelForm from "./TabsPanelForm";
 import updateAt from "@app/util/updateAt";
 import { styled } from "@common/theme";
 import { MdAdd } from "react-icons/md";
-import IconButton from "../IconButton";
 import appendAt from "@app/util/appendAt";
+import Button from "../Button";
 
 interface Props {
     component: Tabs;
@@ -18,7 +18,8 @@ export default function TabsForm({ component, update }: Props) {
         <>
             <StyledListTitle>
                 Panels
-                <IconButton
+                <Button
+                    icon
                     onClick={() =>
                         appendAt(
                             update,
@@ -29,7 +30,7 @@ export default function TabsForm({ component, update }: Props) {
                     }
                 >
                     <MdAdd />
-                </IconButton>
+                </Button>
             </StyledListTitle>
 
             {component.panels?.map((panel, index) => (

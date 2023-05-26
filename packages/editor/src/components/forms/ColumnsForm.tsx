@@ -4,9 +4,9 @@ import { UpdateFn } from "@app/hooks/useLocalState";
 import { styled } from "@common/theme";
 import ComponentList from "../ComponentList";
 import updateAt from "@app/util/updateAt";
-import IconButton from "../IconButton";
 import { MdAdd } from "react-icons/md";
 import appendAt from "@app/util/appendAt";
+import Button from "../Button";
 
 interface Props {
     component: Columns;
@@ -18,7 +18,8 @@ export default function ColumnsForm({ component, update }: Props) {
         <>
             <StyledListTitle>
                 Children
-                <IconButton
+                <Button
+                    icon
                     onClick={() =>
                         appendAt(
                             update,
@@ -30,7 +31,7 @@ export default function ColumnsForm({ component, update }: Props) {
                     }
                 >
                     <MdAdd />
-                </IconButton>
+                </Button>
             </StyledListTitle>
 
             <Wrapper>

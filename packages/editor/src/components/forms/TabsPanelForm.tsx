@@ -5,9 +5,9 @@ import FormComponent from "../FormComponent";
 import updateAt from "@app/util/updateAt";
 import { styled } from "@common/theme";
 import ComponentList from "../ComponentList";
-import IconButton from "../IconButton";
 import { MdAdd, MdExpandLess, MdExpandMore } from "react-icons/md";
 import appendAt from "@app/util/appendAt";
+import Button from "../Button";
 
 interface Props {
     component: TabsPanel;
@@ -33,7 +33,8 @@ export default function TabsPanelForm({ component, update }: Props) {
                 />
 
                 {open && (
-                    <IconButton
+                    <Button
+                        icon
                         onClick={() =>
                             appendAt(
                                 update,
@@ -45,16 +46,17 @@ export default function TabsPanelForm({ component, update }: Props) {
                         }
                     >
                         <MdAdd />
-                    </IconButton>
+                    </Button>
                 )}
 
-                <IconButton
+                <Button
+                    icon
                     onClick={() => {
                         setOpen(!open);
                     }}
                 >
                     {open ? <MdExpandLess /> : <MdExpandMore />}
-                </IconButton>
+                </Button>
             </StyledListTitle>
 
             {open && (
