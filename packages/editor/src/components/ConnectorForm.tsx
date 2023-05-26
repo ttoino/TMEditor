@@ -27,7 +27,7 @@ const ConnectorForm = () => {
                         <input type="text" name="host"/>
                     </label>
                     <label>Port: 
-                        <input type="numer" name="port"/>
+                        <input type="number" name="port"/>
                     </label>
                     <label>Dialect: 
                         <select name="dialect">

@@ -2,7 +2,7 @@ import React from "react";
 import type { UIComponent } from "@types";
 import { UpdateFn } from "@app/hooks/useLocalState";
 import updateAt from "@app/util/updateAt";
-import FormComponent from "../FormComponent";
+import FormComponent from "../../FormComponent";
 import ChartForm from "./ChartForm";
 import ColumnsForm from "./ColumnsForm";
 import HeadingForm from "./HeadingForm";

@@ -3,7 +3,7 @@ import { styled } from "@common/theme";
 import Card from "@common/components/Card";
 import { UIComponent } from "../../../types/src";
 import { UpdateFn } from "@app/hooks/useLocalState";
-import ComponentForm from "./forms/ComponentForm";
+import ComponentForm from "./forms/pages/ComponentForm";
 import {
     MdCode,
     MdCodeOff,

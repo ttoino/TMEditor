@@ -5,10 +5,8 @@ import { useParams } from "react-router-dom";
 import { styled } from "@common/theme";
 import LoadingIndicator from "@common/components/LoadingIndicator";
 import useConfig from "@app/hooks/useConfig";
-import Card from "@common/components/Card";
-import ConnectorForm from "@app/components/ConnectorForm";
 import FormComponent from "@app/components/FormComponent";
-import updateAt from "@app/util/updateAt";
+import ConnectorForm from "@app/components/forms/connectors/ConnectorForm";
 
 const DatabaseContainer = () => {
     const { database } = useParams();
@@ -53,6 +51,12 @@ const DatabaseContainer = () => {
                 value={db.id}
                 css={{ fontSize: "1.5em", fontWeight: "500" }}
             />
+            
+            <ConnectorForm
+                component={db}
+                update={update}
+            />
+            
         </Wrapper>
     );
 };
