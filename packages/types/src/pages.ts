@@ -115,7 +115,7 @@ export interface Tabs extends BaseComponent {
   panels: TabsPanel[]
 }
 
-type TabsPanel = {
+export type TabsPanel = {
   label: string,
   components: UIComponentResponse[]
 }
