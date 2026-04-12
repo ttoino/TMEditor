@@ -1,98 +1,45 @@
-# Trial Monitor
+# FEUP-PI
 
-Trial Monitor is a tool that enables developers and researchers to create personalized web dashboards for monitoring participants in technology-enabled field trials. The tool was designed to reduce the work of developing one’s own dashboard, the need to adapt the technology stack to an existing dashboard, or the need to create a different dashboard tool for each project.
+Group project for the PI course unit at FEUP.
 
-Trial Monitor uses simple configuration files to define the connection to different databases, the types of visualizations to be used, and the user interface that researchers will see to make sense of the user-generated data.
+This project consisted of developing an extension to Trial Monitor, a tool for creating personalized web dashboards for monitoring participants in technology-enabled field trials. The main contribution was the development of a **configuration editor** that allows researchers to create and edit dashboard configurations through an intuitive user interface.
 
-![Trial Monitor dashboard](docs/docs/01-Getting%20started/assets/dashboard.png)
+## Editor Package
 
-## Requirements
+The `packages/editor` directory contains a React-based configuration editor that provides:
 
-Ensure that you have [Node.js](https://nodejs.org/) (tested with v16)  or Docker installed on your machine according to your desired set up.
+- Visual editing of dashboard configurations
+- Real-time preview of changes
+- Support for multiple data connectors (Firebase, CouchDB, SQL, FHIR)
+- Customizable UI components and layouts
+- Interactive data visualization configuration
 
+### Building and running the editor
 
-## Getting Started
-
-Trial Monitor can either be installed directly on your machine or use through Docker. In the repository, we provide a config with examples and sample data, as well as Docker files and Docker images for easy deployment.
-
-You can use the published docker images to run Trial Monitor without clonning the repository. To do so, follow these instructions:
-
-1. Download the [config.template](https://downgit.github.io/#/home?url=https://github.com/fraunhoferportugal/trial-monitor/tree/master/config.template) folder.
-
-2. Rename `config.template` to `config`.
-
-3. Edit the files in the `config` folder according to the needs of your project. Don't forget to specify the location where the API will run in `api_url` within the `ui-config.json` file.
-
-4. Run the services using docker or docker-compose. Make sure you map the `config` folder as a volumes as shown in the following example:
-
-```yaml
-version: "3"
-services:
-  api:
-    image: ghcr.io/fraunhoferportugal/trialmonitor-api:latest
-    volumes:
-      - ./config:/usr/config
-    ports:
-      - 3001:80
-  frontend:
-    image: ghcr.io/fraunhoferportugal/trialmonitor-ui:latest
-    volumes:
-      - ./config/ui-config.json:/usr/share/nginx/html/ui-config.json
-    ports:
-      - 80:80
-```
-
-For this example, the `api_url` within the `ui-config.json` file needs to be `"http://host.docker.internal:3001/api"` (verify if it is correctly configured, more information [here](https://fraunhoferportugal.github.io/trial-monitor/Getting%20started/deployment#requirement-docker-configuration-requirement)) or `"http://<domain_name>:3001/api"`.
-
-> :page_facing_up: Check [here](https://github.com/fraunhoferportugal/trial-monitor/blob/master/docker-compose.yaml) for a more complex example of a docker-compose file. Don't forget to replace `build` property from `api` and `frontend` services with the respective docker images.
-
-For more details refer to the [Trial Monitor Documentation](https://fraunhoferportugal.github.io/trial-monitor/). You can also run the documentation on your machine by following the instructions [here](./docs/README.md).
-
-## Building from Source
-
-To install Trial Monitor  on your machine from the source repository follow the steps below:
-
-1. Clone the repository on your machine.
-
-````
-git clone https://github.com/fraunhoferportugal/trial-monitor.git
-````
-
-2. Rename `config.template` to `config`.
-
-3. Edit the files in the `config` folder according to the needs of your project.
-
-For more details, see the [documentation](https://fraunhoferportugal.github.io/trial-monitor/). You can also run the documentation on your machine by following the instructions [here](./docs/README.md).
-
-### Running Trial Monitor
-
-To use Trial Monitor directly on your machine with `yarn` just run:
+The editor uses [Snowpack](https://www.snowpack.dev/) as the build tool. To build and run:
 
 ```bash
+cd packages/editor
 yarn install
-yarn run dev
+yarn start
 ```
 
-Or you can use the `docker-compose` file:
+The editor will run on `http://localhost:8080` by default.
 
-```bash
-# Production
-docker-compose -f docker-compose.yaml up
+## Original Project
 
-# Development
-docker-compose -f docker-compose.dev.yaml up
-```
+Trial Monitor is a tool developed by Fraunhofer Portugal that enables developers and researchers to create personalized web dashboards for monitoring participants in technology-enabled field trials. See [README.old.md](README.old.md) for the full original documentation.
 
-> :warning: When running with docker in development, you shouldn't install the packages using yarn in your host. The startup script will install the packages for you. If you did, delete the directories: packages/client/node_modules and packages/server/node_modules.
+## Unit info
 
-In development mode, Trial Monitor API will run by default on port `3001`, while the UI will run by default on port `8080`. When running in development mode all changes in the config files will be automatically reflected on the interface.
+- **Name**: Projeto Integrador (Integrator Project)
+- **Date**: Year 2, Semester 2, 2022/23
+- [**More info**](https://sigarra.up.pt/feup/ucurr_geral.ficha_uc_view?pv_ocorrencia_id=501692)
 
-> :page_facing_up: To run Trial Monitor with authentication check the instructions [here](https://fraunhoferportugal.github.io/trial-monitor/Getting%20started/deployment).
+## Disclaimer
 
-## Citing
+This repository (and all others with the name format `feup-*`) are for archival and educational purposes only.
 
-When using Trial Monitor please cite the following publication:
+If you don't understand some part of the code or anything else in this repo, feel free to ask (although I may not understand it myself anymore).
 
-```
-Ribeiro J., Lima P., Nunes F. "Trial Monitor: Scaffolding Personalised Web Dashboards for Human-Computer Interaction Field Trials". SoftwareX, 16. (2021).
-```
+Keep in mind that this repo is public. If you copy any code and use it in your school projects you may be flagged for plagiarism by automated tools.
