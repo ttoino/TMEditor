@@ -14,6 +14,10 @@ import {
 } from "vega-lite/build/src/spec/concat";
 
 const getMainMark = (spec: BaseSpec): Mark | CompositeMark | undefined => {
+    if (spec === undefined || spec === null) {
+        return undefined;
+    }
+
     if (isFacetSpec(spec) || isRepeatSpec(spec)) {
         return getMainMark(spec.spec);
     }
